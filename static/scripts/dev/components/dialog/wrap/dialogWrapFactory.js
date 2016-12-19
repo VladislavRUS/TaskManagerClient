@@ -1,16 +1,25 @@
-function dialogWrapFactory() {
+function dialogWrapFactory($timeout) {
     var factory = {};
 
-    var templateUrl, isOpened = false;
+    var templateUrl, isOpened = false, factoryParams = null;
 
-    factory.open = function(url) {
+    factory.open = function(url, params) {
         templateUrl = url;
         isOpened = true;
+        factoryParams = params;
+
+        $timeout(function() {
+            var popup = angular.element(document).find('.jsPopup');
+            popup.css({
+                'opacity': 1
+            });
+        }, 100);
     };
 
     factory.close = function() {
         templateUrl = '';
         isOpened = false;
+        factoryParams = null;
     };
 
     factory.getTemplateUrl = function() {
@@ -19,6 +28,10 @@ function dialogWrapFactory() {
 
     factory.getOpenState = function() {
         return isOpened;
+    };
+
+    factory.getParams = function() {
+        return factoryParams;
     };
 
     return factory;

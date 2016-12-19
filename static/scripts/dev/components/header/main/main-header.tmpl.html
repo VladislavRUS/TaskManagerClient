@@ -1,5 +1,10 @@
 <div class="main-header">
     <div class="main-header__item"
+         ui-sref="details"
+         ng-class="{'_active': mainHeaderCtrl.currentState() === 'details'}">
+        Виброизоляторы
+    </div>
+    <div class="main-header__item"
          ui-sref="events"
         ng-class="{'_active': mainHeaderCtrl.currentState() === 'events'}">
         События

@@ -34,6 +34,7 @@ module.exports = {
             "bower_components/angular-animate/angular-animate.min.js",
             "bower_components/angular-sanitize/angular-sanitize.min.js",
             "bower_components/angular-ui-router/release/angular-ui-router.min.js",
+            "bower_components/angular-i18n/angular-locale_ru-ru.js",
             "scripts/ngTemplates.js",
             "scripts/modules/**/*.js",
             "scripts/dev/app.js",

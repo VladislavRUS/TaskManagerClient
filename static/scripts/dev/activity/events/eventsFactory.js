@@ -3,6 +3,7 @@ function eventsFactory($http, restServiceFactory) {
 
     factory.getEvents = function() {
         $http.get(restServiceFactory.eventsReadAll).then(function(resp) {
+            console.log(resp.data);
             factory.events = resp.data;
         });
     };

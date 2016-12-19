@@ -1,6 +1,6 @@
 <div class="event-item">
     <div class="event-item__title">
-        {{eventItemCtrl.item.title + ', ' + eventItemCtrl.item.date}}
+        {{eventItemCtrl.item.title}}, {{eventItemCtrl.item.date | date:'longDate'}}
 
         <span class="event-item__title _remove"
               ng-click="eventItemCtrl.remove()">X</span>
