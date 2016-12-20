@@ -23,6 +23,10 @@
         line-height: 50px;
         user-select: none;
 
+        &._left {
+            left: 0;
+        }
+
         &:hover {
             background-color: rgba(255, 255, 255, 0.3);
         }
@@ -35,6 +39,19 @@
             top: 46px;
             height: 15px;
             background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        &-notification {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 5px;
+            left: -50px;
+            border-radius: 50%;
+            background-color: white;
+            color: black;
+            text-align: center;
+            line-height: 40px;
         }
     }
 }

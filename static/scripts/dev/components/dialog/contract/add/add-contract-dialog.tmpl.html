@@ -13,11 +13,13 @@
         </div>
 
         <div class="dialog-add__control">
-            <input class="input" type="text" ng-model="addContractDialogCtrl.amount" placeholder="Количество изделий">
+            <input class="input" type="number" ng-model="addContractDialogCtrl.amount" placeholder="Количество изделий">
         </div>
 
         <div class="dialog-add__control">
-            <select ng-model="addContractDialogCtrl.quoter">
+            Выберите квартал:
+            <select class="select"
+                    ng-model="addContractDialogCtrl.quoter">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -26,11 +28,10 @@
         </div>
 
         <div class="dialog-add__control">
-            <select ng-model="addContractDialogCtrl.year">
-                <option>2000</option>
-                <option>2001</option>
-                <option>2002</option>
-                <option>2003</option>
+            Выберите год:
+            <select class="select"
+                    ng-model="addContractDialogCtrl.year">
+                <option ng-repeat="year in addContractDialogCtrl.years">{{year}}</option>
             </select>
         </div>
 

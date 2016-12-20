@@ -1,7 +1,7 @@
-angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate'])
+angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll'])
     .config(function($stateProvider, $urlRouterProvider) {
 
-        $urlRouterProvider.otherwise('/events');
+        $urlRouterProvider.otherwise('/details');
 
         $stateProvider
             .state('/', {
@@ -17,10 +17,17 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate'])
             })
 
             .state('details', {
-                url: '/details',
+                url: '/details?uuid',
                 controller: 'DetailsController',
                 controllerAs: 'detailsCtrl',
                 templateUrl: 'scripts/dev/activity/details/details-activity.tmpl.html'
+            })
+
+            .state('notifications', {
+                url: '/notifications',
+                controller: 'NotificationsController',
+                controllerAs: 'notificationsCtrl',
+                templateUrl: 'scripts/dev/activity/notifications/notifictions-activity.tmpl.html'
             })
     });
 
@@ -30,7 +37,8 @@ angular.module('app')
     .controller('AddContractDialogController', AddContractDialogController)
     .controller('AddDetailDialogController', AddDetailDialogController)
     .controller('DetailsController', DetailsController)
-    .controller('EventsController', EventsController);
+    .controller('EventsController', EventsController)
+    .controller('NotificationsController', NotificationsController);
 
 
 /*Directives*/
@@ -41,14 +49,17 @@ angular.module('app')
     .directive('detailContract', detailContractDirective)
     .directive('eventsLayout', eventsLayoutDirective)
     .directive('eventItem', eventItemDirective)
-    .directive('mainHeader', mainHeaderDirective);
+    .directive('mainHeader', mainHeaderDirective)
+    .directive('notificationsLayout', notificationsLayoutDirective);
 
 /*Factories*/
 angular.module('app')
+    .factory('dateFactory', dateFactory)
     .factory('dialogWrapFactory', dialogWrapFactory)
     .factory('detailsFactory', detailsFactory)
     .factory('eventsFactory', eventsFactory)
-    .factory('restServiceFactory', restServiceFactory);
+    .factory('restServiceFactory', restServiceFactory)
+    .factory('notificationsFactory', notificationsFactory);
 
 /*Animations*/
 angular.module('app')
