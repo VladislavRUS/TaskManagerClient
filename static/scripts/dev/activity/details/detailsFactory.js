@@ -1,4 +1,4 @@
-function detailsFactory($http, $rootScope, restServiceFactory, dateFactory, notificationsFactory) {
+function detailsFactory($http, $rootScope, printFactory, restServiceFactory, dateFactory, notificationsFactory) {
     var factory = {};
 
     var detailTypeValue = 'details',
@@ -8,6 +8,8 @@ function detailsFactory($http, $rootScope, restServiceFactory, dateFactory, noti
         contractTypeName = 'Договоры';
 
     factory.getDetails = function () {
+        printFactory.clear();
+
         $http.get(restServiceFactory.detailsReadAll).then(function (resp) {
 
             notificationsFactory.clearNotifications([detailTypeValue, contractTypeValue]);
@@ -70,20 +72,25 @@ function detailsFactory($http, $rootScope, restServiceFactory, dateFactory, noti
         })
     };
 
+
     factory.addAccessoryToDetail = function(accessory) {
         $http.post(restServiceFactory.accessoriesCreate, accessory).then(function(resp) {
             factory.getDetails();
         })
     };
     
-    factory.deleteContractFromDetail = function (detail, contract) {
-        var url = restServiceFactory.deleteContract;
-        url = url.replace('{detailUUID}', detail.uuid);
-        url = url.replace('{UUID}', contract.uuid);
+    factory.deleteContract = function (detail, contract) {
+        var url = restServiceFactory.deleteContract
+            .replace('{UUID}', contract.uuid);
 
-        $http.delete(url).then(function (resp) {
-            factory.getDetails();
-        })
+        $http.delete(url).then(function () {
+            for (var i = 0; i < detail.contracts.length; i++) {
+                if (detail.contracts[i].uuid == contract.uuid) {
+                    detail.contracts.splice(i, 1);
+                    break;
+                }
+            }
+        });
     };
 
     factory.createDetail = function (detail) {
@@ -99,7 +106,13 @@ function detailsFactory($http, $rootScope, restServiceFactory, dateFactory, noti
     };
 
     factory.updateContract = function(contract) {
-        $http.put(restServiceFactory.updateContract.replace('{UUID}', contract.uuid), contract).then(function() {
+        $http.put(restServiceFactory.updateContract, contract).then(function() {
+            factory.getDetails();
+        });
+    };
+
+    factory.updateAccessory = function(accessory) {
+        $http.put(restServiceFactory.accessoriesUpdate, accessory).then(function() {
             factory.getDetails();
         });
     };

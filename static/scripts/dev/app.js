@@ -67,6 +67,7 @@ angular.module('app')
     .controller('EquipmentsController', EquipmentsController)
     .controller('EquipmentsProgressController', EquipmentsProgressController)
     .controller('EditContractDialogController', EditContractDialogController)
+    .controller('EditAccessoryDialogController', EditAccessoryDialogController)
     .controller('NotificationsController', NotificationsController);
 
 

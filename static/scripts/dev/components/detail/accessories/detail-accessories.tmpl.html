@@ -10,10 +10,10 @@
         <tr class="item__table-row"
             ng-repeat="accessory in detailAccessoriesCtrl.detail.accessories"
             ng-class="'{{detailAccessoriesCtrl.contractStatus(contract)}}'"
-            ng-click="detailAccessoriesCtrl.editContract(contract)">
+            ng-click="detailAccessoriesCtrl.editAccessory(accessory)">
 
-            <td class="item__table-body-cell">{{accessory.name}}</td>
-            <td class="item__table-body-cell">{{accessory.designation}}</td>
+            <td class="item__table-cell">{{accessory.name}}</td>
+            <td class="item__table-cell">{{accessory.designation}}</td>
         </tr>
     </table>
 

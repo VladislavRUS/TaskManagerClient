@@ -18,14 +18,20 @@
             ng-class="'{{detailContractsCtrl.contractStatus(contract)}}'"
             ng-click="detailContractsCtrl.editContract(contract)">
 
-            <td class="item__table-body-cell">{{contract.agreement}}</td>
-            <td class="item__table-body-cell">{{contract.customer}}</td>
-            <td class="item__table-body-cell">{{contract.amount}}</td>
-            <td class="item__table-body-cell">{{contract.quoter}}</td>
-            <td class="item__table-body-cell">{{contract.year}}</td>
-            <td class="item__table-body-cell">{{contract.prepaidNote}}</td>
-            <td class="item__table-body-cell">Done</td>
-            <td class="item__table-body-cell">Delete</td>
+            <td class="item__table-cell" ng-class="{'_contract-done': contract.isDone}">{{contract.agreement}}</td>
+            <td class="item__table-cell">{{contract.customer}}</td>
+            <td class="item__table-cell">{{contract.amount}}</td>
+            <td class="item__table-cell">{{contract.quoter}}</td>
+            <td class="item__table-cell">{{contract.year}}</td>
+            <td class="item__table-cell">{{contract.prepaidNote}}</td>
+            <td class="item__table-cell">
+                <span class="item__table-cell-done"
+                      ng-click="detailContractsCtrl.setDone(contract); $event.stopPropagation();"></span>
+            </td>
+            <td class="item__table-cell">
+                <span class="item__table-cell-delete"
+                      ng-click="detailContractsCtrl.deleteContract(contract); $event.stopPropagation();">X</span>
+            </td>
         </tr>
     </table>
 

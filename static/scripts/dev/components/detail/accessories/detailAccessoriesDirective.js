@@ -1,4 +1,4 @@
-function detailAccessoriesDirective(dialogWrapFactory) {
+function detailAccessoriesDirective($q, dialogWrapFactory) {
     return {
         scope: {},
         bindToController: {
@@ -17,7 +17,14 @@ function detailAccessoriesDirective(dialogWrapFactory) {
                 dialogWrapFactory.open('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html', {
                     detail: self.detail
                 });
-            }
+            };
+
+            self.editAccessory = function(accessory) {
+
+                dialogWrapFactory.open('scripts/dev/components/dialog/accessory/edit/edit-accessory-dialog.tmpl.html', {
+                    accessory: accessory
+                });
+            };
 
         },
         controllerAs: 'detailAccessoriesCtrl'

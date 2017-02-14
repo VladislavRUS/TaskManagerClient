@@ -2,6 +2,7 @@ function restServiceFactory() {
 
     var service = {};
 
+    //192.168.1.41
     service.ip = 'http://localhost:9999//api/v1/frontend-api/';
 
     /*Events*/
@@ -18,9 +19,9 @@ function restServiceFactory() {
     service.detailsPrint = service.ip + 'details/print';
 
     /*Contracts*/
-    service.updateContract = service.ip + 'contracts/{UUID}';
+    service.updateContract = service.ip + 'contracts';
     service.createContract = service.ip + 'contracts/{detailUUID}';
-    service.deleteContract = service.ip + 'contracts/{detailUUID}/{UUID}';
+    service.deleteContract = service.ip + 'contracts/{UUID}';
 
     /*Equipments*/
     service.equipmentsAll = service.ip + 'equipments';

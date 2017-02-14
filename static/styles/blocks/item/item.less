@@ -3,7 +3,7 @@
     width: 1000px;
     height: 50px;
     background-color: white;
-    box-shadow: 0 1px 80px -25px #404040;
+    box-shadow: 0 1px 80px -20px #404040;
     margin-bottom: 10px;
     align-items: center;
     cursor: pointer;
@@ -127,6 +127,55 @@
             }
         }
 
+        &-cell {
+            position: relative;
+            font-weight: bold;
+
+            &._contract-done::after {
+                position: absolute;
+                content: '';
+                top: 0;
+                left: -0px;
+                width: 20px;
+                height: 60px;
+                background-color: green;
+                opacity: .6;
+            }
+
+            &-done {
+                position: absolute;
+                top: 20px;
+                left: 60px;
+                width: 20px;
+                height: 10px;
+                border-left: 5px solid green;
+                border-bottom: 5px solid green;
+                transform: rotate(-45deg);
+                opacity: .7;
+                transition: transform .3s ease, opacity .3s ease;
+
+                &:hover {
+                    transform: rotate(-45deg) scale(1.2);
+                    opacity: 1;
+                }
+            }
+
+            &-delete {
+                width: 50px;
+                height: 50px;
+                color: red;
+                font-weight: bolder;
+                font-size: 30px;
+                opacity: .7;
+                transition: font-size .3s ease, opacity .3s ease;
+
+                &:hover {
+                    font-size: 35px;
+                    opacity: 1;
+                }
+            }
+        }
+
         &-header {
             font-size: 20px;
             height: 50px;
@@ -136,7 +185,7 @@
 
         &-wrapper {
             margin-top: 10px;
-            margin-bottom: 100px;
+            margin-bottom: 20px;
             transform: scale(1.05);
             box-shadow: 0 1px 80px -25px #404040;
             transition: transform 0.4s ease;

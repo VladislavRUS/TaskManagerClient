@@ -7,6 +7,10 @@ function printFactory($http, restServiceFactory) {
         factory.printArray.push(item);
     };
 
+    factory.clear = function() {
+        factory.printArray = [];
+    };
+
     factory.removeFromPrintArray = function (item) {
         factory.printArray = factory.printArray.filter(function (obj) {
             return obj.uuid != item.uuid;
@@ -22,15 +26,21 @@ function printFactory($http, restServiceFactory) {
                 $http({
                     method: 'POST',
                     url: restServiceFactory.detailsPrint,
-                    responseType: 'arraybuffer'
+                    responseType: 'arraybuffer',
+                    data: { uuidList: uuidList }
                 }).then(function (resp) {
-                    factory.saveData(resp.data, 'report.docx');
+                    var date = new Date();
+                    factory.saveData(resp.data, getName());
                 });
                 break;
             }
         }
     };
 
+    function getName() {
+        var date = new Date();
+        return 'report(' + date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() + '__' + date.getHours() + ':' + date.getMinutes() + ').docx';
+    }
     factory.saveData = function (data, fileName) {
         var a = document.createElement("a");
         document.body.appendChild(a);

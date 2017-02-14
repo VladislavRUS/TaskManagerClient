@@ -1,4 +1,4 @@
-function detailContractsDirective($q, dialogWrapFactory, dateFactory) {
+function detailContractsDirective($q, dialogWrapFactory, dateFactory, detailsFactory) {
     return {
         scope: {},
         bindToController: {
@@ -19,21 +19,21 @@ function detailContractsDirective($q, dialogWrapFactory, dateFactory) {
                 });
             };
 
-            self.editContract = function(contract) {
+            self.editContract = function (contract) {
                 var deferred = $q.defer();
 
                 dialogWrapFactory.open('scripts/dev/components/dialog/contract/edit/edit-contract-dialog.tmpl.html', {
                     contract: contract,
-                    deferred : deferred
+                    deferred: deferred
                 });
 
-                deferred.promise.then(function() {
+                deferred.promise.then(function () {
 
                 });
             };
 
 
-            self.contractStatus = function(contract) {
+            self.contractStatus = function (contract) {
                 var expiresIn = dateFactory.expiresIn(contract.quoter, contract.year);
 
                 if (expiresIn == -1) {
@@ -46,6 +46,17 @@ function detailContractsDirective($q, dialogWrapFactory, dateFactory) {
 
                 return '_soon';
             };
+
+            self.setDone = function (contract) {
+                var copy = JSON.parse(JSON.stringify(contract));
+                copy.isDone = !copy.isDone;
+
+                detailsFactory.updateContract(copy);
+            };
+
+            self.deleteContract = function (contract) {
+                detailsFactory.deleteContract(self.detail, contract);
+            }
         },
         controllerAs: 'detailContractsCtrl'
     }
