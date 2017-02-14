@@ -1,4 +1,5 @@
 .item {
+    position: relative;
     width: 1000px;
     height: 50px;
     background-color: white;
@@ -9,8 +10,13 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    transition: all 0.4s ease;
+    transition: transform 0.4s ease;
     border-radius: 5px;
+
+    &._print {
+        border: 3px solid black;
+        opacity: .7;
+    }
 
     &._expired {
         background-color: rgba(255, 0, 0, 0.32);
@@ -22,7 +28,6 @@
 
     &._opened {
         transform: scale(1.05);
-        transition: transform 0.4s ease;
     }
 
     &__col {
@@ -77,7 +82,6 @@
     }
 
     &:hover {
-        transition: all 0.3s ease;
         background-color: rgba(83, 88, 234, 0.27);
     }
 

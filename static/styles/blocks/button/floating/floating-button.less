@@ -14,24 +14,35 @@
         background-color: #171717;
     }
 
-    &:after {
-        position: absolute;
-        top: 28px;
-        left: 20px;
-        content: "";
-        width: 20px;
-        height: 4px;
-        background-color: white;
+    &._print {
+        left: 100px;
+        text-align: center;
+        line-height: 60px;
+        font-weight: bold;
+        font-size: 13px;
+        color: white;
     }
 
-    &:before {
-        position: absolute;
-        top: 28px;
-        left: 20px;
-        content: "";
-        width: 20px;
-        height: 4px;
-        background-color: white;
-        transform: rotate(90deg);
+    &._add {
+        &:after {
+            position: absolute;
+            top: 28px;
+            left: 20px;
+            content: "";
+            width: 20px;
+            height: 4px;
+            background-color: white;
+        }
+
+        &:before {
+            position: absolute;
+            top: 28px;
+            left: 20px;
+            content: "";
+            width: 20px;
+            height: 4px;
+            background-color: white;
+            transform: rotate(90deg);
+        }
     }
 }

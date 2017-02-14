@@ -1,7 +1,9 @@
 <div class="item"
      id="{{detailItemCtrl.item.uuid}}"
-     ng-click="detailItemCtrl.toggleContracts()"
-     ng-class="{'_expired': detailItemCtrl.expired, '_opened': detailItemCtrl.isOpened}">
+     ng-mouseenter="detailItemCtrl.toggleShowPrint()"
+     ng-mouseleave="detailItemCtrl.toggleShowPrint()"
+     ng-click="detailItemCtrl.onClick($event)"
+     ng-class="{'_expired': detailItemCtrl.expired, '_opened': detailItemCtrl.isOpened, '_print': detailItemCtrl.print}">
 
     <div class="item__col">
         <div class="item__col-text">{{detailItemCtrl.item.name}}</div>

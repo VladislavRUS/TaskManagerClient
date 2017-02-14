@@ -98,6 +98,7 @@ angular.module('app')
     .factory('eventsFactory', eventsFactory)
     .factory('equipmentsFactory', equipmentsFactory)
     .factory('loginFactory', loginFactory)
+    .factory('printFactory', printFactory)
     .factory('restServiceFactory', restServiceFactory)
     .factory('notificationsFactory', notificationsFactory);
 
