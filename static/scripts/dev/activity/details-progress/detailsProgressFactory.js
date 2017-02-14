@@ -24,11 +24,11 @@ function detailsProgressFactory($http, restServiceFactory, dateFactory, notifica
                 for (var j = 0; j < steps.length; j++) {
                     var step = steps[j];
 
-                    if (new Date(step.expirationDate) > new Date()) {
+                    if (new Date(step.expirationDate).getTime() < new Date().getTime()) {
 
                         notificationsFactory.addNotification({
-                            type: { value: stepTypeValue, name: stepTypeName },
-                            text: 'Завершен этап под номером: ' + step.number + '. Оборудование НИКОРТ: ' + detail.name,
+                            type: { value: stepTypeValue, name: stepTypeName, style: '_expired' },
+                            text: stepExpired(step, detail),
                             link: detailProgressTypeValue + '?uuid=' + detail.uuid
                         });
                     }
@@ -36,6 +36,10 @@ function detailsProgressFactory($http, restServiceFactory, dateFactory, notifica
             }
         });
     };
+
+    function stepExpired(step, detail) {
+        return 'Завершен этап под номером: ' + step.number + '. Оборудование НИОКР: ' + detail.name;
+    }
 
     factory.addStepToDetail = function (detail, step) {
         $http.post(restServiceFactory.stepsCreate, step).then(function (resp) {

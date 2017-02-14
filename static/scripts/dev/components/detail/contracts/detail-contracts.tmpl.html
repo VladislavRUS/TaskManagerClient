@@ -9,14 +9,12 @@
             <td class="item__table-header-cell">Квартал</td>
             <td class="item__table-header-cell">Год</td>
             <td class="item__table-header-cell">Отм. об аванс</td>
+            <td class="item__table-header-cell">Выполнено</td>
+            <td class="item__table-header-cell">Удалить</td>
         </tr>
-        <detail-contract
-                contract="contract"
-                ng-repeat="contract in detailContractsCtrl.item.contracts">
-        </detail-contract>
 
-        <!--<tr class="item__table-row"
-            ng-repeat="contract in detailContractsCtrl.item.contracts"
+        <tr class="item__table-row"
+            ng-repeat="contract in detailContractsCtrl.detail.contracts"
             ng-class="'{{detailContractsCtrl.contractStatus(contract)}}'"
             ng-click="detailContractsCtrl.editContract(contract)">
 
@@ -26,7 +24,9 @@
             <td class="item__table-body-cell">{{contract.quoter}}</td>
             <td class="item__table-body-cell">{{contract.year}}</td>
             <td class="item__table-body-cell">{{contract.prepaidNote}}</td>
-        </tr>-->
+            <td class="item__table-body-cell">Done</td>
+            <td class="item__table-body-cell">Delete</td>
+        </tr>
     </table>
 
     <div class="detail-contract__add" ng-click="detailContractsCtrl.addContract()">Добавить контракт</div>

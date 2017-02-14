@@ -38,5 +38,10 @@ function restServiceFactory() {
     service.detailsProgressUpdate = service.ip + 'createdequipments/{UUID}';
     service.detailsProgressDelete  = service.ip + 'createdequipments/{UUID}';
 
+    /*Accessories*/
+    service.accessoriesCreate = service.ip + 'accessory';
+    service.accessoriesDelete = service.ip + 'accessory/{UUID}';
+    service.accessoriesUpdate = service.ip + 'accessory';
+    
     return service;
 }

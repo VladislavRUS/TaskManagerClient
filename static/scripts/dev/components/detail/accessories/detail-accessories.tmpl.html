@@ -6,24 +6,16 @@
             <td class="item__table-header-cell">Наименование</td>
             <td class="item__table-header-cell">Обозначение</td>
         </tr>
-        <detail-contract
-                contract="contract"
-                ng-repeat="contract in detailAccessoriesCtrl.item.contracts">
-        </detail-contract>
 
-        <!--<tr class="item__table-row"
-            ng-repeat="contract in detailAccessoriesCtrl.item.contracts"
+        <tr class="item__table-row"
+            ng-repeat="accessory in detailAccessoriesCtrl.detail.accessories"
             ng-class="'{{detailAccessoriesCtrl.contractStatus(contract)}}'"
             ng-click="detailAccessoriesCtrl.editContract(contract)">
 
-            <td class="item__table-body-cell">{{contract.agreement}}</td>
-            <td class="item__table-body-cell">{{contract.customer}}</td>
-            <td class="item__table-body-cell">{{contract.amount}}</td>
-            <td class="item__table-body-cell">{{contract.quoter}}</td>
-            <td class="item__table-body-cell">{{contract.year}}</td>
-            <td class="item__table-body-cell">{{contract.prepaidNote}}</td>
-        </tr>-->
+            <td class="item__table-body-cell">{{accessory.name}}</td>
+            <td class="item__table-body-cell">{{accessory.designation}}</td>
+        </tr>
     </table>
 
-    <div class="detail-contract__add" ng-click="detailAccessoriesCtrl.addContract()">Добавить комплектующее</div>
+    <div class="detail-contract__add" ng-click="detailAccessoriesCtrl.addAccessory()">Добавить комплектующее</div>
 </div>

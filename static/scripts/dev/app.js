@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate'])
+angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll'])
     .config(function($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/notifications');
@@ -54,6 +54,7 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate'])
 
 /*Controllers*/
 angular.module('app')
+    .controller('AddAccessoryDialogController', AddAccessoryDialogController)
     .controller('AddEventDialogController', AddEventDialogController)
     .controller('AddContractDialogController', AddContractDialogController)
     .controller('AddDetailDialogController', AddDetailDialogController)
@@ -70,6 +71,8 @@ angular.module('app')
 
 
 /*Directives*/
+/*Factories*/
+
 angular.module('app')
     .directive('dialogWrap', dialogWrapDirective)
     .directive('detailsLayout', detailsLayoutDirective)
@@ -78,6 +81,7 @@ angular.module('app')
     .directive('detailProgressItem', detailProgressItemDirective)
     .directive('detailContract', detailContractDirective)
     .directive('detailContracts', detailContractsDirective)
+    .directive('detailAccessory', detailAccessoryDirective)
     .directive('detailAccessories', detailAccessoriesDirective)
     .directive('eventsLayout', eventsLayoutDirective)
     .directive('eventItem', eventItemDirective)
@@ -86,8 +90,6 @@ angular.module('app')
     .directive('loginLanding', loginLandingDirective)
     .directive('mainHeader', mainHeaderDirective)
     .directive('notificationsLayout', notificationsLayoutDirective);
-
-/*Factories*/
 angular.module('app')
     .factory('dateFactory', dateFactory)
     .factory('dialogWrapFactory', dialogWrapFactory)
