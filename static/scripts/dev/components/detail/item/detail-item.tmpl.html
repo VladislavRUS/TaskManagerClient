@@ -14,6 +14,12 @@
     </div>
 </div>
 
+<div class="item__detailed" ng-if="detailItemCtrl.isOpened">
+    <detail-accessories detail="detailItemCtrl.item"></detail-accessories>
+    <detail-contracts detail="detailItemCtrl.item"></detail-contracts>
+</div>
+<!--
+
 <div class="item__table-wrapper tableAnimation" ng-if="detailItemCtrl.isOpened">
     <table class="item__table" id="{{detailItemCtrl.item.uuid + '-table'}}">
         <tr class="item__table-header">
@@ -38,7 +44,7 @@
         </tr>
     </table>
 
-    <!--<detail-contract contract="contract" ng-repeat="contract in detailItemCtrl.item.contracts"></detail-contract>-->
+    &lt;!&ndash;<detail-contract contract="contract" ng-repeat="contract in detailItemCtrl.item.contracts"></detail-contract>&ndash;&gt;
 
     <div class="detail-contract__add" ng-click="detailItemCtrl.addContract()">Добавить контракт</div>
-</div>
+</div>-->

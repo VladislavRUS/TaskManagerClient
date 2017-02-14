@@ -2,7 +2,7 @@ function restServiceFactory() {
 
     var service = {};
 
-    service.ip = 'http://192.168.1.39:9999//api/v1/frontend-api/';
+    service.ip = 'http://localhost:9999//api/v1/frontend-api/';
 
     /*Events*/
     service.eventsReadAll = service.ip + 'events';

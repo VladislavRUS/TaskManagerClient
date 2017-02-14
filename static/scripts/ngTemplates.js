@@ -136,6 +136,90 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/detail/accessories/detail-accessories.tmpl.html',
+    '<div class="item__inner-header" ng-click="detailAccessoriesCtrl.toggle()">Комплектующие</div>\n' +
+    '\n' +
+    '<div class="item__table-wrapper tableAnimation" ng-if="detailAccessoriesCtrl.opened">\n' +
+    '    <table class="item__table" id="{{detailAccessoriesCtrl.detail.uuid + \'-table\'}}">\n' +
+    '        <tr class="item__table-header">\n' +
+    '            <td class="item__table-header-cell">Наименование</td>\n' +
+    '            <td class="item__table-header-cell">Обозначение</td>\n' +
+    '        </tr>\n' +
+    '        <detail-contract\n' +
+    '                contract="contract"\n' +
+    '                ng-repeat="contract in detailAccessoriesCtrl.item.contracts">\n' +
+    '        </detail-contract>\n' +
+    '\n' +
+    '        <!--<tr class="item__table-row"\n' +
+    '            ng-repeat="contract in detailAccessoriesCtrl.item.contracts"\n' +
+    '            ng-class="\'{{detailAccessoriesCtrl.contractStatus(contract)}}\'"\n' +
+    '            ng-click="detailAccessoriesCtrl.editContract(contract)">\n' +
+    '\n' +
+    '            <td class="item__table-body-cell">{{contract.agreement}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.customer}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.amount}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.quoter}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.year}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.prepaidNote}}</td>\n' +
+    '        </tr>-->\n' +
+    '    </table>\n' +
+    '\n' +
+    '    <div class="detail-contract__add" ng-click="detailAccessoriesCtrl.addContract()">Добавить комплектующее</div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/detail/contracts/detail-contracts.tmpl.html',
+    '<div class="item__inner-header" ng-click="detailContractsCtrl.toggle()">Контракты</div>\n' +
+    '\n' +
+    '<div class="item__table-wrapper tableAnimation" ng-if="detailContractsCtrl.opened">\n' +
+    '    <table class="item__table" id="{{detailContractsCtrl.detail.uuid + \'-table\'}}">\n' +
+    '        <tr class="item__table-header">\n' +
+    '            <td class="item__table-header-cell">Договор</td>\n' +
+    '            <td class="item__table-header-cell">Заказчик</td>\n' +
+    '            <td class="item__table-header-cell">Кол-во изделий</td>\n' +
+    '            <td class="item__table-header-cell">Квартал</td>\n' +
+    '            <td class="item__table-header-cell">Год</td>\n' +
+    '            <td class="item__table-header-cell">Отм. об аванс</td>\n' +
+    '        </tr>\n' +
+    '        <detail-contract\n' +
+    '                contract="contract"\n' +
+    '                ng-repeat="contract in detailContractsCtrl.item.contracts">\n' +
+    '        </detail-contract>\n' +
+    '\n' +
+    '        <!--<tr class="item__table-row"\n' +
+    '            ng-repeat="contract in detailContractsCtrl.item.contracts"\n' +
+    '            ng-class="\'{{detailContractsCtrl.contractStatus(contract)}}\'"\n' +
+    '            ng-click="detailContractsCtrl.editContract(contract)">\n' +
+    '\n' +
+    '            <td class="item__table-body-cell">{{contract.agreement}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.customer}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.amount}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.quoter}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.year}}</td>\n' +
+    '            <td class="item__table-body-cell">{{contract.prepaidNote}}</td>\n' +
+    '        </tr>-->\n' +
+    '    </table>\n' +
+    '\n' +
+    '    <div class="detail-contract__add" ng-click="detailContractsCtrl.addContract()">Добавить контракт</div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/detail/item/detail-item.tmpl.html',
     '<div class="item"\n' +
     '     id="{{detailItemCtrl.item.uuid}}"\n' +
@@ -152,6 +236,12 @@ module.run(['$templateCache', function($templateCache) {
     '        <div class="item__col-text">{{detailItemCtrl.item.expirationDate | date}}</div>\n' +
     '    </div>\n' +
     '</div>\n' +
+    '\n' +
+    '<div class="item__detailed" ng-if="detailItemCtrl.isOpened">\n' +
+    '    <detail-accessories detail="detailItemCtrl.item"></detail-accessories>\n' +
+    '    <detail-contracts detail="detailItemCtrl.item"></detail-contracts>\n' +
+    '</div>\n' +
+    '<!--\n' +
     '\n' +
     '<div class="item__table-wrapper tableAnimation" ng-if="detailItemCtrl.isOpened">\n' +
     '    <table class="item__table" id="{{detailItemCtrl.item.uuid + \'-table\'}}">\n' +
@@ -177,10 +267,11 @@ module.run(['$templateCache', function($templateCache) {
     '        </tr>\n' +
     '    </table>\n' +
     '\n' +
-    '    <!--<detail-contract contract="contract" ng-repeat="contract in detailItemCtrl.item.contracts"></detail-contract>-->\n' +
+    '    &lt;!&ndash;<detail-contract contract="contract" ng-repeat="contract in detailItemCtrl.item.contracts"></detail-contract>&ndash;&gt;\n' +
     '\n' +
     '    <div class="detail-contract__add" ng-click="detailItemCtrl.addContract()">Добавить контракт</div>\n' +
-    '</div>');
+    '</div>-->\n' +
+    '');
 }]);
 })();
 
@@ -484,6 +575,46 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/detail/add/add-detail-dialog.tmpl.html',
+    '<div class="dialog-add jsPopup" ng-controller="AddDetailDialogController as addDetailDialogCtrl">\n' +
+    '    <div class="dialog-add__header">\n' +
+    '        Добавление виброизолятора\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__body">\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addDetailDialogCtrl.name" placeholder="Наименование">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addDetailDialogCtrl.description" placeholder="Обозначение КД">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <label>Срок действия ПИ</label>\n' +
+    '            <input class="input" type="date" ng-model="addDetailDialogCtrl.expirationDate" placeholder="Срок действия ПИ">\n' +
+    '        </div>\n' +
+    '\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__actions">\n' +
+    '        <div class="dialog-add__actions-button _save"\n' +
+    '             ng-click="addDetailDialogCtrl.onSave()">Сохранить</div>\n' +
+    '\n' +
+    '        <div class="dialog-add__actions-button _cancel"\n' +
+    '             ng-click="addDetailDialogCtrl.onCancel()">Отмена</div>\n' +
+    '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/dialog/contract/add/add-contract-dialog.tmpl.html',
     '<div class="dialog-add jsPopup" ng-controller="AddContractDialogController as addContractDialogCtrl">\n' +
     '    <div class="dialog-add__header">\n' +
@@ -583,46 +714,6 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="editContractDialogCtrl.onCancel()">Отмена</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/detail/add/add-detail-dialog.tmpl.html',
-    '<div class="dialog-add jsPopup" ng-controller="AddDetailDialogController as addDetailDialogCtrl">\n' +
-    '    <div class="dialog-add__header">\n' +
-    '        Добавление виброизолятора\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__body">\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addDetailDialogCtrl.name" placeholder="Наименование">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addDetailDialogCtrl.description" placeholder="Обозначение КД">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <label>Срок действия ПИ</label>\n' +
-    '            <input class="input" type="date" ng-model="addDetailDialogCtrl.expirationDate" placeholder="Срок действия ПИ">\n' +
-    '        </div>\n' +
-    '\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__actions">\n' +
-    '        <div class="dialog-add__actions-button _save"\n' +
-    '             ng-click="addDetailDialogCtrl.onSave()">Сохранить</div>\n' +
-    '\n' +
-    '        <div class="dialog-add__actions-button _cancel"\n' +
-    '             ng-click="addDetailDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
