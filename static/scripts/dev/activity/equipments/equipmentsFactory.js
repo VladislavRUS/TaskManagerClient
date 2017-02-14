@@ -1,8 +1,12 @@
-function equipmentsFactory($http, restServiceFactory, notificationsFactory) {
+function equipmentsFactory($http, $rootScope, restServiceFactory, notificationsFactory) {
     var factory = {};
 
     var equipmentTypeValue = 'equipments',
         equipmentTypeName = 'Испытательное оборудование';
+
+    $rootScope.$on('data:update', function() {
+        factory.getEquipments();
+    });
 
     factory.getEquipments = function () {
         $http.get(restServiceFactory.equipmentsAll).then(function (resp) {
@@ -52,6 +56,6 @@ function equipmentsFactory($http, restServiceFactory, notificationsFactory) {
             factory.getEquipments();
         })
     };
-
+    
     return factory;
 }

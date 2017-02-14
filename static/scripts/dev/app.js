@@ -6,7 +6,7 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll'])
         $stateProvider
             .state('/', {
                 url: '/',
-                abstact: 'true'
+                abstract: 'true'
             })
 
             .state('events', {
@@ -71,8 +71,6 @@ angular.module('app')
 
 
 /*Directives*/
-/*Factories*/
-
 angular.module('app')
     .directive('dialogWrap', dialogWrapDirective)
     .directive('detailsLayout', detailsLayoutDirective)
@@ -90,6 +88,8 @@ angular.module('app')
     .directive('loginLanding', loginLandingDirective)
     .directive('mainHeader', mainHeaderDirective)
     .directive('notificationsLayout', notificationsLayoutDirective);
+
+/*Factories*/
 angular.module('app')
     .factory('dateFactory', dateFactory)
     .factory('dialogWrapFactory', dialogWrapFactory)

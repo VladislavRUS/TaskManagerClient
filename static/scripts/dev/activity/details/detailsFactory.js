@@ -1,4 +1,4 @@
-function detailsFactory($http, restServiceFactory, dateFactory, notificationsFactory) {
+function detailsFactory($http, $rootScope, restServiceFactory, dateFactory, notificationsFactory) {
     var factory = {};
 
     var detailTypeValue = 'details',
@@ -103,6 +103,10 @@ function detailsFactory($http, restServiceFactory, dateFactory, notificationsFac
             factory.getDetails();
         });
     };
+
+    $rootScope.$on('data:update', function() {
+        factory.getDetails();
+    });
 
     return factory;
 }
