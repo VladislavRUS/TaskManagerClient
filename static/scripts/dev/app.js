@@ -1,7 +1,10 @@
-angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll'])
-    .config(function($stateProvider, $urlRouterProvider) {
+angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.calendar'])
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
-        $urlRouterProvider.otherwise('/notifications');
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+        $urlRouterProvider.otherwise('/calendar');
 
         $stateProvider
             .state('/', {
@@ -9,46 +12,25 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll'])
                 abstract: 'true'
             })
 
-            .state('events', {
-                url: '/events',
-                controller: 'EventsController',
-                controllerAs: 'eventsCtrl',
-                templateUrl: 'scripts/dev/activity/events/events-activity.tmpl.html'
+            .state('dampers', {
+                url: '/dampers',
+                controller: 'DampersController',
+                controllerAs: 'dampersCtrl',
+                templateUrl: 'scripts/dev/activity/dampers/dampers-activity.tmpl.html'
             })
 
-            .state('details', {
-                url: '/details?uuid',
-                controller: 'DetailsController',
-                controllerAs: 'detailsCtrl',
-                templateUrl: 'scripts/dev/activity/details/details-activity.tmpl.html'
+            .state('dampers-detailed', {
+                url: '/dampers-detailed/{uuid}',
+                controller: 'DampersDetailedController',
+                controllerAs: 'dampersDetailedCtrl',
+                templateUrl: 'scripts/dev/activity/dampers/detailed/dampers-detailed-activity.tmpl.html'
             })
 
-            .state('detailsProgress', {
-                url: '/detailsProgress?uuid',
-                controller: 'DetailsProgressController',
-                controllerAs: 'detailsProgressCtrl',
-                templateUrl: 'scripts/dev/activity/details-progress/details-progress-activity.tmpl.html'
-            })
-
-            .state('notifications', {
-                url: '/notifications',
-                controller: 'NotificationsController',
-                controllerAs: 'notificationsCtrl',
-                templateUrl: 'scripts/dev/activity/notifications/notifictions-activity.tmpl.html'
-            })
-
-            .state('equipments', {
-                url: '/equipments',
-                controller: 'EquipmentsController',
-                controllerAs: 'equipmentsCtrl',
-                templateUrl: 'scripts/dev/activity/equipments/equipments-activity.tmpl.html'
-            })
-
-            .state('equipmentsProgress', {
-                url: '/equipmentsProgress',
-                controller: 'EquipmentsProgressController',
-                controllerAs: 'equipmentsProgressCtrl',
-                templateUrl: 'scripts/dev/activity/equipments-progress/equipments-progress-activity.tmpl.html'
+            .state('calendar', {
+                url: '/calendar',
+                controller: 'CalendarController',
+                controllerAs: 'calendarCtrl',
+                templateUrl: 'scripts/dev/activity/calendar/calendar-activity.tmpl.html'
             })
     });
 
@@ -62,6 +44,9 @@ angular.module('app')
     .controller('AddProgressDetailDialogController', AddProgressDetailDialogController)
     .controller('AddEquipmentDialogController', AddEquipmentDialogController)
     .controller('DetailsController', DetailsController)
+    .controller('DampersController', DampersController)
+    .controller('DampersDetailedController', DampersDetailedController)
+    .controller('CalendarController', CalendarController)
     .controller('DetailsProgressController', DetailsProgressController)
     .controller('EventsController', EventsController)
     .controller('EquipmentsController', EquipmentsController)
@@ -73,8 +58,11 @@ angular.module('app')
 
 /*Directives*/
 angular.module('app')
+    .directive('calendarLayout', calendarLayoutDirective)
     .directive('dialogWrap', dialogWrapDirective)
     .directive('detailsLayout', detailsLayoutDirective)
+    .directive('dampersLayout', dampersLayoutDirective)
+    .directive('damperDetailed', damperDetailedDirective)
     .directive('detailsProgressLayout', detailsProgressLayoutDirective)
     .directive('detailItem', detailItemDirective)
     .directive('detailProgressItem', detailProgressItemDirective)
@@ -93,6 +81,7 @@ angular.module('app')
 /*Factories*/
 angular.module('app')
     .factory('dateFactory', dateFactory)
+    .factory('dampersFactory', dampersFactory)
     .factory('dialogWrapFactory', dialogWrapFactory)
     .factory('detailsFactory', detailsFactory)
     .factory('detailsProgressFactory', detailsProgressFactory)
@@ -105,4 +94,4 @@ angular.module('app')
 
 /*Animations*/
 angular.module('app')
-    .animation('.tableAnimation', tableAnimation);
+    .animation('.slideAnimation', slideAnimation);

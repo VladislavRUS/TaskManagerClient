@@ -28,17 +28,27 @@ module.exports = {
         src: [
             "bower_components/underscore/underscore-min.js",
             "bower_components/jquery/dist/jquery.min.js",
+            "bower_components/moment/min/moment-with-locales.min.js",
             "bower_components/velocity/velocity.min.js",
             "bower_components/angular/angular.min.js",
             "bower_components/angular-cookies/angular-cookies.min.js",
             "bower_components/angular-animate/angular-animate.min.js",
             "bower_components/angular-sanitize/angular-sanitize.min.js",
-            "bower_components/angular-ui-router/release/angular-ui-router.min.js",
+            "node_modules/angular-ui-router/release/angular-ui-router.min.js",
             "bower_components/angular-i18n/angular-locale_ru-ru.js",
             "bower_components/angular-scroll/angular-scroll.min.js",
+            "bower_components/angular-ui-calendar/src/calendar.js",
+            "bower_components/fullcalendar/dist/fullcalendar.js",
+            "bower_components/fullcalendar/dist/gcal.js",
+            "bower_components/fullcalendar/dist/lang-all.js",
+
+            "node_modules/tether/dist/js/tether.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js",
+
             "scripts/ngTemplates.js",
             "scripts/modules/**/*.js",
             "scripts/dev/app.js",
+            "scripts/dev/**/**/*.js",
             "scripts/dev/**/**/**/*.js"
         ],
         dest: './scripts/'

@@ -1,0 +1,71 @@
+<form>
+    <div class="form-group">
+        <button type="button" class="btn btn-success" ng-click="ctrl.onAdd()">Добавить виброизолятор</button>
+    </div>
+</form>
+
+<table class="table table-hover">
+    <thead class="thead-inverse">
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Обозначение</th>
+            <th>Дата истечения строка</th>
+            <th>Контрактов</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ui-sref="dampers-detailed({uuid: damper.uuid})">
+            <th>{{$index}}</th>
+            <td>{{damper.name}}</td>
+            <td>{{damper.designation}}</td>
+            <td>{{damper.expirationDate | date: 'yyyy-MM-dd'}}</td>
+            <td>{{damper.contracts.length}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal fade" id="createDamperModal" tabindex="-1" role="dialog" aria-labelledby="createDamperModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createDamperModalLabel">Добавление виброизолятора</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2" for="name">
+                            Название
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="name" ng-model="ctrl.name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2" for="designation">
+                            Обозначение
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="designation" ng-model="ctrl.designation">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12" for="expirationDate">
+                            Дата истечения срока
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.expirationDate">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-success" ng-click="ctrl.save()">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>

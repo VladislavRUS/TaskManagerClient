@@ -1,0 +1,165 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a ui-sref="dampers">Виброизоляторы</a></li>
+    <li class="breadcrumb-item active">{{ctrl.damper.name}}</li>
+</ol>
+
+<form class="form-horizontal col-sm-12 form-control" role="form">
+    <div class="form-group">
+        <label class="col-sm-2" for="name">
+            Название
+        </label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="name" ng-model="ctrl.damper.name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2" for="designation">
+            Обозначение
+        </label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="designation" ng-model="ctrl.damper.designation">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2" for="expirationDate">
+            Дата истечения срока
+        </label>
+        <div class="col-sm-5">
+            <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.damper.expirationDate">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-10">
+            <button type="button" ng-click="ctrl.onUpdate()" class="btn btn-success">Обновить</button>
+        </div>
+    </div>
+
+    <div id="updateAlert" class="alert alert-success slideAnimation" ng-if="ctrl.showAlert" role="alert">
+        <strong>Виброизолятор обновлен!</strong>
+    </div>
+</form>
+
+<hr>
+
+<div class="d-flex justify-content-start">
+    <div class="p-2">
+        <h4>Договоры</h4>
+    </div>
+    <div class="ml-auto p-2">
+        <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.addContract('createContractModal');">Добавить
+        </button>
+    </div>
+</div>
+
+<div class="modal fade" id="createContractModal" tabindex="-1" role="dialog" aria-labelledby="createContractModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createContractModalLabel">{{ctrl.update ? 'Обновление' : 'Добавление'}} контракта</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-12" for="name">
+                            Соглашение о поставке
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="agreement" ng-model="ctrl.currentContract.agreement">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12" for="designation">
+                            Заказчик
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="customer" ng-model="ctrl.currentContract.customer">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12" for="expirationDate">
+                            Количество
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="1" step="1" class="form-control" id="amount"
+                                   ng-model="ctrl.currentContract.amount">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12" for="expirationDate">
+                            Квартал
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="1" max="4" step="1" class="form-control" id="quoter"
+                                   ng-model="ctrl.currentContract.quoter">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12" for="expirationDate">
+                            Год
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="number" min="2000" step="1" class="form-control" id="year"
+                                   ng-model="ctrl.currentContract.year">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12" for="expirationDate">
+                            Заметка об авансировании
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="prepaidNote"
+                                   ng-model="ctrl.currentContract.prepaidNote">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" id="done" type="checkbox" ng-model="ctrl.currentContract.done"> Выполнен
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-success" ng-click="ctrl.saveContract()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead class="thead-inverse">
+    <tr>
+        <th>#</th>
+        <th>Соглашение</th>
+        <th>Заказчик</th>
+        <th>Кол-во</th>
+        <th>Квартал</th>
+        <th>Год</th>
+        <th>Отметка о предварительном авансировании</th>
+        <th>Выполнен</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="contract in ctrl.damper.contracts track by $index" ng-click="ctrl.updateContract(contract, 'createContractModal');">
+        <th>{{$index}}</th>
+        <td>{{contract.agreement}}</td>
+        <td>{{contract.customer}}</td>
+        <td>{{contract.amount}}</td>
+        <td>{{contract.quoter}}</td>
+        <td>{{contract.year}}</td>
+        <td>{{contract.prepaidNote}}</td>
+        <td>{{contract.done ? 'Да' : 'Нет'}}</td>
+    </tr>
+    </tbody>
+</table>
+
+
+

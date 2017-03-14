@@ -3,7 +3,7 @@ function restServiceFactory() {
     var service = {};
 
     //192.168.1.41
-    service.ip = 'http://localhost:9999//api/v1/frontend-api/';
+    service.ip = 'http://localhost:9999/api/v1/frontend-api/';
 
     /*Events*/
     service.eventsReadAll = service.ip + 'events';
@@ -18,10 +18,18 @@ function restServiceFactory() {
     service.detailsDelete = service.ip + 'details/{UUID}';
     service.detailsPrint = service.ip + 'details/print';
 
+    /*Dampers*/
+    service.dampersCreate = service.ip + 'dampers';
+    service.dampersCreateContract = service.ip + 'dampers/{uuid}/contracts';
+    service.dampersCreateAccessory = service.ip + 'dampers/{uuid}/accessories';
+    service.dampersAll = service.ip + 'dampers';
+    service.dampersOne = service.ip + 'dampers/{uuid}';
+    service.dampersUpdate = service.ip + 'dampers/{uuid}';
+    service.dampersDelete = service.ip + 'dampers/{uuid}';
+
     /*Contracts*/
-    service.updateContract = service.ip + 'contracts';
-    service.createContract = service.ip + 'contracts/{detailUUID}';
-    service.deleteContract = service.ip + 'contracts/{UUID}';
+    service.contractUpdate = service.ip + 'contracts/{uuid}';
+    service.contractDelete = service.ip + 'contracts/{uuid}';
 
     /*Equipments*/
     service.equipmentsAll = service.ip + 'equipments';
@@ -41,9 +49,8 @@ function restServiceFactory() {
     service.detailsProgressDelete  = service.ip + 'createdequipments/{UUID}';
 
     /*Accessories*/
-    service.accessoriesCreate = service.ip + 'accessory';
-    service.accessoriesDelete = service.ip + 'accessory/{UUID}';
-    service.accessoriesUpdate = service.ip + 'accessory';
+    service.accessoriesDelete = service.ip + 'accessories/{uuid}';
+    service.accessoriesUpdate = service.ip + 'accessories/{uuid}';
     
     return service;
 }
