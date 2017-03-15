@@ -17,17 +17,14 @@ function printFactory($http, restServiceFactory) {
         });
     };
 
-    factory.sendToPrint = function (page) {
+    factory.sendToPrint = function (page, printArray) {
         switch (page) {
-            case 'details': {
-                var uuidList = factory.printArray.map(function (obj) {
-                    return obj.uuid;
-                });
+            case 'dampers': {
                 $http({
                     method: 'POST',
                     url: restServiceFactory.detailsPrint,
                     responseType: 'arraybuffer',
-                    data: { uuidList: uuidList }
+                    data: { uuidList: printArray }
                 }).then(function (resp) {
                     var date = new Date();
                     factory.saveData(resp.data, getName());

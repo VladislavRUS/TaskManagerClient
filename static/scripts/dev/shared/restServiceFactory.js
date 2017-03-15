@@ -51,6 +51,9 @@ function restServiceFactory() {
     /*Accessories*/
     service.accessoriesDelete = service.ip + 'accessories/{uuid}';
     service.accessoriesUpdate = service.ip + 'accessories/{uuid}';
-    
+
+    /*Notifications*/
+    service.notificationsAll = service.ip + 'notifications';
+
     return service;
 }

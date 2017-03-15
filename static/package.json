@@ -45,6 +45,8 @@
     "webpack": "^1.12.14"
   },
   "dependencies": {
-    "angular-ui-router": "^0.3.2"
+    "angular-ui-router": "^0.3.2",
+    "fullcalendar": "^3.2.0",
+    "tether": "^1.4.0"
   }
 }

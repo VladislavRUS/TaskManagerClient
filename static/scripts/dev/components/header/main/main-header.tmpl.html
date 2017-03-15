@@ -1,6 +1,11 @@
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" ng-class="{'active': mainHeaderCtrl.inState('notifications')}" ui-sref="notifications">Уведомления ({{mainHeaderCtrl.storage.notifications.length}})</a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" ng-class="{'active': mainHeaderCtrl.inState('calendar')}" ui-sref="calendar">Календарь</a>
             </li>

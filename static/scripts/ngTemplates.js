@@ -113,10 +113,9 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/activity/events/events-activity.tmpl.html',
-    '<div class="page">\n' +
+    '<div class="container">\n' +
     '    <main-header></main-header>\n' +
     '    <events-layout></events-layout>\n' +
-    '\n' +
     '    <dialog-wrap></dialog-wrap>\n' +
     '</div>');
 }]);
@@ -130,11 +129,11 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/activity/notifications/notifictions-activity.tmpl.html',
-    '<div class="page">\n' +
-    '    <login-landing ng-if="!notificationsCtrl.loginFactory.loggedIn"></login-landing>\n' +
-    '\n' +
+    '<div class="container">\n' +
     '    <main-header></main-header>\n' +
-    '    <notifications-layout notifications="notificationsCtrl.storage.notifications"></notifications-layout>\n' +
+    '    <notifications-layout\n' +
+    '            notifications="notificationsCtrl.storage.notifications">\n' +
+    '    </notifications-layout>\n' +
     '    <dialog-wrap></dialog-wrap>\n' +
     '</div>');
 }]);
@@ -218,7 +217,7 @@ module.run(['$templateCache', function($templateCache) {
     '                    </div>\n' +
     '                </form>\n' +
     '            </div>\n' +
-    '            <div class="modal-footer">\n' +
+    '            <div class="modal-footer" ng-if="!ctrl.currentEvent.custom">\n' +
     '                <button type="button" class="btn btn-danger" ng-click="ctrl.delete()">Удалить</button>\n' +
     '                <button type="button" class="btn btn-success" ng-click="ctrl.update()">Обновить</button>\n' +
     '            </div>\n' +
@@ -283,19 +282,347 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/detail/contract/detail-contract.tmpl.html',
-    '<tr class="item__table-row"\n' +
-    '    ng-class="\'{{detailContractCtrl.contractStatus(contract)}}\'"\n' +
-    '    ng-click="detailContractCtrl.editContract(contract)">\n' +
+  $templateCache.put('scripts/dev/components/damper/detailed/damper-detailed.tmpl.html',
+    '<ol class="breadcrumb">\n' +
+    '    <li class="breadcrumb-item"><a ui-sref="dampers">Виброизоляторы</a></li>\n' +
+    '    <li class="breadcrumb-item active">{{ctrl.damper.name}}</li>\n' +
+    '</ol>\n' +
     '\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.agreement}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.customer}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.amount}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.quoter}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.year}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.prepaidNote}}</td>\n' +
-    '</tr>\n' +
-    '');
+    '<form class="form-horizontal col-sm-12 form-control" role="form">\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="name">\n' +
+    '                Название\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="name" ng-model="ctrl.damper.name">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="designation">\n' +
+    '                Обозначение\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="designation" ng-model="ctrl.damper.designation">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="expirationDate">\n' +
+    '                Дата истечения срока\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.damper.expirationDate">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="inspectionMethods">\n' +
+    '                Состав контролируемых изделий\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <textarea type="text" class="form-control" id="inspectionMethods"\n' +
+    '                          ng-model="ctrl.damper.inspectionMethods"></textarea>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="controlType">\n' +
+    '                Вид контроля, объем выборки, контрольные нормативы\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="controlType" ng-model="ctrl.damper.controlType">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="measurementMeans">\n' +
+    '                Необходимые средства измерений\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="measurementMeans" ng-model="ctrl.damper.measurementMeans">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="guarantee">\n' +
+    '                Гарантийный срок хранения\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="guarantee" ng-model="ctrl.damper.guarantee">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="fiatLabeling">\n' +
+    '                Указания о маркировке изделий\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="fiatLabeling" ng-model="ctrl.damper.fiatLabeling">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="row">\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="note">\n' +
+    '                Примечание\n' +
+    '            </label>\n' +
+    '            <div class="col-sm-12">\n' +
+    '                <input type="text" class="form-control" id="note" ng-model="ctrl.damper.note">\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="col-md-6 form-group">\n' +
+    '            <label class="col-sm-12" for="note">\n' +
+    '                &nbsp;\n' +
+    '            </label>\n' +
+    '\n' +
+    '            <div class="col-sm-12 d-flex">\n' +
+    '                <button type="button" ng-click="ctrl.onUpdate()" class="btn btn-success">Обновить</button>\n' +
+    '                <button type="button" ng-click="ctrl.onDelete()" class="btn btn-danger ml-auto">Удалить</button>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div id="updateAlert" class="alert alert-success slideAnimation" ng-if="ctrl.showAlert" role="alert">\n' +
+    '        <strong>Виброизолятор обновлен!</strong>\n' +
+    '    </div>\n' +
+    '</form>\n' +
+    '\n' +
+    '<hr>\n' +
+    '\n' +
+    '<div class="d-flex justify-content-start">\n' +
+    '    <div class="p-2">\n' +
+    '        <h4>Договоры</h4>\n' +
+    '    </div>\n' +
+    '    <div class="ml-auto p-2">\n' +
+    '        <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.addContract(\'createContractModal\');">\n' +
+    '            Добавить\n' +
+    '        </button>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
+    '<table class="table table-hover">\n' +
+    '    <thead class="thead-inverse">\n' +
+    '    <tr>\n' +
+    '        <th>#</th>\n' +
+    '        <th>Соглашение</th>\n' +
+    '        <th>Заказчик</th>\n' +
+    '        <th>Кол-во</th>\n' +
+    '        <th>Квартал</th>\n' +
+    '        <th>Год</th>\n' +
+    '        <th>Отметка о предварительном авансировании</th>\n' +
+    '        <th>Выполнен</th>\n' +
+    '    </tr>\n' +
+    '    </thead>\n' +
+    '    <tbody>\n' +
+    '    <tr ng-repeat="contract in ctrl.damper.contracts track by $index"\n' +
+    '        ng-click="ctrl.updateContract(contract, \'createContractModal\');">\n' +
+    '        <th>{{$index + 1}}</th>\n' +
+    '        <td>{{contract.agreement}}</td>\n' +
+    '        <td>{{contract.customer}}</td>\n' +
+    '        <td>{{contract.amount}}</td>\n' +
+    '        <td>{{contract.quoter}}</td>\n' +
+    '        <td>{{contract.year}}</td>\n' +
+    '        <td>{{contract.prepaidNote}}</td>\n' +
+    '        <td>{{contract.done ? \'Да\' : \'Нет\'}}</td>\n' +
+    '    </tr>\n' +
+    '    </tbody>\n' +
+    '</table>\n' +
+    '\n' +
+    '<hr>\n' +
+    '\n' +
+    '<div class="d-flex justify-content-start">\n' +
+    '    <div class="p-2">\n' +
+    '        <h4>Комплектующие</h4>\n' +
+    '    </div>\n' +
+    '    <div class="ml-auto p-2">\n' +
+    '        <button type="button" class="btn btn-sm btn-success"\n' +
+    '                ng-click="ctrl.addAccessory(\'createAccessoryModal\', \'component\');">Добавить\n' +
+    '        </button>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
+    '<table class="table table-hover">\n' +
+    '    <thead class="thead-inverse">\n' +
+    '    <tr>\n' +
+    '        <th>#</th>\n' +
+    '        <th>Наименование, обозначение</th>\n' +
+    '        <th>Обозначение КД, ТД и ТУ</th>\n' +
+    '    </tr>\n' +
+    '    </thead>\n' +
+    '    <tbody>\n' +
+    '    <tr ng-repeat="accessory in ctrl.damper.accessories | filter: { type: \'component\' }"\n' +
+    '        ng-click="ctrl.updateAccessory(accessory, \'createAccessoryModal\');">\n' +
+    '        <th>{{$index + 1}}</th>\n' +
+    '        <td>{{accessory.name}}</td>\n' +
+    '        <td>{{accessory.designation}}</td>\n' +
+    '    </tr>\n' +
+    '    </tbody>\n' +
+    '</table>\n' +
+    '\n' +
+    '<hr>\n' +
+    '\n' +
+    '<div class="d-flex justify-content-start">\n' +
+    '    <div class="p-2">\n' +
+    '        <h4>Расходные материалы</h4>\n' +
+    '    </div>\n' +
+    '    <div class="ml-auto p-2">\n' +
+    '        <button type="button" class="btn btn-sm btn-success"\n' +
+    '                ng-click="ctrl.addAccessory(\'createAccessoryModal\', \'material\');">Добавить\n' +
+    '        </button>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
+    '<table class="table table-hover">\n' +
+    '    <thead class="thead-inverse">\n' +
+    '    <tr>\n' +
+    '        <th>#</th>\n' +
+    '        <th>Наименование, обозначение</th>\n' +
+    '        <th>Обозначение КД, ТД и ТУ</th>\n' +
+    '    </tr>\n' +
+    '    </thead>\n' +
+    '    <tbody>\n' +
+    '    <tr ng-repeat="accessory in ctrl.damper.accessories | filter: { type: \'material\' }"\n' +
+    '        ng-click="ctrl.updateAccessory(accessory, \'createAccessoryModal\');">\n' +
+    '        <th>{{$index + 1}}</th>\n' +
+    '        <td>{{accessory.name}}</td>\n' +
+    '        <td>{{accessory.designation}}</td>\n' +
+    '    </tr>\n' +
+    '    </tbody>\n' +
+    '</table>\n' +
+    '\n' +
+    '<div class="modal fade" id="createContractModal" tabindex="-1" role="dialog" aria-labelledby="createContractModalLabel"\n' +
+    '     aria-hidden="true">\n' +
+    '    <div class="modal-dialog" role="document">\n' +
+    '        <div class="modal-content">\n' +
+    '            <div class="modal-header">\n' +
+    '                <h5 class="modal-title" id="createContractModalLabel">Договор</h5>\n' +
+    '                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+    '                    <span aria-hidden="true">&times;</span>\n' +
+    '                </button>\n' +
+    '            </div>\n' +
+    '            <div class="modal-body">\n' +
+    '                <form class="form-horizontal" role="form">\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="name">\n' +
+    '                            Соглашение о поставке\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="agreement"\n' +
+    '                                   ng-model="ctrl.currentContract.agreement">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="designation">\n' +
+    '                            Заказчик\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="customer"\n' +
+    '                                   ng-model="ctrl.currentContract.customer">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="expirationDate">\n' +
+    '                            Количество\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="number" min="1" step="1" class="form-control" id="amount"\n' +
+    '                                   ng-model="ctrl.currentContract.amount">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="expirationDate">\n' +
+    '                            Квартал\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="number" min="1" max="4" step="1" class="form-control" id="quoter"\n' +
+    '                                   ng-model="ctrl.currentContract.quoter">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="expirationDate">\n' +
+    '                            Год\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="number" min="2000" step="1" class="form-control" id="year"\n' +
+    '                                   ng-model="ctrl.currentContract.year">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="expirationDate">\n' +
+    '                            Заметка об авансировании\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="prepaidNote"\n' +
+    '                                   ng-model="ctrl.currentContract.prepaidNote">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group" ng-if="ctrl.update">\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <div class="form-check">\n' +
+    '                                <label class="form-check-label">\n' +
+    '                                    <input class="form-check-input" id="done" type="checkbox"\n' +
+    '                                           ng-model="ctrl.currentContract.done">Выполнен\n' +
+    '                                </label>\n' +
+    '                            </div>\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                </form>\n' +
+    '            </div>\n' +
+    '            <div class="modal-footer">\n' +
+    '                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>\n' +
+    '                <button type="button" class="btn btn-success" ng-click="ctrl.saveContract()">Сохранить</button>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
+    '<div class="modal fade" id="createAccessoryModal" tabindex="-1" role="dialog"\n' +
+    '     aria-labelledby="createAccessoryModalLabel"\n' +
+    '     aria-hidden="true">\n' +
+    '    <div class="modal-dialog" role="document">\n' +
+    '        <div class="modal-content">\n' +
+    '            <div class="modal-header">\n' +
+    '                <h5 class="modal-title" id="createAccessoryModalLabel">\n' +
+    '                    {{ctrl.accessoryTypes[ctrl.currentAccessory.type]}}</h5>\n' +
+    '                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+    '                    <span aria-hidden="true">&times;</span>\n' +
+    '                </button>\n' +
+    '            </div>\n' +
+    '            <div class="modal-body">\n' +
+    '                <form class="form-horizontal" role="form">\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="accessoryName">\n' +
+    '                            Наименование\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="accessoryName"\n' +
+    '                                   ng-model="ctrl.currentAccessory.name">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="accessoryDesignation">\n' +
+    '                            Обозначение основных КД, ТД, стандартов и ТУ\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="accessoryDesignation"\n' +
+    '                                   ng-model="ctrl.currentAccessory.designation">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                </form>\n' +
+    '            </div>\n' +
+    '            <div class="modal-footer">\n' +
+    '                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>\n' +
+    '                <button type="button" class="btn btn-success" ng-click="ctrl.saveAccessory()">Сохранить</button>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '</div>');
 }]);
 })();
 
@@ -313,6 +640,29 @@ module.run(['$templateCache', function($templateCache) {
     '        <div class="detail-accessory__col">{{detailAccessoryCtrl.accessory.designation}}</div>\n' +
     '    </div>\n' +
     '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/detail/contract/detail-contract.tmpl.html',
+    '<tr class="item__table-row"\n' +
+    '    ng-class="\'{{detailContractCtrl.contractStatus(contract)}}\'"\n' +
+    '    ng-click="detailContractCtrl.editContract(contract)">\n' +
+    '\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.agreement}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.customer}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.amount}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.quoter}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.year}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.prepaidNote}}</td>\n' +
+    '</tr>\n' +
+    '');
 }]);
 })();
 
@@ -406,202 +756,6 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/damper/detailed/damper-detailed.tmpl.html',
-    '<ol class="breadcrumb">\n' +
-    '    <li class="breadcrumb-item"><a ui-sref="dampers">Виброизоляторы</a></li>\n' +
-    '    <li class="breadcrumb-item active">{{ctrl.damper.name}}</li>\n' +
-    '</ol>\n' +
-    '\n' +
-    '<form class="form-horizontal col-sm-12 form-control" role="form">\n' +
-    '    <div class="form-group">\n' +
-    '        <label class="col-sm-2" for="name">\n' +
-    '            Название\n' +
-    '        </label>\n' +
-    '        <div class="col-sm-5">\n' +
-    '            <input type="text" class="form-control" id="name" ng-model="ctrl.damper.name">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '    <div class="form-group">\n' +
-    '        <label class="col-sm-2" for="designation">\n' +
-    '            Обозначение\n' +
-    '        </label>\n' +
-    '        <div class="col-sm-5">\n' +
-    '            <input type="text" class="form-control" id="designation" ng-model="ctrl.damper.designation">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '    <div class="form-group">\n' +
-    '        <label class="col-sm-2" for="expirationDate">\n' +
-    '            Дата истечения срока\n' +
-    '        </label>\n' +
-    '        <div class="col-sm-5">\n' +
-    '            <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.damper.expirationDate">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '    <div class="form-group">\n' +
-    '        <div class="col-sm-10">\n' +
-    '            <button type="button" ng-click="ctrl.onUpdate()" class="btn btn-success">Обновить</button>\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div id="updateAlert" class="alert alert-success slideAnimation" ng-if="ctrl.showAlert" role="alert">\n' +
-    '        <strong>Виброизолятор обновлен!</strong>\n' +
-    '    </div>\n' +
-    '</form>\n' +
-    '\n' +
-    '<hr>\n' +
-    '\n' +
-    '<div class="d-flex justify-content-start">\n' +
-    '    <div class="p-2">\n' +
-    '        <h4>Договоры</h4>\n' +
-    '    </div>\n' +
-    '    <div class="ml-auto p-2">\n' +
-    '        <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.addContract(\'createContractModal\');">Добавить\n' +
-    '        </button>\n' +
-    '    </div>\n' +
-    '</div>\n' +
-    '\n' +
-    '<div class="modal fade" id="createContractModal" tabindex="-1" role="dialog" aria-labelledby="createContractModalLabel"\n' +
-    '     aria-hidden="true">\n' +
-    '    <div class="modal-dialog" role="document">\n' +
-    '        <div class="modal-content">\n' +
-    '            <div class="modal-header">\n' +
-    '                <h5 class="modal-title" id="createContractModalLabel">{{ctrl.update ? \'Обновление\' : \'Добавление\'}} контракта</h5>\n' +
-    '                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
-    '                    <span aria-hidden="true">&times;</span>\n' +
-    '                </button>\n' +
-    '            </div>\n' +
-    '            <div class="modal-body">\n' +
-    '                <form class="form-horizontal" role="form">\n' +
-    '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="name">\n' +
-    '                            Соглашение о поставке\n' +
-    '                        </label>\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <input type="text" class="form-control" id="agreement" ng-model="ctrl.currentContract.agreement">\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="designation">\n' +
-    '                            Заказчик\n' +
-    '                        </label>\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <input type="text" class="form-control" id="customer" ng-model="ctrl.currentContract.customer">\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="expirationDate">\n' +
-    '                            Количество\n' +
-    '                        </label>\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <input type="number" min="1" step="1" class="form-control" id="amount"\n' +
-    '                                   ng-model="ctrl.currentContract.amount">\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="expirationDate">\n' +
-    '                            Квартал\n' +
-    '                        </label>\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <input type="number" min="1" max="4" step="1" class="form-control" id="quoter"\n' +
-    '                                   ng-model="ctrl.currentContract.quoter">\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="expirationDate">\n' +
-    '                            Год\n' +
-    '                        </label>\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <input type="number" min="2000" step="1" class="form-control" id="year"\n' +
-    '                                   ng-model="ctrl.currentContract.year">\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="expirationDate">\n' +
-    '                            Заметка об авансировании\n' +
-    '                        </label>\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <input type="text" class="form-control" id="prepaidNote"\n' +
-    '                                   ng-model="ctrl.currentContract.prepaidNote">\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                    <div class="form-group">\n' +
-    '                        <div class="col-sm-12">\n' +
-    '                            <div class="form-check">\n' +
-    '                                <label class="form-check-label">\n' +
-    '                                    <input class="form-check-input" id="done" type="checkbox" ng-model="ctrl.currentContract.done"> Выполнен\n' +
-    '                                </label>\n' +
-    '                            </div>\n' +
-    '                        </div>\n' +
-    '                    </div>\n' +
-    '                </form>\n' +
-    '            </div>\n' +
-    '            <div class="modal-footer">\n' +
-    '                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>\n' +
-    '                <button type="button" class="btn btn-success" ng-click="ctrl.saveContract()">Сохранить</button>\n' +
-    '            </div>\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '</div>\n' +
-    '\n' +
-    '<table class="table table-hover">\n' +
-    '    <thead class="thead-inverse">\n' +
-    '    <tr>\n' +
-    '        <th>#</th>\n' +
-    '        <th>Соглашение</th>\n' +
-    '        <th>Заказчик</th>\n' +
-    '        <th>Кол-во</th>\n' +
-    '        <th>Квартал</th>\n' +
-    '        <th>Год</th>\n' +
-    '        <th>Отметка о предварительном авансировании</th>\n' +
-    '        <th>Выполнен</th>\n' +
-    '    </tr>\n' +
-    '    </thead>\n' +
-    '    <tbody>\n' +
-    '    <tr ng-repeat="contract in ctrl.damper.contracts track by $index" ng-click="ctrl.updateContract(contract, \'createContractModal\');">\n' +
-    '        <th>{{$index}}</th>\n' +
-    '        <td>{{contract.agreement}}</td>\n' +
-    '        <td>{{contract.customer}}</td>\n' +
-    '        <td>{{contract.amount}}</td>\n' +
-    '        <td>{{contract.quoter}}</td>\n' +
-    '        <td>{{contract.year}}</td>\n' +
-    '        <td>{{contract.prepaidNote}}</td>\n' +
-    '        <td>{{contract.done ? \'Да\' : \'Нет\'}}</td>\n' +
-    '    </tr>\n' +
-    '    </tbody>\n' +
-    '</table>\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    '');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/wrap/dialog-wrap.tmpl.html',
-    '<div class="dialog-wrap"\n' +
-    '     ng-show="dialogWrapCtrl.show()"\n' +
-    '     ng-click="dialogWrapCtrl.close()">\n' +
-    '\n' +
-    '    <div class="dialog-wrap__body">\n' +
-    '        <div ng-include="dialogWrapCtrl.getTemplateUrl()" ng-click="$event.stopPropagation()"></div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/detail-progress/item/detail-progress-item.tmpl.html',
     '<div class="item"\n' +
     '     id="{{detailProgressItemCtrl.item.uuid}}"\n' +
@@ -633,6 +787,25 @@ module.run(['$templateCache', function($templateCache) {
     '    </table>\n' +
     '\n' +
     '    <div class="detail-contract__add" ng-click="detailProgressItemCtrl.addStep()">Добавить этап</div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/wrap/dialog-wrap.tmpl.html',
+    '<div class="dialog-wrap"\n' +
+    '     ng-show="dialogWrapCtrl.show()"\n' +
+    '     ng-click="dialogWrapCtrl.close()">\n' +
+    '\n' +
+    '    <div class="dialog-wrap__body">\n' +
+    '        <div ng-include="dialogWrapCtrl.getTemplateUrl()" ng-click="$event.stopPropagation()"></div>\n' +
+    '    </div>\n' +
     '</div>');
 }]);
 })();
@@ -699,6 +872,11 @@ module.run(['$templateCache', function($templateCache) {
     '<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">\n' +
     '    <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n' +
     '        <ul class="navbar-nav mr-auto">\n' +
+    '\n' +
+    '            <li class="nav-item">\n' +
+    '                <a class="nav-link" ng-class="{\'active\': mainHeaderCtrl.inState(\'notifications\')}" ui-sref="notifications">Уведомления ({{mainHeaderCtrl.storage.notifications.length}})</a>\n' +
+    '            </li>\n' +
+    '\n' +
     '            <li class="nav-item">\n' +
     '                <a class="nav-link" ng-class="{\'active\': mainHeaderCtrl.inState(\'calendar\')}" ui-sref="calendar">Календарь</a>\n' +
     '            </li>\n' +
@@ -746,8 +924,9 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/layout/dampers/dampers-layout.tmpl.html',
     '<form>\n' +
-    '    <div class="form-group">\n' +
+    '    <div class="form-group d-flex">\n' +
     '        <button type="button" class="btn btn-success" ng-click="ctrl.onAdd()">Добавить виброизолятор</button>\n' +
+    '        <button type="button" class="btn btn-info ml-auto" ng-click="ctrl.onPrint()">Печать ({{ctrl.print.length}})</button>\n' +
     '    </div>\n' +
     '</form>\n' +
     '\n' +
@@ -762,8 +941,8 @@ module.run(['$templateCache', function($templateCache) {
     '        </tr>\n' +
     '    </thead>\n' +
     '    <tbody>\n' +
-    '        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ui-sref="dampers-detailed({uuid: damper.uuid})">\n' +
-    '            <th>{{$index}}</th>\n' +
+    '        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ng-style="ctrl.inPrint(damper.uuid) && {\'font-weight\': \'bolder\', \'text-decoration\': \'underline\'}" ng-click="ctrl.onClick(damper, $event)">\n' +
+    '            <th>{{$index + 1}}</th>\n' +
     '            <td>{{damper.name}}</td>\n' +
     '            <td>{{damper.designation}}</td>\n' +
     '            <td>{{damper.expirationDate | date: \'yyyy-MM-dd\'}}</td>\n' +
@@ -783,28 +962,85 @@ module.run(['$templateCache', function($templateCache) {
     '            </div>\n' +
     '            <div class="modal-body">\n' +
     '                <form class="form-horizontal" role="form">\n' +
+    '\n' +
     '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-2" for="name">\n' +
-    '                            Название\n' +
+    '                        <label class="col-sm-12" for="name">\n' +
+    '                            Наименование, обозначение\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <input type="text" class="form-control" id="name" ng-model="ctrl.name">\n' +
     '                        </div>\n' +
     '                    </div>\n' +
+    '\n' +
     '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-2" for="designation">\n' +
-    '                            Обозначение\n' +
+    '                        <label class="col-sm-12" for="designation">\n' +
+    '                            Обозначение КД\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <input type="text" class="form-control" id="designation" ng-model="ctrl.designation">\n' +
     '                        </div>\n' +
     '                    </div>\n' +
+    '\n' +
     '                    <div class="form-group">\n' +
     '                        <label class="col-sm-12" for="expirationDate">\n' +
-    '                            Дата истечения срока\n' +
+    '                            Дата истечения срока действия ПИ\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.expirationDate">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="inspectionMethods">\n' +
+    '                            Состав контролируемых параметров изделий\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <textarea type="text" class="form-control" id="inspectionMethods" ng-model="ctrl.inspectionMethods"></textarea>\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="controlType">\n' +
+    '                            Вид контроля, объем выборки, контрольные нормативы и правила выборочного контроля\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="controlType" ng-model="ctrl.controlType">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="measurementMeans">\n' +
+    '                            Средства измерений необходимые для контроля параметров изделий\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="measurementMeans" ng-model="ctrl.measurementMeans">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="guarantee">\n' +
+    '                            Гарантийный срок хранения\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="guarantee" ng-model="ctrl.guarantee">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="fiatLabeling">\n' +
+    '                            Указания о маркировке изделий по результатам входного контроля\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="fiatLabeling" ng-model="ctrl.fiatLabeling">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="note">\n' +
+    '                            Примечание\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="text" class="form-control" id="note" ng-model="ctrl.note">\n' +
     '                        </div>\n' +
     '                    </div>\n' +
     '                </form>\n' +
@@ -895,13 +1131,8 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/layout/events/events-layout.tmpl.html',
-    '<div class="page-layout">\n' +
-    '\n' +
-    '    <event-item item="event" ng-repeat="event in eventsLayoutCtrl.storage.events"></event-item>\n' +
-    '\n' +
-    '    <div class="floating-button-wrapper">\n' +
-    '        <div class="floating-button" ng-click="eventsLayoutCtrl.addEvent()"></div>\n' +
-    '    </div>\n' +
+    '<div class="alert alert-info" role="alert" ng-repeat="event in ctrl.events">\n' +
+    '    <strong>{{event.reason}}</strong> <a href="{{event.link}}" class="alert-link">{{event.linkText}}</a> {{event.text}}\n' +
     '</div>');
 }]);
 })();
@@ -914,24 +1145,30 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/layout/notifications/notifications-layout.tmpl.html',
-    '<div class="page-layout">\n' +
+    '<ul class="list-group col-md-6">\n' +
+    '    <li class="list-group-item list-group-item-action justify-content-between"\n' +
+    '        ng-class="{\'active\': key==ctrl.currentType}"\n' +
+    '        ng-click="ctrl.setType(key)"\n' +
+    '        ng-repeat="(key, val) in ctrl.storage.types">\n' +
+    '        {{key.toString().split(\'-\')[1]}}\n' +
+    '        <span class="badge badge-default badge-pill">{{ctrl.storage.types[key].length}}</span>\n' +
+    '    </li>\n' +
+    '</ul>\n' +
     '\n' +
+    '<hr>\n' +
     '\n' +
-    '    <div class="notification__types">\n' +
-    '        <div class="notification__types-item"\n' +
-    '             ng-repeat="type in notificationsLayoutCtrl.types()"\n' +
-    '             ng-class="{\'_active\': type.value == notificationsLayoutCtrl.currentType.value}"\n' +
-    '             ng-click="notificationsLayoutCtrl.setCurrentType(type)">{{type.name + \' (\' + type.amount + \')\'}}\n' +
-    '        </div>\n' +
-    '    </div>\n' +
+    '<div class="alert alert-{{n.alertType}} col-md-12" role="alert"\n' +
+    '     ng-repeat="n in ctrl.notifications | filter: ctrl.typeFilter">\n' +
     '\n' +
-    '    <div class="notification"\n' +
-    '         ng-repeat="notification in notificationsLayoutCtrl.notifications | filter : notificationsLayoutCtrl.filterType"\n' +
-    '         ng-class="notification.type.style"\n' +
-    '         ng-click="notificationsLayoutCtrl.go(notification.link)">\n' +
-    '        {{notification.text}}\n' +
-    '    </div>\n' +
-    '</div>');
+    '    <h4 class="alert-heading">{{n.heading}}</h4>\n' +
+    '\n' +
+    '    <a href="/{{n.link}}" class="alert-link">\n' +
+    '        {{n.linkText}}\n' +
+    '    </a>\n' +
+    '\n' +
+    '    <p>{{n.text}}</p>\n' +
+    '</div>\n' +
+    '');
 }]);
 })();
 
@@ -990,40 +1227,6 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="addAccessoryDialogCtrl.onCancel()">Отмена</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/accessory/edit/edit-accessory-dialog.tmpl.html',
-    '<div class="dialog-add jsPopup" ng-controller="EditAccessoryDialogController as editAccessoryDialogCtrl">\n' +
-    '    <div class="dialog-add__header">\n' +
-    '        Редактирование комплектующего\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__body">\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="editAccessoryDialogCtrl.accessory.name" placeholder="Имя">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="editAccessoryDialogCtrl.accessory.designation" placeholder="Обозначение">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__actions">\n' +
-    '        <div class="dialog-add__actions-button _save"\n' +
-    '             ng-click="editAccessoryDialogCtrl.onSave()">Сохранить</div>\n' +
-    '\n' +
-    '        <div class="dialog-add__actions-button _cancel"\n' +
-    '             ng-click="editAccessoryDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
@@ -1097,6 +1300,40 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/accessory/edit/edit-accessory-dialog.tmpl.html',
+    '<div class="dialog-add jsPopup" ng-controller="EditAccessoryDialogController as editAccessoryDialogCtrl">\n' +
+    '    <div class="dialog-add__header">\n' +
+    '        Редактирование комплектующего\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__body">\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="editAccessoryDialogCtrl.accessory.name" placeholder="Имя">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="editAccessoryDialogCtrl.accessory.designation" placeholder="Обозначение">\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__actions">\n' +
+    '        <div class="dialog-add__actions-button _save"\n' +
+    '             ng-click="editAccessoryDialogCtrl.onSave()">Сохранить</div>\n' +
+    '\n' +
+    '        <div class="dialog-add__actions-button _cancel"\n' +
+    '             ng-click="editAccessoryDialogCtrl.onCancel()">Отмена</div>\n' +
+    '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/dialog/contract/edit/edit-contract-dialog.tmpl.html',
     '<div class="dialog-add jsPopup" ng-controller="EditContractDialogController as editContractDialogCtrl">\n' +
     '    <div class="dialog-add__header">\n' +
@@ -1135,40 +1372,6 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="editContractDialogCtrl.onCancel()">Отмена</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/detail-progress/add/add-progress-detail-dialog.tmpl.html',
-    '<div class="dialog-add jsPopup" ng-controller="AddProgressDetailDialogController as addProgressDetailDialogCtrl">\n' +
-    '    <div class="dialog-add__header">\n' +
-    '        Добавление оборудования НИОКР\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__body">\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.description" placeholder="Техзадание">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.agreement" placeholder="Договор">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__actions">\n' +
-    '        <div class="dialog-add__actions-button _save"\n' +
-    '             ng-click="addProgressDetailDialogCtrl.onSave()">Сохранить</div>\n' +
-    '\n' +
-    '        <div class="dialog-add__actions-button _cancel"\n' +
-    '             ng-click="addProgressDetailDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
@@ -1233,6 +1436,40 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="addDetailDialogCtrl.onCancel()">Отмена</div>\n' +
+    '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/detail-progress/add/add-progress-detail-dialog.tmpl.html',
+    '<div class="dialog-add jsPopup" ng-controller="AddProgressDetailDialogController as addProgressDetailDialogCtrl">\n' +
+    '    <div class="dialog-add__header">\n' +
+    '        Добавление оборудования НИОКР\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__body">\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.description" placeholder="Техзадание">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.agreement" placeholder="Договор">\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__actions">\n' +
+    '        <div class="dialog-add__actions-button _save"\n' +
+    '             ng-click="addProgressDetailDialogCtrl.onSave()">Сохранить</div>\n' +
+    '\n' +
+    '        <div class="dialog-add__actions-button _cancel"\n' +
+    '             ng-click="addProgressDetailDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);

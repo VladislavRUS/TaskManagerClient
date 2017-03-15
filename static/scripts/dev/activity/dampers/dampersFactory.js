@@ -12,9 +12,13 @@ function dampersFactory($http, $q, restServiceFactory) {
     };
 
     factory.deleteDamper = function (damper) {
+        var deferred = $q.defer();
+
         $http.delete(restServiceFactory.dampersDelete.replace('{uuid}', damper.uuid)).then(function (data) {
-            factory.getDampers();
-        })
+            factory.getDampers().then(deferred.resolve);
+        });
+
+        return deferred.promise;
     };
 
 
@@ -42,21 +46,25 @@ function dampersFactory($http, $q, restServiceFactory) {
         return deferred.promise;
     };
 
+    function findDamper(uuid) {
+        for (var i = 0; i < factory.dampers.length; i++) {
+            if (factory.dampers[i].uuid == uuid) {
+                return factory.dampers[i];
+            }
+        }
+    }
+
     factory.getDamper = function(uuid) {
         var deferred = $q.defer();
 
-        factory.getDampers().then(function() {
-            var damper;
+        if (factory.dampers) {
+            deferred.resolve(findDamper(uuid));
 
-            for (var i = 0; i < factory.dampers.length; i++) {
-                if (factory.dampers[i].uuid == uuid) {
-                    damper = factory.dampers[i];
-                    break;
-                }
-            }
-
-            deferred.resolve(damper);
-        });
+        } else {
+            factory.getDampers().then(function() {
+                deferred.resolve(findDamper(uuid));
+            });
+        }
 
         return deferred.promise;
     };
@@ -83,31 +91,47 @@ function dampersFactory($http, $q, restServiceFactory) {
     };
 
     factory.deleteContract = function (detail, contract) {
+        var deferred = $q.defer();
+
         var url = restServiceFactory.contractDelete.replace('{uuid}', contract.uuid);
         $http.delete(url).then(function () {
-            factory.getDampers();
+            factory.getDampers().then(deferred.resolve);
         });
+
+        return deferred.promise;
     };
 
     factory.addAccessoryToDamper = function(damper, accessory) {
+        var deferred = $q.defer();
+
         $http.post(restServiceFactory.dampersCreateAccessory
             .replace('{uuid}', damper.uuid), accessory).then(function(resp) {
-            factory.getDampers();
-        })
+            factory.getDampers().then(deferred.resolve);
+        });
+
+        return deferred.promise;
     };
 
     factory.updateAccessory = function(accessory) {
+        var deferred = $q.defer();
+
         $http.put(restServiceFactory.accessoriesUpdate
             .replace('{uuid}', accessory.uuid), accessory).then(function() {
-            factory.getDampers();
+            factory.getDampers().then(deferred.resolve);
         });
+
+        return deferred.promise;
     };
 
     factory.deleteAccessory = function(accessory) {
+        var deferred = $q.defer();
+
         $http.delete(restServiceFactory.accessoriesDelete
             .replace('{uuid}', accessory.uuid), accessory).then(function() {
-            factory.getDampers();
+            factory.getDampers().then(deferred.resolve);
         });
+
+        return deferred.promise;
     };
 
     return factory;

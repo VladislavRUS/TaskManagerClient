@@ -10,6 +10,12 @@ function damperDetailedDirective($state, $timeout, dampersFactory) {
             self.showAlert = false;
             self.currentContract = {};
             self.update = false;
+            self.currentAccessory = {};
+            self.accessoryTypes = {
+                'component': 'Комплектующее',
+                'material': 'Расходный материал'
+            };
+
             var currentModal = null;
 
             self.onUpdate = function () {
@@ -65,6 +71,45 @@ function damperDetailedDirective($state, $timeout, dampersFactory) {
                         }, 500);
                     });
                 }
+            };
+
+            self.addAccessory = function(modal, type) {
+                self.update = false;
+                self.currentAccessory.type = type;
+                self.openModal(modal);
+            };
+
+            self.updateAccessory = function(accessory, modal) {
+                self.update = true;
+                self.currentAccessory = accessory;
+                self.openModal(modal);
+            };
+
+            self.saveAccessory = function() {
+                if (self.update) {
+                    dampersFactory.updateAccessory(self.currentAccessory).then(function() {
+                        self.closeModal();
+                        self.currentAccessory = {};
+
+                        $timeout(function() {
+                            $state.reload();
+                        }, 500);
+                    });
+                } else {
+                    dampersFactory.addAccessoryToDamper(self.damper, self.currentAccessory).then(function() {
+                        self.closeModal();
+
+                        $timeout(function() {
+                            $state.reload();
+                        }, 500);
+                    })
+                }
+            };
+
+            self.onDelete = function() {
+                dampersFactory.deleteDamper(self.damper).then(function() {
+                    $state.go('dampers');
+                })
             }
         },
         controllerAs: 'ctrl'

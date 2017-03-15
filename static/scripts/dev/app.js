@@ -4,7 +4,7 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-        $urlRouterProvider.otherwise('/calendar');
+        $urlRouterProvider.otherwise('/notifications');
 
         $stateProvider
             .state('/', {
@@ -31,6 +31,13 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
                 controller: 'CalendarController',
                 controllerAs: 'calendarCtrl',
                 templateUrl: 'scripts/dev/activity/calendar/calendar-activity.tmpl.html'
+            })
+
+            .state('notifications', {
+                url: '/notifications',
+                controller: 'NotificationsController',
+                controllerAs: 'notificationsCtrl',
+                templateUrl: 'scripts/dev/activity/notifications/notifictions-activity.tmpl.html'
             })
     });
 

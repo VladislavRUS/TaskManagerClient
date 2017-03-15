@@ -1,6 +1,7 @@
 <form>
-    <div class="form-group">
+    <div class="form-group d-flex">
         <button type="button" class="btn btn-success" ng-click="ctrl.onAdd()">Добавить виброизолятор</button>
+        <button type="button" class="btn btn-info ml-auto" ng-click="ctrl.onPrint()">Печать ({{ctrl.print.length}})</button>
     </div>
 </form>
 
@@ -15,8 +16,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ui-sref="dampers-detailed({uuid: damper.uuid})">
-            <th>{{$index}}</th>
+        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ng-style="ctrl.inPrint(damper.uuid) && {'font-weight': 'bolder', 'text-decoration': 'underline'}" ng-click="ctrl.onClick(damper, $event)">
+            <th>{{$index + 1}}</th>
             <td>{{damper.name}}</td>
             <td>{{damper.designation}}</td>
             <td>{{damper.expirationDate | date: 'yyyy-MM-dd'}}</td>
@@ -36,28 +37,85 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
+
                     <div class="form-group">
-                        <label class="col-sm-2" for="name">
-                            Название
+                        <label class="col-sm-12" for="name">
+                            Наименование, обозначение
                         </label>
                         <div class="col-sm-12">
                             <input type="text" class="form-control" id="name" ng-model="ctrl.name">
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label class="col-sm-2" for="designation">
-                            Обозначение
+                        <label class="col-sm-12" for="designation">
+                            Обозначение КД
                         </label>
                         <div class="col-sm-12">
                             <input type="text" class="form-control" id="designation" ng-model="ctrl.designation">
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label class="col-sm-12" for="expirationDate">
-                            Дата истечения срока
+                            Дата истечения срока действия ПИ
                         </label>
                         <div class="col-sm-12">
                             <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.expirationDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-12" for="inspectionMethods">
+                            Состав контролируемых параметров изделий
+                        </label>
+                        <div class="col-sm-12">
+                            <textarea type="text" class="form-control" id="inspectionMethods" ng-model="ctrl.inspectionMethods"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-12" for="controlType">
+                            Вид контроля, объем выборки, контрольные нормативы и правила выборочного контроля
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="controlType" ng-model="ctrl.controlType">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-12" for="measurementMeans">
+                            Средства измерений необходимые для контроля параметров изделий
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="measurementMeans" ng-model="ctrl.measurementMeans">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-12" for="guarantee">
+                            Гарантийный срок хранения
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="guarantee" ng-model="ctrl.guarantee">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-12" for="fiatLabeling">
+                            Указания о маркировке изделий по результатам входного контроля
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="fiatLabeling" ng-model="ctrl.fiatLabeling">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-12" for="note">
+                            Примечание
+                        </label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="note" ng-model="ctrl.note">
                         </div>
                     </div>
                 </form>

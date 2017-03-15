@@ -1,4 +1,4 @@
-function calendarLayoutDirective($state, $timeout, eventsFactory) {
+function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsFactory) {
     return {
         scope: {},
         bindToController: {},
@@ -23,7 +23,7 @@ function calendarLayoutDirective($state, $timeout, eventsFactory) {
                         openModal('createEventModal');
                     },
 
-                    eventClick: function(calEvent, jsEvent, view) {
+                    eventClick: function (calEvent, jsEvent, view) {
                         self.currentEvent = calEvent;
                         openModal('detailedEventModal');
                     },
@@ -34,19 +34,33 @@ function calendarLayoutDirective($state, $timeout, eventsFactory) {
             self.eventSources = [];
 
             eventsFactory.getEvents().then(function () {
-                self.eventSources.
-                    push(
-                        {
-                            events: eventsFactory.events
-                                .map(function(event) {
-                                    return {
-                                        uuid: event.uuid,
-                                        title: event.title,
-                                        start: event.date,
-                                        comment: event.comment
-                                    }
-                                })
-                        });
+                self.eventSources.push(
+                    {
+                        events: eventsFactory.events
+                            .map(function (event) {
+                                return {
+                                    uuid: event.uuid,
+                                    title: event.title,
+                                    start: event.date,
+                                    comment: event.comment
+                                }
+                            })
+                    });
+
+                self.eventSources.push({
+                    events: notificationsFactory.notifications.filter(function(e) {
+                        return !e.type.startsWith('eventType');
+                    }).
+                    map(function(n) {
+                        return  {
+                            uuid: n.uuid,
+                            title: n.heading,
+                            start: new Date(n.date),
+                            comment: n.text,
+                            custom: true
+                        }
+                    })
+                })
             });
 
             self.save = function () {
@@ -56,13 +70,13 @@ function calendarLayoutDirective($state, $timeout, eventsFactory) {
                     date: self.currentDate
                 };
 
-                eventsFactory.addEvent(event).then(function() {
+                eventsFactory.addEvent(event).then(function () {
                     closeModal('createEventModal');
                     reloadState();
                 });
             };
 
-            self.update = function() {
+            self.update = function () {
                 var event = {
                     uuid: self.currentEvent.uuid,
                     title: self.currentEvent.title,
@@ -72,16 +86,16 @@ function calendarLayoutDirective($state, $timeout, eventsFactory) {
 
                 console.log(event);
 
-                eventsFactory.updateEvent(event).then(function() {
+                eventsFactory.updateEvent(event).then(function () {
                     closeModal('detailedEventModal');
                     reloadState();
                 });
             };
 
-            self.delete = function() {
+            self.delete = function () {
                 var event = {uuid: self.currentEvent.uuid};
 
-                eventsFactory.removeEvent(event).then(function() {
+                eventsFactory.removeEvent(event).then(function () {
                     closeModal('detailedEventModal');
                     reloadState();
                 });
@@ -98,7 +112,7 @@ function calendarLayoutDirective($state, $timeout, eventsFactory) {
             }
 
             function reloadState() {
-                $timeout(function() {
+                $timeout(function () {
                     $state.reload();
                 }, 500);
             }

@@ -1,22 +1,32 @@
-function notificationsFactory() {
+function notificationsFactory($q, $http, restServiceFactory) {
     var factory = {};
 
     factory.notifications = [];
+    factory.types = [];
 
-    factory.addNotification = function(event) {
-        factory.notifications.push(event);
-    };
+    factory.getNotifications = function() {
+        factory.notifications = [];
+        factory.types = {};
 
-    factory.notificationsLength = function() {
-        return factory.notifications.length;
-    };
+        var deferred = $q.defer();
 
-    factory.clearNotifications = function(types) {
-        types.forEach(function(type) {
-            factory.notifications = factory.notifications.filter(function(n) {
-                return n.type.value !== type;
-            });
+        $http.get(restServiceFactory.notificationsAll).then(function(resp) {
+            factory.notifications = factory.notifications.concat(resp.data);
+
+            for (var i = 0; i < factory.notifications.length; i++) {
+                var type = factory.notifications[i].type;
+
+                if (!factory.types[type]) {
+                    factory.types[type] = []
+                }
+
+                factory.types[type].push(factory.notifications[i]);
+            }
+
+            deferred.resolve();
         });
+
+        return deferred.promise;
     };
 
     return factory;

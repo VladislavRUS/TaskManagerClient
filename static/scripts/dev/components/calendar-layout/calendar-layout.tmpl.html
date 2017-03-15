@@ -68,7 +68,7 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" ng-if="!ctrl.currentEvent.custom">
                 <button type="button" class="btn btn-danger" ng-click="ctrl.delete()">Удалить</button>
                 <button type="button" class="btn btn-success" ng-click="ctrl.update()">Обновить</button>
             </div>

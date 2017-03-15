@@ -1,18 +1,23 @@
-<div class="page-layout">
+<ul class="list-group col-md-6">
+    <li class="list-group-item list-group-item-action justify-content-between"
+        ng-class="{'active': key==ctrl.currentType}"
+        ng-click="ctrl.setType(key)"
+        ng-repeat="(key, val) in ctrl.storage.types">
+        {{key.toString().split('-')[1]}}
+        <span class="badge badge-default badge-pill">{{ctrl.storage.types[key].length}}</span>
+    </li>
+</ul>
 
+<hr>
 
-    <div class="notification__types">
-        <div class="notification__types-item"
-             ng-repeat="type in notificationsLayoutCtrl.types()"
-             ng-class="{'_active': type.value == notificationsLayoutCtrl.currentType.value}"
-             ng-click="notificationsLayoutCtrl.setCurrentType(type)">{{type.name + ' (' + type.amount + ')'}}
-        </div>
-    </div>
+<div class="alert alert-{{n.alertType}} col-md-12" role="alert"
+     ng-repeat="n in ctrl.notifications | filter: ctrl.typeFilter">
 
-    <div class="notification"
-         ng-repeat="notification in notificationsLayoutCtrl.notifications | filter : notificationsLayoutCtrl.filterType"
-         ng-class="notification.type.style"
-         ng-click="notificationsLayoutCtrl.go(notification.link)">
-        {{notification.text}}
-    </div>
+    <h4 class="alert-heading">{{n.heading}}</h4>
+
+    <a href="/{{n.link}}" class="alert-link">
+        {{n.linkText}}
+    </a>
+
+    <p>{{n.text}}</p>
 </div>

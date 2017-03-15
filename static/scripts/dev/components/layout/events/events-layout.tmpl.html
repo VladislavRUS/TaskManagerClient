@@ -1,8 +1,3 @@
-<div class="page-layout">
-
-    <event-item item="event" ng-repeat="event in eventsLayoutCtrl.storage.events"></event-item>
-
-    <div class="floating-button-wrapper">
-        <div class="floating-button" ng-click="eventsLayoutCtrl.addEvent()"></div>
-    </div>
+<div class="alert alert-info" role="alert" ng-repeat="event in ctrl.events">
+    <strong>{{event.reason}}</strong> <a href="{{event.link}}" class="alert-link">{{event.linkText}}</a> {{event.text}}
 </div>
