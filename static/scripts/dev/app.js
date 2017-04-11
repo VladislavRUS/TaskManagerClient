@@ -39,6 +39,13 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
                 controllerAs: 'notificationsCtrl',
                 templateUrl: 'scripts/dev/activity/notifications/notifictions-activity.tmpl.html'
             })
+
+            .state('test-equipments', {
+                url: '/test-equipments/:vendor',
+                controller: 'TestEquipmentsController',
+                controllerAs: 'testEquipmentsCtrl',
+                templateUrl: 'scripts/dev/activity/test-equipments/test-equipments-activity.tmpl.html'
+            })
     });
 
 /*Controllers*/
@@ -60,7 +67,8 @@ angular.module('app')
     .controller('EquipmentsProgressController', EquipmentsProgressController)
     .controller('EditContractDialogController', EditContractDialogController)
     .controller('EditAccessoryDialogController', EditAccessoryDialogController)
-    .controller('NotificationsController', NotificationsController);
+    .controller('NotificationsController', NotificationsController)
+    .controller('TestEquipmentsController', TestEquipmentsController);
 
 
 /*Directives*/
@@ -83,7 +91,8 @@ angular.module('app')
     .directive('equipmentItem', equipmentItemDirective)
     .directive('loginLanding', loginLandingDirective)
     .directive('mainHeader', mainHeaderDirective)
-    .directive('notificationsLayout', notificationsLayoutDirective);
+    .directive('notificationsLayout', notificationsLayoutDirective)
+    .directive('testEquipmentsLayout', testEquipmentsLayoutDirective);
 
 /*Factories*/
 angular.module('app')
@@ -97,7 +106,8 @@ angular.module('app')
     .factory('loginFactory', loginFactory)
     .factory('printFactory', printFactory)
     .factory('restServiceFactory', restServiceFactory)
-    .factory('notificationsFactory', notificationsFactory);
+    .factory('notificationsFactory', notificationsFactory)
+    .factory('testEquipmentsFactory', testEquipmentsFactory);
 
 /*Animations*/
 angular.module('app')

@@ -55,5 +55,11 @@ function restServiceFactory() {
     /*Notifications*/
     service.notificationsAll = service.ip + 'notifications';
 
+    /*Test equipments*/
+    service.testEquipmentsAll = service.ip + 'test-equipments';
+    service.testEquipmentsCreate = service.ip + 'test-equipments';
+    service.testEquipmentsUpdate = service.ip + 'test-equipments/{UUID}';
+    service.testEquipmentsDelete = service.ip + 'test-equipments/{UUID}';
+
     return service;
 }
