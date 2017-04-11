@@ -1,4 +1,4 @@
-function testEquipmentsLayoutDirective($stateParams, testEquipmentsFactory) {
+function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFactory) {
 	return {
 		scope: {},
 		bindToController: {},
@@ -15,20 +15,24 @@ function testEquipmentsLayoutDirective($stateParams, testEquipmentsFactory) {
 
 			self.save = function() {
 				var testEquipment = {
-					number: 1,
 					name: self.name,
-					type: self.type,
+                    number: self.number,
+                    type: self.type,
 					expirationDate: self.expirationDate,
 					vendor: self.vendor
 				};
 
 				testEquipmentsFactory.createTestEquipment(testEquipment).then(function() {
 					closeModal('createTestEquipmentModal');
-				})
+				});
 			};
 
 			self.vendorFilter = function(testEquipment) {
 				return testEquipment.vendor == self.vendor;
+			};
+
+			self.onClick = function(testEquipment) {
+                $state.go('test-equipments-detailed', { uuid: testEquipment.uuid });
 			};
 
 			function closeModal(id) {

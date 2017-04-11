@@ -61,5 +61,11 @@ function restServiceFactory() {
     service.testEquipmentsUpdate = service.ip + 'test-equipments/{UUID}';
     service.testEquipmentsDelete = service.ip + 'test-equipments/{UUID}';
 
+    /*Research details*/
+    service.researchDetailsAll = service.ip + 'research-details';
+    service.researchDetailsCreate = service.ip + 'research-details';
+    service.researchDetailsUpdate = service.ip + 'research-details/{UUID}';
+    service.researchDetailsDelete = service.ip + 'research-details/{UUID}';
+
     return service;
 }

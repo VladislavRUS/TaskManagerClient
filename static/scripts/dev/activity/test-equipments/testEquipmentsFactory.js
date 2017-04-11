@@ -1,8 +1,6 @@
 function testEquipmentsFactory($http, $q, restServiceFactory) {
 	var factory = {};
 
-	factory.testEquipments = [];
-
 	factory.createTestEquipment = function (testEquipment) {
 		var deferred = $q.defer();
 
@@ -21,6 +19,11 @@ function testEquipmentsFactory($http, $q, restServiceFactory) {
 
 		$http.get(restServiceFactory.testEquipmentsAll).then(function (resp) {
 			factory.testEquipments = resp.data;
+
+            factory.testEquipments .forEach(function(t) {
+                t.expirationDate = new Date(t.expirationDate);
+            });
+
 			deferred.resolve();
 
 		}, function () {
@@ -33,7 +36,7 @@ function testEquipmentsFactory($http, $q, restServiceFactory) {
 	factory.updateTestEquipment = function(testEquipment) {
 		var deferred = $q.defer();
 
-		$http.delete(restServiceFactory.testEquipmentsUpdate.replace('{uuid}', testEquipment.uuid)).then(function (data) {
+		$http.put(restServiceFactory.testEquipmentsUpdate.replace('{uuid}', testEquipment.uuid), testEquipment).then(function (data) {
 			factory.getTestEquipments().then(deferred.resolve);
 		});
 
@@ -49,6 +52,30 @@ function testEquipmentsFactory($http, $q, restServiceFactory) {
 
 		return deferred.promise;
 	};
+
+    function findTestEquipment(uuid) {
+        for (var i = 0; i < factory.testEquipments.length; i++) {
+            if (factory.testEquipments[i].uuid == uuid) {
+                return factory.testEquipments[i];
+            }
+        }
+    }
+
+    factory.getTestEquipment = function(uuid) {
+        var deferred = $q.defer();
+
+        if (factory.testEquipments) {
+            deferred.resolve(findTestEquipment(uuid));
+
+        } else {
+            factory.getTestEquipments().then(function() {
+            	var testEquipment = findTestEquipment(uuid);
+                deferred.resolve(testEquipment);
+            });
+        }
+
+        return deferred.promise;
+    };
 
 	return factory;
 }
