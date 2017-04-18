@@ -1,4 +1,4 @@
-function TestEquipmentsDetailedController($stateParams, testEquipmentsFactory) {
+function TestEquipmentsDetailedController($rootScope, $stateParams, testEquipmentsFactory) {
     var self = this;
 
     var uuid = $stateParams.uuid;
@@ -6,4 +6,5 @@ function TestEquipmentsDetailedController($stateParams, testEquipmentsFactory) {
     testEquipmentsFactory.getTestEquipment(uuid).then(function (e) {
         self.testEquipment = e;
     });
+    $rootScope.$emit('updateNotifications');
 }

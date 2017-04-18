@@ -12,6 +12,7 @@
         <th>Заводской номер</th>
         <th>Тип</th>
         <th>Дата истечения строка</th>
+        <th>Отметка</th>
     </tr>
     </thead>
     <tbody>
@@ -20,7 +21,10 @@
         <td>{{testEquipment.name}}</td>
         <td>{{testEquipment.number}}</td>
         <td>{{testEquipment.type}}</td>
-        <td>{{testEquipment.expirationDate | date: 'yyyy-MM-dd'}}</td>
+        <td>{{testEquipment.expirationDate | date: 'dd-MM-yyyy'}}</td>
+        <td>
+            <span class="badge badge-{{ctrl.nf.getBadgeType(testEquipment)}}">{{ctrl.nf.getBadgeText(testEquipment)}}</span>
+        </td>
     </tr>
     </tbody>
 </table>

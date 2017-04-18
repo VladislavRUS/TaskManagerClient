@@ -46,7 +46,7 @@ function testEquipmentsFactory($http, $q, restServiceFactory) {
 	factory.deleteTestEquipment = function (testEquipment) {
 		var deferred = $q.defer();
 
-		$http.delete(restServiceFactory.testEquipmentsDelete.replace('{uuid}', testEquipment.uuid)).then(function (data) {
+		$http.delete(restServiceFactory.testEquipmentsDelete.replace('{UUID}', testEquipment.uuid)).then(function (data) {
 			factory.getTestEquipments().then(deferred.resolve);
 		});
 

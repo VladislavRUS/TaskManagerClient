@@ -1,4 +1,4 @@
-function damperDetailedDirective($state, $timeout, dampersFactory) {
+function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory) {
     return {
         scope: {},
         bindToController: {
@@ -9,6 +9,7 @@ function damperDetailedDirective($state, $timeout, dampersFactory) {
             var self = this;
             self.showAlert = false;
             self.currentContract = {};
+            self.nf = notificationsFactory;
             self.update = false;
             self.currentAccessory = {};
             self.accessoryTypes = {
@@ -75,13 +76,14 @@ function damperDetailedDirective($state, $timeout, dampersFactory) {
 
             self.addAccessory = function(modal, type) {
                 self.update = false;
+                self.currentAccessory = {};
                 self.currentAccessory.type = type;
                 self.openModal(modal);
             };
 
             self.updateAccessory = function(accessory, modal) {
                 self.update = true;
-                self.currentAccessory = accessory;
+                self.currentAccessory = angular.copy(accessory);
                 self.openModal(modal);
             };
 
@@ -106,10 +108,31 @@ function damperDetailedDirective($state, $timeout, dampersFactory) {
                 }
             };
 
+            self.deleteAccessory = function() {
+                dampersFactory.deleteAccessory(self.currentAccessory).then(function() {
+                    self.closeModal();
+
+                    $timeout(function() {
+                        $state.reload();
+                    }, 500);
+                })
+            };
+
             self.onDelete = function() {
                 dampersFactory.deleteDamper(self.damper).then(function() {
                     $state.go('dampers');
                 })
+            };
+
+            self.deleteContract = function() {
+
+                dampersFactory.deleteContract(self.currentContract).then(function() {
+                    self.closeModal();
+
+                    $timeout(function() {
+                        $state.reload();
+                    }, 500);
+                });
             }
         },
         controllerAs: 'ctrl'

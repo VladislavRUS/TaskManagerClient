@@ -62,7 +62,7 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
             })
 
             .state('research-details-detailed', {
-                url: '/research-details-detailed',
+                url: '/research-details-detailed/:uuid',
                 controller: 'ResearchDetailsDetailedController',
                 controllerAs: 'researchDetailsDetailedCtrl',
                 templateUrl: 'scripts/dev/activity/research-details/detailed/research-details-detailed-activity.tmpl.html'
@@ -117,6 +117,7 @@ angular.module('app')
     .directive('mainHeader', mainHeaderDirective)
     .directive('notificationsLayout', notificationsLayoutDirective)
     .directive('researchDetailsLayout', researchDetailsLayoutDirective)
+    .directive('researchDetailDetailed', researchDetailDetailedDirective)
     .directive('testEquipmentsLayout', testEquipmentsLayoutDirective)
     .directive('testEquipmentDetailed', testEquipmentDetailedDirective);
 

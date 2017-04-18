@@ -90,7 +90,7 @@ function dampersFactory($http, $q, restServiceFactory) {
         return deferred.promise;
     };
 
-    factory.deleteContract = function (detail, contract) {
+    factory.deleteContract = function (contract) {
         var deferred = $q.defer();
 
         var url = restServiceFactory.contractDelete.replace('{uuid}', contract.uuid);

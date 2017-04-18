@@ -1,77 +1,125 @@
 function researchDetailsFactory($http, $q, restServiceFactory) {
-    var factory = {};
+	var factory = {};
 
-    factory.createResearchDetail = function (researchDetail) {
-        var deferred = $q.defer();
+	factory.createResearchDetail = function (researchDetail) {
+		var deferred = $q.defer();
 
-        $http.post(restServiceFactory.researchDetailsCreate, researchDetail).then(function (resp) {
-            factory.getResearchDetails().then(deferred.resolve);
+		$http.post(restServiceFactory.researchDetailsCreate, researchDetail).then(function (resp) {
+			factory.getResearchDetails().then(deferred.resolve);
 
-        }, function () {
-            deferred.reject();
-        });
+		}, function () {
+			deferred.reject();
+		});
 
-        return deferred.promise;
-    };
+		return deferred.promise;
+	};
 
-    factory.getResearchDetails = function () {
-        var deferred = $q.defer();
+	factory.getResearchDetails = function () {
+		var deferred = $q.defer();
 
-        $http.get(restServiceFactory.researchDetailsAll).then(function (resp) {
-            factory.researchDetails = resp.data;
+		$http.get(restServiceFactory.researchDetailsAll).then(function (resp) {
+			factory.researchDetails = resp.data;
 
-            deferred.resolve();
+			factory.researchDetails.forEach(function(detail) {
+				detail.steps.forEach(function(s) {
+					s.expirationDate = new Date(s.expirationDate);
+				});
+			});
 
-        }, function () {
-            deferred.reject();
-        });
+			deferred.resolve();
 
-        return deferred.promise;
-    };
+		}, function () {
+			deferred.reject();
+		});
 
-    factory.updateResearchDetail = function(researchDetail) {
-        var deferred = $q.defer();
+		return deferred.promise;
+	};
 
-        $http.put(restServiceFactory.researchDetailsUpdate.replace('{uuid}', researchDetail.uuid), researchDetail).then(function (data) {
-            factory.getResearchDetails().then(deferred.resolve);
-        });
+	factory.updateResearchDetail = function (researchDetail) {
+		var deferred = $q.defer();
 
-        return deferred.promise;
-    };
+		$http.put(restServiceFactory.researchDetailsUpdate.replace('{UUID}', researchDetail.uuid), researchDetail).then(function (data) {
+			factory.getResearchDetails().then(deferred.resolve);
+		});
 
-    factory.deleteResearchDetail = function (researchDetail) {
-        var deferred = $q.defer();
+		return deferred.promise;
+	};
 
-        $http.delete(restServiceFactory.researchDetailsDelete.replace('{uuid}', researchDetail.uuid)).then(function (data) {
-            factory.getResearchDetails().then(deferred.resolve);
-        });
+	factory.deleteResearchDetail = function (researchDetail) {
+		var deferred = $q.defer();
 
-        return deferred.promise;
-    };
+		$http.delete(restServiceFactory.researchDetailsDelete.replace('{UUID}', researchDetail.uuid)).then(function (data) {
+			factory.getResearchDetails().then(deferred.resolve);
+		});
 
-    function findResearchDetail(uuid) {
-        for (var i = 0; i < factory.researchDetails.length; i++) {
-            if (factory.researchDetails[i].uuid == uuid) {
-                return factory.researchDetails[i];
-            }
-        }
-    }
+		return deferred.promise;
+	};
 
-    factory.getResearchDetail = function(uuid) {
-        var deferred = $q.defer();
+	function findResearchDetail(uuid) {
+		for (var i = 0; i < factory.researchDetails.length; i++) {
+			if (factory.researchDetails[i].uuid == uuid) {
+				return factory.researchDetails[i];
+			}
+		}
+	}
 
-        if (factory.researchDetails) {
-            deferred.resolve(findResearchDetail(uuid));
+	factory.getResearchDetail = function (uuid) {
+		var deferred = $q.defer();
 
-        } else {
-            factory.getResearchDetails().then(function() {
-                var researchDetail = findResearchDetail(uuid);
-                deferred.resolve(researchDetail);
-            });
-        }
+		if (factory.researchDetails) {
+			deferred.resolve(findResearchDetail(uuid));
 
-        return deferred.promise;
-    };
-    
-    return factory;
+		} else {
+			factory.getResearchDetails().then(function () {
+				var researchDetail = findResearchDetail(uuid);
+				deferred.resolve(researchDetail);
+			});
+		}
+
+		return deferred.promise;
+	};
+
+	factory.createStep = function (researchDetail, step) {
+		var deferred = $q.defer();
+
+		$http.post(restServiceFactory.researchDetailsCreateStep.replace('{UUID}', researchDetail.uuid), step).then(function() {
+
+			factory.getResearchDetails().then(deferred.resolve);
+
+		}, function() {
+			deferred.reject();
+		});
+
+		return deferred.promise;
+	};
+
+	factory.updateStep = function (step) {
+		var deferred = $q.defer();
+
+		$http.put(restServiceFactory.researchDetailsUpdateStep.replace('{UUID}', step.uuid), step).then(function() {
+
+			factory.getResearchDetails().then(deferred.resolve);
+
+		}, function() {
+			deferred.reject();
+		});
+
+		return deferred.promise;
+	};
+
+	factory.deleteStep = function (step) {
+		var deferred = $q.defer();
+
+		$http.delete(restServiceFactory.researchDetailsDeleteStep.replace('{UUID}', step.uuid), step).then(function() {
+
+			factory.getResearchDetails().then(deferred.resolve);
+
+		}, function() {
+			deferred.reject();
+		});
+
+		return deferred.promise;
+	};
+
+	return factory;
 }

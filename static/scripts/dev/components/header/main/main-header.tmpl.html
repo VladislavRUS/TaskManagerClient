@@ -3,16 +3,16 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item">
-                <a class="nav-link" ng-class="{'active': mainHeaderCtrl.inState('notifications')}" ui-sref="notifications">Уведомления ({{mainHeaderCtrl.storage.notifications.length}})</a>
+                <a class="nav-link" ng-class="{'active': mainHeaderCtrl.inState(['notifications'])}" ui-sref="notifications">Уведомления ({{mainHeaderCtrl.storage.notifications.length}})</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" ng-class="{'active': mainHeaderCtrl.inState('calendar')}" ui-sref="calendar">Календарь</a>
+                <a class="nav-link" ng-class="{'active': mainHeaderCtrl.inState(['calendar'])}" ui-sref="calendar">Календарь</a>
             </li>
 
             <li class="nav-item dropdown">
                 <span class="nav-link dropdown-toggle cursor-pointer"
-                      ng-class="{'active': mainHeaderCtrl.inState('university')}"
+                      ng-class="{'active': mainHeaderCtrl.inState(['dampers', 'test-equipments', 'university'])}"
                       id="dropdown01"
                       data-toggle="dropdown"
                       aria-haspopup="true"
@@ -28,6 +28,7 @@
 
             <li class="nav-item dropdown">
                 <span class="nav-link dropdown-toggle cursor-pointer"
+                      ng-class="{'active': mainHeaderCtrl.inState(['research-details', 'test-equipments', 'progress'])}"
                       id="dropdown02"
                       data-toggle="dropdown"
                       aria-haspopup="true"

@@ -1,4 +1,4 @@
-function DampersDetailedController($stateParams, dampersFactory) {
+function DampersDetailedController($rootScope, $stateParams, dampersFactory) {
     var self = this;
 
     var uuid = $stateParams.uuid;
@@ -6,4 +6,6 @@ function DampersDetailedController($stateParams, dampersFactory) {
     dampersFactory.getDamper(uuid).then(function(d) {
         self.damper = d;
     });
+
+    $rootScope.$emit('updateNotifications');
 }

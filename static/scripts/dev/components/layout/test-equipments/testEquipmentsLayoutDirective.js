@@ -1,4 +1,4 @@
-function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFactory) {
+function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFactory, notificationsFactory) {
 	return {
 		scope: {},
 		bindToController: {},
@@ -8,6 +8,7 @@ function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFacto
 
 			self.storage = testEquipmentsFactory;
 			self.vendor = $stateParams.vendor;
+			self.nf = notificationsFactory;
 
 			self.onAdd = function() {
 				openModal('createTestEquipmentModal');

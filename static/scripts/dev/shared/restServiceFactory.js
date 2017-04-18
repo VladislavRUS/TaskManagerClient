@@ -37,11 +37,6 @@ function restServiceFactory() {
     service.equipmentsUpdate = service.ip + 'equipments/{UUID}';
     service.equipmentsDelete  = service.ip + 'equipments/{UUID}';
 
-    /*Steps*/
-    service.stepsAll = service.ip + 'steps';
-    service.stepsCreate = service.ip + 'steps/';
-    service.stepsDelete = service.ip + 'steps/{UUID}';
-
     /*Created equipments*/
     service.detailsProgressReadAll = service.ip + 'createdequipments';
     service.detailsProgressCreate = service.ip + 'createdequipments';
@@ -66,6 +61,9 @@ function restServiceFactory() {
     service.researchDetailsCreate = service.ip + 'research-details';
     service.researchDetailsUpdate = service.ip + 'research-details/{UUID}';
     service.researchDetailsDelete = service.ip + 'research-details/{UUID}';
+    service.researchDetailsCreateStep = service.ip + 'research-details/{UUID}/steps';
+    service.researchDetailsUpdateStep = service.ip + 'steps/{UUID}';
+    service.researchDetailsDeleteStep = service.ip + 'steps/{UUID}';
 
     return service;
 }

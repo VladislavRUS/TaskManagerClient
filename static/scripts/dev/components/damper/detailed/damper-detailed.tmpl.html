@@ -132,6 +132,7 @@
         <th>Год</th>
         <th>Отметка о предварительном авансировании</th>
         <th>Выполнен</th>
+        <th>Отметка</th>
     </tr>
     </thead>
     <tbody>
@@ -145,6 +146,9 @@
         <td>{{contract.year}}</td>
         <td>{{contract.prepaidNote}}</td>
         <td>{{contract.done ? 'Да' : 'Нет'}}</td>
+        <td>
+            <span class="badge badge-{{ctrl.nf.getBadgeType(contract)}}">{{ctrl.nf.getBadgeText(contract)}}</span>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -290,7 +294,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+
+                <button type="button" class="btn btn-danger" ng-if="ctrl.update" ng-click="ctrl.deleteContract()">Удалить</button>
                 <button type="button" class="btn btn-success" ng-click="ctrl.saveContract()">Сохранить</button>
             </div>
         </div>
@@ -332,7 +337,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-danger" ng-if="ctrl.update" ng-click="ctrl.deleteAccessory()">Удалить</button>
                 <button type="button" class="btn btn-success" ng-click="ctrl.saveAccessory()">Сохранить</button>
             </div>
         </div>

@@ -1,4 +1,4 @@
-function dampersLayoutDirective($timeout, $state, dampersFactory, printFactory) {
+function dampersLayoutDirective($timeout, $state, notificationsFactory, dampersFactory, printFactory) {
     return {
         scope: {},
         bindToController: {},
@@ -6,6 +6,8 @@ function dampersLayoutDirective($timeout, $state, dampersFactory, printFactory) 
         controller: function() {
             var self = this;
             self.storage = dampersFactory;
+            self.nf = notificationsFactory;
+
             self.print = [];
 
             self.onAdd = function() {

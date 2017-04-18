@@ -1,4 +1,4 @@
-function ResearchDetailsDetailedController($stateParams, researchDetailsFactory) {
+function ResearchDetailsDetailedController($rootScope, $stateParams, researchDetailsFactory) {
     var self = this;
 
     var uuid = $stateParams.uuid;
@@ -6,4 +6,6 @@ function ResearchDetailsDetailedController($stateParams, researchDetailsFactory)
     researchDetailsFactory.getResearchDetail(uuid).then(function (r) {
         self.researchDetail = r;
     });
+
+    $rootScope.$emit('updateNotifications');
 }

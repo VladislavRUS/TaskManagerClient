@@ -13,6 +13,7 @@
             <th>Обозначение</th>
             <th>Дата истечения строка</th>
             <th>Контрактов</th>
+            <th>Отметка</th>
         </tr>
     </thead>
     <tbody>
@@ -20,8 +21,11 @@
             <th>{{$index + 1}}</th>
             <td>{{damper.name}}</td>
             <td>{{damper.designation}}</td>
-            <td>{{damper.expirationDate | date: 'yyyy-MM-dd'}}</td>
+            <td>{{damper.expirationDate | date: 'dd-MM-yyyy'}}</td>
             <td>{{damper.contracts.length}}</td>
+            <td>
+                <span class="badge badge-{{ctrl.nf.getBadgeType(damper)}}">{{ctrl.nf.getBadgeText(damper)}}</span>
+            </td>
         </tr>
     </tbody>
 </table>
