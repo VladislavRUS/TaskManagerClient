@@ -6,16 +6,18 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 
 	factory.getNotifications = function () {
 
+		var deferred = $q.defer();
+
 		var dampersPromise = dampersFactory.getDampers();
 		var researchDetailsPromise = researchDetailsFactory.getResearchDetails();
 		var testEquipmentsPromise = testEquipmentsFactory.getTestEquipments();
 		var eventsPromise = eventsFactory.getEvents();
 
 		$q.all([dampersPromise, researchDetailsPromise, testEquipmentsPromise, eventsPromise]).then(function () {
-			console.log('dampers', dampersFactory.dampers);
+			/*console.log('dampers', dampersFactory.dampers);
 			console.log('r-details', researchDetailsFactory.researchDetails);
 			console.log('t-equip', testEquipmentsFactory.testEquipments);
-			console.log('events', eventsFactory.events);
+			console.log('events', eventsFactory.events);*/
 
 			var n1 = processDampers(dampersFactory.dampers);
 			var n2 = processResearchDetails(researchDetailsFactory.researchDetails);
@@ -43,8 +45,11 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 			});
 
 			factory.types = angular.copy(uniqueTypes);
+
+			deferred.resolve();
 		});
 
+		return deferred.promise;
 	};
 
 	function containsType(type, types) {
@@ -84,7 +89,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 					text: 'Виброизолятор: ' + damper.name,
 					link: 'dampers-detailed/' + damper.uuid,
 					linkText: 'Перейти к виброизолятору',
-					badge: 'Истек'
+					badge: 'Истек',
+					date: damper.expirationDate
 				});
 
 			} else if (daysBetween < 30) {
@@ -95,7 +101,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 					text: damperExpiresIn.replace('{damper}', damper.name).replace('{daysBetween}', daysBetween),
 					link: 'dampers-detailed/' + damper.uuid,
 					linkText: 'Перейти к виброизолятору',
-					badge: 'Дней осталось: ' + daysBetween
+					badge: 'Дней осталось: ' + daysBetween,
+					date: damper.expirationDate
 				})
 			}
 
@@ -113,7 +120,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 						text: 'Данные договора: ' + contract.agreement + ', ' + contract.customer + ', квартал: ' + contract.quoter + ', год: ' + contract.year,
 						link: 'dampers-detailed/' + damper.uuid,
 						linkText: 'Перейти к договору',
-						badge: 'Истек'
+						badge: 'Истек',
+						date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
 					});
 
 					//Или если года совпадают
@@ -129,7 +137,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 							text: 'Данные договора: ' + contract.agreement + ', ' + contract.customer + ', квартал: ' + contract.quoter + ', год: ' + contract.year,
 							link: 'dampers-detailed/' + damper.uuid,
 							linkText: 'Перейти к договору',
-							badge: 'Истек'
+							badge: 'Истек',
+							date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
 						});
 
 						//Если же совпадают, то смотрим сколько дней осталось
@@ -146,7 +155,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 							text: contractExpiresIn.replace('{daysBetween}', daysBetween),
 							link: 'dampers-detailed/' + damper.uuid,
 							linkText: 'Перейти к договору',
-							badge: 'Дней осталось: ' + daysBetween
+							badge: 'Дней осталось: ' + daysBetween,
+							date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
 						});
 					}
 				}
@@ -196,7 +206,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 						text: 'Этап: ' + step.name,
 						link: 'research-details-detailed/' + researchDetail.uuid,
 						linkText: 'Перейти к этапу',
-						badge: 'Истек'
+						badge: 'Истек',
+						date: step.expirationDate
 					});
 
 				} else if (daysBetween < 30) {
@@ -207,7 +218,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 						text: stepExpiresIn.replace('{step}', step.name).replace('{daysBetween}', daysBetween),
 						link: 'research-details-detailed/' + researchDetail.uuid,
 						linkText: 'Перейти к этапу',
-						badge: 'Дней осталось: ' + daysBetween
+						badge: 'Дней осталось: ' + daysBetween,
+						date: step.expirationDate
 					})
 				}
 			});
@@ -238,7 +250,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 					text: 'Испытательное оборудование: ' + testEquipment.name,
 					link: 'test-equipments-detailed/' + testEquipment.uuid,
 					linkText: 'Перейти к испытательному оборудованию',
-					badge: 'Истек'
+					badge: 'Истек',
+					date: testEquipment.expirationDate
 				});
 
 			} else if (daysBetween < 30) {
@@ -249,7 +262,8 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 					text: teExpiresIn.replace('{testEquipment}', testEquipment.name).replace('{daysBetween}', daysBetween),
 					link: 'test-equipments-detailed/' + testEquipment.uuid,
 					linkText: 'Перейти к испытательному оборудованию',
-					badge: 'Дней осталось: ' + daysBetween
+					badge: 'Дней осталось: ' + daysBetween,
+					date: testEquipment.expirationDate
 				})
 			}
 		});
@@ -263,7 +277,7 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 		var now = new Date();
 
 		var eventExpiredText = 'Событие {eventTitle} произошло';
-		var eventSoonText = 'Скоро произойдет событие {eventTitle}';
+		var eventSoonText = 'Скоро произойдет событие {eventTitle}, дата: {date}';
 		var eventExpiresIn = 'До события {eventTitle} осталось дней: {daysBetween}.';
 
 		events.forEach(function (event) {
@@ -279,18 +293,20 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 					text: 'Событие: ' + event.title + ', ' + event.comment + ', дата: ' + event.date,
 					link: 'calendar',
 					linkText: 'Перейти к календарю',
-					badge: 'Прошло'
+					badge: 'Прошло',
+					date: event.date
 				});
 
 			} else if (daysBetween < 30) {
 				notifications.push({
 					uuid: event.uuid,
 					type: 'event:warning:Событие',
-					title: eventSoonText.replace('{eventTitle}', event.title),
+					title: eventSoonText.replace('{eventTitle}', event.title).replace('{date}', event.date),
 					text: eventExpiresIn.replace('{eventTitle}', event.title).replace('{daysBetween}', daysBetween),
 					link: 'calendar',
 					linkText: 'Перейти к календарю',
-					badge: 'Дней осталось: ' + daysBetween
+					badge: 'Дней осталось: ' + daysBetween,
+					date: event.date
 				})
 			}
 		});

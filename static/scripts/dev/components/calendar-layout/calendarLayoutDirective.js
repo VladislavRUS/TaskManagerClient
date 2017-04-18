@@ -8,6 +8,7 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 
 			self.currentDate = new Date();
 			self.currentEvent = null;
+			self.update = false;
 
 			self.uiConfig = {
 				calendar: {
@@ -19,13 +20,21 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 					},
 					height: 500,
 					dayClick: function (date) {
-						self.currentDate = new Date(date);
+						self.currentEvent = {};
+						self.currentEvent.date = new Date(date);
+						self.update = false;
 						openModal('createEventModal');
 					},
 
 					eventClick: function (calEvent, jsEvent, view) {
-						self.currentEvent = calEvent;
-						openModal('detailedEventModal');
+						self.currentEvent = {};
+						self.currentEvent.title = calEvent.title;
+						self.currentEvent.comment = calEvent.comment;
+						self.currentEvent.uuid = calEvent.uuid;
+						self.currentEvent.date = calEvent.start._i;
+						self.currentEvent.custom = calEvent.custom || false;
+						self.update = true;
+						openModal('createEventModal');
 					},
 
 					dayRender: function (date, cell) {
@@ -42,22 +51,8 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 							});
 						}
 
-						var bg = $(cell).css('background-color');
-
 						$(cell).css({
 							'cursor': 'pointer'
-						});
-
-						$(cell).bind('mouseover', function () {
-							$(this).css({
-								'background-color': '#e5e3e3'
-							})
-						});
-
-						$(cell).bind('mouseout', function () {
-							$(this).css({
-								'background-color': bg
-							});
 						});
 					},
 
@@ -72,6 +67,8 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 					{
 						events: eventsFactory.events
 							.map(function (event) {
+								console.log(event);
+
 								return {
 									uuid: event.uuid,
 									title: event.title,
@@ -82,54 +79,41 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 					});
 
 				self.eventSources.push({
-					events: notificationsFactory.notifications.filter(function (e) {
-						return !e.type.startsWith('eventType');
-					}).map(function (n) {
-						return {
-							uuid: n.uuid,
-							title: n.heading,
-							start: new Date(n.date),
-							comment: n.text,
-							custom: true
-						}
+					events: notificationsFactory.notifications.filter(function (n) {
+						return n.type.split(':')[0] !== 'event'
 					})
+						.map(function (n) {
+							return {
+								uuid: n.uuid,
+								title: n.title,
+								start: n.date,
+								comment: n.text,
+								custom: true
+							}
+						})
 				})
 			});
 
 			self.save = function () {
-				var event = {
-					title: self.eventTitle,
-					comment: self.eventComment,
-					date: self.currentDate
-				};
+				if (self.update) {
+					eventsFactory.updateEvent(self.currentEvent).then(function () {
+						closeModal('createEventModal');
+						reloadState();
+					});
 
-				eventsFactory.addEvent(event).then(function () {
-					closeModal('createEventModal');
-					reloadState();
-				});
-			};
-
-			self.update = function () {
-				var event = {
-					uuid: self.currentEvent.uuid,
-					title: self.currentEvent.title,
-					comment: self.currentEvent.comment,
-					date: self.currentEvent.start._i
-				};
-
-				console.log(event);
-
-				eventsFactory.updateEvent(event).then(function () {
-					closeModal('detailedEventModal');
-					reloadState();
-				});
+				} else {
+					eventsFactory.addEvent(self.currentEvent).then(function () {
+						closeModal('createEventModal');
+						reloadState();
+					});
+				}
 			};
 
 			self.delete = function () {
 				var event = {uuid: self.currentEvent.uuid};
 
 				eventsFactory.removeEvent(event).then(function () {
-					closeModal('detailedEventModal');
+					closeModal('createEventModal');
 					reloadState();
 				});
 			};

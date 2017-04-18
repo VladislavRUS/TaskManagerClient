@@ -113,11 +113,17 @@
 <div class="d-flex justify-content-start">
     <div class="p-2">
         <h4>Договоры</h4>
+
     </div>
+
     <div class="ml-auto p-2">
-        <button type="button" class="btn btn-sm btn-success" ng-click="ctrl.addContract('createContractModal');">
+
+        <input class="form-check-input" id="hideDone" type="checkbox" ng-click="ctrl.toggleDone()">Скрыть выполненные
+
+        <button type="button" class="btn btn-sm btn-success ml-2" ng-click="ctrl.addContract('createContractModal');">
             Добавить
         </button>
+
     </div>
 </div>
 
@@ -136,7 +142,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="contract in ctrl.damper.contracts track by $index"
+    <tr ng-repeat="contract in ctrl.damper.contracts | filter: ctrl.filterContract track by $index"
         ng-click="ctrl.updateContract(contract, 'createContractModal');">
         <th>{{$index + 1}}</th>
         <td>{{contract.agreement}}</td>
@@ -284,10 +290,9 @@
                     <div class="form-group" ng-if="ctrl.update">
                         <div class="col-sm-12">
                             <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" id="done" type="checkbox"
-                                           ng-model="ctrl.currentContract.done">Выполнен
-                                </label>
+                                <label class="form-check-label"></label>
+                                <input class="form-check-input" id="done" type="checkbox"
+                                       ng-model="ctrl.currentContract.done">Выполнен
                             </div>
                         </div>
                     </div>

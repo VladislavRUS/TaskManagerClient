@@ -1,4 +1,4 @@
-function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFactory, notificationsFactory) {
+function testEquipmentsLayoutDirective($stateParams, $timeout, $state, testEquipmentsFactory, notificationsFactory) {
 	return {
 		scope: {},
 		bindToController: {},
@@ -24,7 +24,10 @@ function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFacto
 				};
 
 				testEquipmentsFactory.createTestEquipment(testEquipment).then(function() {
-					closeModal('createTestEquipmentModal');
+					self.nf.getNotifications().then(function () {
+						closeModal('createTestEquipmentModal');
+						reloadState();
+					});
 				});
 			};
 
@@ -44,6 +47,12 @@ function testEquipmentsLayoutDirective($stateParams, $state, testEquipmentsFacto
 			function openModal(id) {
 				var el = angular.element(document).find('#' + id);
 				el.modal('show');
+			}
+
+			function reloadState() {
+				$timeout(function () {
+					$state.reload();
+				}, 500);
 			}
 		},
 		controllerAs: 'ctrl'

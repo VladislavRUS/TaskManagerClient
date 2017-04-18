@@ -1,87 +1,91 @@
 function dampersLayoutDirective($timeout, $state, notificationsFactory, dampersFactory, printFactory) {
-    return {
-        scope: {},
-        bindToController: {},
-        templateUrl: 'scripts/dev/components/layout/dampers/dampers-layout.tmpl.html',
-        controller: function() {
-            var self = this;
-            self.storage = dampersFactory;
-            self.nf = notificationsFactory;
+	return {
+		scope: {},
+		bindToController: {},
+		templateUrl: 'scripts/dev/components/layout/dampers/dampers-layout.tmpl.html',
+		controller: function () {
+			var self = this;
+			self.storage = dampersFactory;
+			self.nf = notificationsFactory;
 
-            self.print = [];
+			self.print = [];
 
-            self.onAdd = function() {
-                openModal('createDamperModal');
-            };
+			self.onAdd = function () {
+				openModal('createDamperModal');
+			};
 
-            self.save = function() {
-                var damper = {
-                    name: self.name,
-                    designation: self.designation,
-                    expirationDate: self.expirationDate,
-                    inspectionMethods: self.inspectionMethods,
-                    controlType: self.controlType,
-                    measurementMeans: self.measurementMeans,
-                    guarantee: self.guarantee,
-                    fiatLabeling: self.fiatLabeling,
-                    note: self.note
-                };
+			self.save = function () {
+				var damper = {
+					name: self.name,
+					designation: self.designation,
+					expirationDate: self.expirationDate,
+					inspectionMethods: self.inspectionMethods,
+					controlType: self.controlType,
+					measurementMeans: self.measurementMeans,
+					guarantee: self.guarantee,
+					fiatLabeling: self.fiatLabeling,
+					note: self.note
+				};
 
-                dampersFactory.createDamper(damper).then(function() {
-                    closeModal('createDamperModal')
-                });
-            };
+				dampersFactory.createDamper(damper).then(function () {
 
-            self.inPrint = function(uuid) {
-                for (var i = 0; i < self.print.length; i++) {
-                    if (self.print[i] === uuid) {
-                        return true;
-                    }
-                }
+					self.nf.getNotifications().then(function () {
+						closeModal('createDamperModal');
+						reloadState();
+					});
+				});
+			};
 
-                return false;
-            };
+			self.inPrint = function (uuid) {
+				for (var i = 0; i < self.print.length; i++) {
+					if (self.print[i] === uuid) {
+						return true;
+					}
+				}
 
-            self.onClick = function(damper, event) {
-                if (event.ctrlKey) {
-                    if (self.inPrint(damper.uuid)) {
-                        for (var i = 0; i < self.print.length; i++) {
-                            if (self.print[i] == damper.uuid) {
-                                self.print.splice(i, 1);
-                                break;
-                            }
-                        }
+				return false;
+			};
 
-                    } else {
-                        self.print.push(damper.uuid);
-                    }
+			self.onClick = function (damper, event) {
+				if (event.ctrlKey) {
+					if (self.inPrint(damper.uuid)) {
+						for (var i = 0; i < self.print.length; i++) {
+							if (self.print[i] == damper.uuid) {
+								self.print.splice(i, 1);
+								break;
+							}
+						}
 
-                } else {
-                    $state.go('dampers-detailed', { uuid: damper.uuid });
-                }
-            };
+					} else {
+						self.print.push(damper.uuid);
+					}
 
-            self.onPrint = function() {
-                printFactory.sendToPrint('dampers', JSON.parse(JSON.stringify(self.print)));
-                self.print = [];
-            };
+				} else {
+					$state.go('dampers-detailed', {uuid: damper.uuid});
+				}
+			};
 
-            function closeModal(id) {
-                var el = angular.element(document).find('#' + id);
-                el.modal('hide');
-            }
+			self.onPrint = function () {
+				printFactory.sendToPrint('dampers', JSON.parse(JSON.stringify(self.print)));
+				self.print = [];
+			};
 
-            function openModal(id) {
-                var el = angular.element(document).find('#' + id);
-                el.modal('show');
-            }
+			function closeModal(id) {
+				var el = angular.element(document).find('#' + id);
+				el.modal('hide');
+			}
 
-            function reloadState() {
-                $timeout(function() {
-                    $state.reload();
-                }, 500);
-            }
-        },
-        controllerAs: 'ctrl'
-    }
+			function openModal(id) {
+				var el = angular.element(document).find('#' + id);
+				el.modal('show');
+			}
+
+			function reloadState() {
+				$timeout(function () {
+					$state.reload();
+				}, 500);
+			}
+		},
+		controllerAs: 'ctrl'
+	}
 }
