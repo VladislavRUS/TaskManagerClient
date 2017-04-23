@@ -41,6 +41,16 @@ function filesDirective($state, $timeout, fileFactory, modalFactory) {
 					$timeout(function() {
 						$state.reload();
 					}, 500);
+
+				}, function() {
+					self.animated = false;
+					self.errShow = true;
+					self.errMessage = 'Размер файла превышает допустимые 50 МБ!';
+
+					$timeout(function() {
+						self.errShow = false;
+
+					}, 10000);
 				})
 			};
 

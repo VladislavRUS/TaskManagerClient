@@ -59,6 +59,8 @@ function fileFactory($q, $http, restServiceFactory) {
 				console.log(err);
 				deferred.reject();
 			});
+		}, function () {
+			deferred.reject();
 		});
 
 		return deferred.promise;
@@ -68,6 +70,11 @@ function fileFactory($q, $http, restServiceFactory) {
 		var deferred = $q.defer();
 
 		var file = document.getElementById(id).files[0];
+		var size = file.size / (1024 * 1024);
+
+		if (size > 50) {
+			deferred.reject();
+		}
 
 		var fileName = file.name;
 
