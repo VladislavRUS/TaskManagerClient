@@ -5,10 +5,10 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/activity/calendar/calendar-activity.tmpl.html',
+  $templateCache.put('scripts/dev/activity/dampers/dampers-activity.tmpl.html',
     '<div class="container">\n' +
     '    <main-header></main-header>\n' +
-    '    <calendar-layout></calendar-layout>\n' +
+    '    <dampers-layout></dampers-layout>\n' +
     '    <dialog-wrap></dialog-wrap>\n' +
     '</div>');
 }]);
@@ -21,10 +21,10 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/activity/dampers/dampers-activity.tmpl.html',
+  $templateCache.put('scripts/dev/activity/calendar/calendar-activity.tmpl.html',
     '<div class="container">\n' +
     '    <main-header></main-header>\n' +
-    '    <dampers-layout></dampers-layout>\n' +
+    '    <calendar-layout></calendar-layout>\n' +
     '    <dialog-wrap></dialog-wrap>\n' +
     '</div>');
 }]);
@@ -194,7 +194,7 @@ module.run(['$templateCache', function($templateCache) {
     '            <div class="modal-body">\n' +
     '                <form class="form-horizontal" role="form">\n' +
     '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-2" for="inputTitle">\n' +
+    '                        <label class="col-sm-12" for="inputTitle">\n' +
     '                            Название\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
@@ -202,11 +202,18 @@ module.run(['$templateCache', function($templateCache) {
     '                        </div>\n' +
     '                    </div>\n' +
     '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-2" for="inputComment">\n' +
+    '                        <label class="col-sm-12" for="inputComment">\n' +
     '                            Комментарий\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <textarea type="text" class="form-control" id="inputComment" ng-model="ctrl.currentEvent.comment"></textarea>\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group" ng-if="ctrl.currentEvent.link">\n' +
+    '                        <label class="col-sm-12">\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <button class="btn btn-info btn-sm form-control" ng-click="ctrl.go(ctrl.currentEvent.link)">{{ctrl.currentEvent.linkText}}</button>\n' +
     '                        </div>\n' +
     '                    </div>\n' +
     '                </form>\n' +
@@ -382,7 +389,7 @@ module.run(['$templateCache', function($templateCache) {
     '    <tr>\n' +
     '        <th>Номер этапа</th>\n' +
     '        <th>Название</th>\n' +
-    '        <th>Дата истечения срока</th>\n' +
+    '        <th>Срок выполнения</th>\n' +
     '        <th>Отметка</th>\n' +
     '    </tr>\n' +
     '    </thead>\n' +
@@ -416,7 +423,7 @@ module.run(['$templateCache', function($templateCache) {
     '                <form class="form-horizontal" role="form">\n' +
     '                    <div class="form-group">\n' +
     '                        <label class="col-sm-12" for="stepNumber">\n' +
-    '                            Номер этапа\n' +
+    '                            Номер этапа (число)\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <input type="text" class="form-control" id="stepNumber"\n' +
@@ -434,7 +441,7 @@ module.run(['$templateCache', function($templateCache) {
     '                    </div>\n' +
     '                    <div class="form-group">\n' +
     '                        <label class="col-sm-12" for="stepExpirationDate">\n' +
-    '                            Дата истечения срока\n' +
+    '                            Срок выполнения\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <input type="date" class="form-control" id="stepExpirationDate"\n' +
@@ -615,7 +622,7 @@ module.run(['$templateCache', function($templateCache) {
     '    <div class="row">\n' +
     '        <div class="col-md-6 form-group">\n' +
     '            <label class="col-sm-12" for="expirationDate">\n' +
-    '                Дата истечения срока\n' +
+    '                Срок действия ПИ\n' +
     '            </label>\n' +
     '            <div class="col-sm-12">\n' +
     '                <input type="date" class="form-control" id="expirationDate" ng-model="ctrl.damper.expirationDate">\n' +
@@ -728,12 +735,13 @@ module.run(['$templateCache', function($templateCache) {
     '    <thead class="thead-inverse">\n' +
     '    <tr>\n' +
     '        <th>#</th>\n' +
-    '        <th>Соглашение</th>\n' +
+    '        <th>Номер</th>\n' +
+    '        <th>От</th>\n' +
     '        <th>Заказчик</th>\n' +
     '        <th>Кол-во</th>\n' +
     '        <th>Квартал</th>\n' +
     '        <th>Год</th>\n' +
-    '        <th>Отметка о предварительном авансировании</th>\n' +
+    '        <th>Авансирование</th>\n' +
     '        <th>Выполнен</th>\n' +
     '        <th>Отметка</th>\n' +
     '    </tr>\n' +
@@ -742,7 +750,8 @@ module.run(['$templateCache', function($templateCache) {
     '    <tr ng-repeat="contract in ctrl.damper.contracts | filter: ctrl.filterContract track by $index"\n' +
     '        ng-click="ctrl.updateContract(contract, \'createContractModal\');">\n' +
     '        <th>{{$index + 1}}</th>\n' +
-    '        <td>{{contract.agreement}}</td>\n' +
+    '        <td>{{contract.number}}</td>\n' +
+    '        <td>{{contract.fromDate | date : \'dd-MM-yyyy\'}}</td>\n' +
     '        <td>{{contract.customer}}</td>\n' +
     '        <td>{{contract.amount}}</td>\n' +
     '        <td>{{contract.quoter}}</td>\n' +
@@ -831,12 +840,21 @@ module.run(['$templateCache', function($templateCache) {
     '            <div class="modal-body">\n' +
     '                <form class="form-horizontal" role="form">\n' +
     '                    <div class="form-group">\n' +
-    '                        <label class="col-sm-12" for="name">\n' +
-    '                            Соглашение о поставке\n' +
+    '                        <label class="col-sm-12" for="number">\n' +
+    '                            Номер договора\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
-    '                            <input type="text" class="form-control" id="agreement"\n' +
-    '                                   ng-model="ctrl.currentContract.agreement">\n' +
+    '                            <input type="text" class="form-control" id="number"\n' +
+    '                                   ng-model="ctrl.currentContract.number">\n' +
+    '                        </div>\n' +
+    '                    </div>\n' +
+    '                    <div class="form-group">\n' +
+    '                        <label class="col-sm-12" for="fromDate">\n' +
+    '                            От даты\n' +
+    '                        </label>\n' +
+    '                        <div class="col-sm-12">\n' +
+    '                            <input type="date" class="form-control" id="fromDate"\n' +
+    '                                   ng-model="ctrl.currentContract.fromDate">\n' +
     '                        </div>\n' +
     '                    </div>\n' +
     '                    <div class="form-group">\n' +
@@ -877,7 +895,7 @@ module.run(['$templateCache', function($templateCache) {
     '                    </div>\n' +
     '                    <div class="form-group">\n' +
     '                        <label class="col-sm-12" for="expirationDate">\n' +
-    '                            Заметка об авансировании\n' +
+    '                            Авансирование\n' +
     '                        </label>\n' +
     '                        <div class="col-sm-12">\n' +
     '                            <input type="text" class="form-control" id="prepaidNote"\n' +
@@ -1291,8 +1309,8 @@ module.run(['$templateCache', function($templateCache) {
     '            <th>#</th>\n' +
     '            <th>Название</th>\n' +
     '            <th>Обозначение</th>\n' +
-    '            <th>Дата истечения строка</th>\n' +
-    '            <th>Контрактов</th>\n' +
+    '            <th>Срок действия ПИ</th>\n' +
+    '            <th>Договоров</th>\n' +
     '            <th>Отметка</th>\n' +
     '        </tr>\n' +
     '    </thead>\n' +
