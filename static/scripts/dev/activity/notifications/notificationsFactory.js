@@ -320,7 +320,7 @@ function notificationsFactory($q, $rootScope, dampersFactory, researchDetailsFac
 		var firstDate = new Date(first);
 		var secondDate = new Date(second);
 
-		return Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay));
+		return Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay)) + 1;
 	}
 
 	$rootScope.$on('updateNotifications', factory.getNotifications);

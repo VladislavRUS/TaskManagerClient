@@ -973,6 +973,48 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/detail-progress/item/detail-progress-item.tmpl.html',
+    '<div class="item"\n' +
+    '     id="{{detailProgressItemCtrl.item.uuid}}"\n' +
+    '     ng-click="detailProgressItemCtrl.toggleContracts()"\n' +
+    '     ng-class="{\'_expired\': detailProgressItemCtrl.expired, \'_opened\': detailProgressItemCtrl.isOpened}">\n' +
+    '\n' +
+    '    <div class="item__col">\n' +
+    '        <div class="item__col-text">{{detailProgressItemCtrl.item.description}}</div>\n' +
+    '    </div>\n' +
+    '    <div class="item__col">\n' +
+    '        <div class="item__col-text">{{detailProgressItemCtrl.item.agreement}}</div>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
+    '<div class="item__table-wrapper tableAnimation" ng-if="detailProgressItemCtrl.isOpened">\n' +
+    '    <table class="item__table" id="{{detailProgressItemCtrl.item.uuid + \'-table\'}}">\n' +
+    '        <tr class="item__table-header">\n' +
+    '            <td class="item__table-header-cell">Номер</td>\n' +
+    '            <td class="item__table-header-cell">Срок выполнения</td>\n' +
+    '        </tr>\n' +
+    '        <tr class="item__table-row"\n' +
+    '            ng-repeat="step in detailProgressItemCtrl.item.steps"\n' +
+    '            ng-class="\'{{detailProgressItemCtrl.contractStatus(step)}}\'"\n' +
+    '            ng-click="detailProgressItemCtrl.editContract(step)">\n' +
+    '\n' +
+    '            <td class="item__table-body-cell">{{step.number}}</td>\n' +
+    '            <td class="item__table-body-cell">{{step.expirationDate}}</td>\n' +
+    '        </tr>\n' +
+    '    </table>\n' +
+    '\n' +
+    '    <div class="detail-contract__add" ng-click="detailProgressItemCtrl.addStep()">Добавить этап</div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/detail/accessories/detail-accessories.tmpl.html',
     '<div class="item__inner-header" ng-click="detailAccessoriesCtrl.toggle()">Комплектующие</div>\n' +
     '\n' +
@@ -1128,37 +1170,14 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/detail-progress/item/detail-progress-item.tmpl.html',
-    '<div class="item"\n' +
-    '     id="{{detailProgressItemCtrl.item.uuid}}"\n' +
-    '     ng-click="detailProgressItemCtrl.toggleContracts()"\n' +
-    '     ng-class="{\'_expired\': detailProgressItemCtrl.expired, \'_opened\': detailProgressItemCtrl.isOpened}">\n' +
+  $templateCache.put('scripts/dev/components/dialog/wrap/dialog-wrap.tmpl.html',
+    '<div class="dialog-wrap"\n' +
+    '     ng-show="dialogWrapCtrl.show()"\n' +
+    '     ng-click="dialogWrapCtrl.close()">\n' +
     '\n' +
-    '    <div class="item__col">\n' +
-    '        <div class="item__col-text">{{detailProgressItemCtrl.item.description}}</div>\n' +
+    '    <div class="dialog-wrap__body">\n' +
+    '        <div ng-include="dialogWrapCtrl.getTemplateUrl()" ng-click="$event.stopPropagation()"></div>\n' +
     '    </div>\n' +
-    '    <div class="item__col">\n' +
-    '        <div class="item__col-text">{{detailProgressItemCtrl.item.agreement}}</div>\n' +
-    '    </div>\n' +
-    '</div>\n' +
-    '\n' +
-    '<div class="item__table-wrapper tableAnimation" ng-if="detailProgressItemCtrl.isOpened">\n' +
-    '    <table class="item__table" id="{{detailProgressItemCtrl.item.uuid + \'-table\'}}">\n' +
-    '        <tr class="item__table-header">\n' +
-    '            <td class="item__table-header-cell">Номер</td>\n' +
-    '            <td class="item__table-header-cell">Срок выполнения</td>\n' +
-    '        </tr>\n' +
-    '        <tr class="item__table-row"\n' +
-    '            ng-repeat="step in detailProgressItemCtrl.item.steps"\n' +
-    '            ng-class="\'{{detailProgressItemCtrl.contractStatus(step)}}\'"\n' +
-    '            ng-click="detailProgressItemCtrl.editContract(step)">\n' +
-    '\n' +
-    '            <td class="item__table-body-cell">{{step.number}}</td>\n' +
-    '            <td class="item__table-body-cell">{{step.expirationDate}}</td>\n' +
-    '        </tr>\n' +
-    '    </table>\n' +
-    '\n' +
-    '    <div class="detail-contract__add" ng-click="detailProgressItemCtrl.addStep()">Добавить этап</div>\n' +
     '</div>');
 }]);
 })();
@@ -1170,13 +1189,16 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/wrap/dialog-wrap.tmpl.html',
-    '<div class="dialog-wrap"\n' +
-    '     ng-show="dialogWrapCtrl.show()"\n' +
-    '     ng-click="dialogWrapCtrl.close()">\n' +
+  $templateCache.put('scripts/dev/components/event/item/event-item.tmpl.html',
+    '<div class="event-item">\n' +
+    '    <div class="event-item__title">\n' +
+    '        {{eventItemCtrl.item.title}}, {{eventItemCtrl.item.date | date:\'longDate\'}}\n' +
     '\n' +
-    '    <div class="dialog-wrap__body">\n' +
-    '        <div ng-include="dialogWrapCtrl.getTemplateUrl()" ng-click="$event.stopPropagation()"></div>\n' +
+    '        <span class="event-item__title _remove"\n' +
+    '              ng-click="eventItemCtrl.remove()">X</span>\n' +
+    '    </div>\n' +
+    '    <div class="event-item__body">\n' +
+    '        <div class="event-item__body _comment">{{eventItemCtrl.item.comment}}</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
@@ -1206,28 +1228,6 @@ module.run(['$templateCache', function($templateCache) {
     '    </div>\n' +
     '    <div class="item__col">\n' +
     '        <div class="item__col-text">{{equipmentItemCtrl.item.expirationDate | date}}</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/event/item/event-item.tmpl.html',
-    '<div class="event-item">\n' +
-    '    <div class="event-item__title">\n' +
-    '        {{eventItemCtrl.item.title}}, {{eventItemCtrl.item.date | date:\'longDate\'}}\n' +
-    '\n' +
-    '        <span class="event-item__title _remove"\n' +
-    '              ng-click="eventItemCtrl.remove()">X</span>\n' +
-    '    </div>\n' +
-    '    <div class="event-item__body">\n' +
-    '        <div class="event-item__body _comment">{{eventItemCtrl.item.comment}}</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
@@ -1754,40 +1754,6 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html',
-    '<div class="dialog-add jsPopup" ng-controller="AddAccessoryDialogController as addAccessoryDialogCtrl">\n' +
-    '    <div class="dialog-add__header">\n' +
-    '        Добавление комплектующего\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__body">\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addAccessoryDialogCtrl.name" placeholder="Наименование">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addAccessoryDialogCtrl.designation" placeholder="Обозначение">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__actions">\n' +
-    '        <div class="dialog-add__actions-button _save"\n' +
-    '             ng-click="addAccessoryDialogCtrl.onSave()">Сохранить</div>\n' +
-    '\n' +
-    '        <div class="dialog-add__actions-button _cancel"\n' +
-    '             ng-click="addAccessoryDialogCtrl.onCancel()">Отмена</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/dialog/accessory/edit/edit-accessory-dialog.tmpl.html',
     '<div class="dialog-add jsPopup" ng-controller="EditAccessoryDialogController as editAccessoryDialogCtrl">\n' +
     '    <div class="dialog-add__header">\n' +
@@ -1810,6 +1776,40 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="editAccessoryDialogCtrl.onCancel()">Отмена</div>\n' +
+    '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html',
+    '<div class="dialog-add jsPopup" ng-controller="AddAccessoryDialogController as addAccessoryDialogCtrl">\n' +
+    '    <div class="dialog-add__header">\n' +
+    '        Добавление комплектующего\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__body">\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addAccessoryDialogCtrl.name" placeholder="Наименование">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addAccessoryDialogCtrl.designation" placeholder="Обозначение">\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__actions">\n' +
+    '        <div class="dialog-add__actions-button _save"\n' +
+    '             ng-click="addAccessoryDialogCtrl.onSave()">Сохранить</div>\n' +
+    '\n' +
+    '        <div class="dialog-add__actions-button _cancel"\n' +
+    '             ng-click="addAccessoryDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
@@ -1997,40 +1997,6 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/detail-progress/add/add-progress-detail-dialog.tmpl.html',
-    '<div class="dialog-add jsPopup" ng-controller="AddProgressDetailDialogController as addProgressDetailDialogCtrl">\n' +
-    '    <div class="dialog-add__header">\n' +
-    '        Добавление оборудования НИОКР\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__body">\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.description" placeholder="Техзадание">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.agreement" placeholder="Договор">\n' +
-    '        </div>\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__actions">\n' +
-    '        <div class="dialog-add__actions-button _save"\n' +
-    '             ng-click="addProgressDetailDialogCtrl.onSave()">Сохранить</div>\n' +
-    '\n' +
-    '        <div class="dialog-add__actions-button _cancel"\n' +
-    '             ng-click="addProgressDetailDialogCtrl.onCancel()">Отмена</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/dialog/equipment/add/add-equipment-dialog.tmpl.html',
     '<div class="dialog-add jsPopup" ng-controller="AddEquipmentDialogController as addEquipmentDialogCtrl">\n' +
     '    <div class="dialog-add__header">\n' +
@@ -2063,6 +2029,40 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="addEquipmentDialogCtrl.onCancel()">Отмена</div>\n' +
+    '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/detail-progress/add/add-progress-detail-dialog.tmpl.html',
+    '<div class="dialog-add jsPopup" ng-controller="AddProgressDetailDialogController as addProgressDetailDialogCtrl">\n' +
+    '    <div class="dialog-add__header">\n' +
+    '        Добавление оборудования НИОКР\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__body">\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.description" placeholder="Техзадание">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addProgressDetailDialogCtrl.agreement" placeholder="Договор">\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__actions">\n' +
+    '        <div class="dialog-add__actions-button _save"\n' +
+    '             ng-click="addProgressDetailDialogCtrl.onSave()">Сохранить</div>\n' +
+    '\n' +
+    '        <div class="dialog-add__actions-button _cancel"\n' +
+    '             ng-click="addProgressDetailDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
     '</div>');
 }]);
