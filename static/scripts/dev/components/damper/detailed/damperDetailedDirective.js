@@ -1,4 +1,4 @@
-function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory) {
+function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory, modalFactory) {
 	return {
 		scope: {},
 		bindToController: {
@@ -42,47 +42,27 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 				});
 			};
 
-			self.closeModal = function () {
-				var el = angular.element(document).find('#' + currentModal);
-				el.modal('hide');
-			};
-
-			self.openModal = function (id) {
-				currentModal = id;
-				var el = angular.element(document).find('#' + id);
-				el.modal('show');
-			};
-
 			self.addContract = function (modal) {
 				self.update = false;
 				self.currentContract = {};
-				self.openModal(modal);
+				modalFactory.openModal(modal);
 			};
 
 			self.updateContract = function (contract, modal) {
 				self.update = true;
 				self.currentContract = angular.copy(contract);
-				self.openModal(modal);
+                modalFactory.openModal(modal);
 			};
 
 			self.saveContract = function () {
 				if (self.update) {
 					dampersFactory.updateContract(self.currentContract).then(function () {
-						self.closeModal();
-						self.currentContract = {};
-
-						$timeout(function () {
-							$state.reload();
-						}, 500);
+						modalFactory.closeModal();
 					});
 
 				} else {
 					dampersFactory.addContractToDamper(self.damper, self.currentContract).then(function () {
-						self.closeModal();
-
-						$timeout(function () {
-							$state.reload();
-						}, 500);
+						modalFactory.closeModal();
 					});
 				}
 			};

@@ -7,6 +7,7 @@ let plugins      = require('gulp-load-plugins')(config.plugins);
 let exec         = require('child_process').exec;
 let bsync        = require('browser-sync');
 let del          = require("del");
+let merge        = require('merge-stream');
 let wrapTemplate = '(function() {\n<%= contents %>\n})();';
 
 
@@ -42,22 +43,44 @@ gulp.src(config.html.src, {base: './'})
     .pipe(gulp.dest(config.html.dest))
 );
 
-
-
+gulp.task('copy-fonts', () => {
+    gulp.src(config.fonts.src)
+    .pipe(gulp.dest(config.fonts.dest))
+});
 
 /*Less tasks*/
-gulp.task('less', () =>
-gulp.src(config.less.src)
+gulp.task('less', ["copy-fonts"], () => {
+    let lessStream =
+        gulp.src(config.less.src)
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.less())
+            .pipe(plugins.autoprefixer(config.autoprefixer))
+            .pipe(plugins.sourcemaps.write())
+            .pipe(plugins.concat(config.less.outputFileName));
+
+    let cssStream =
+        gulp.src(config.css.src)
+            .pipe(plugins.concat(config.css.outputFileName));
+
+    merge(lessStream, cssStream)
+        .pipe(plugins.concat(config.styles.outputFileName))
+        .pipe(gulp.dest(config.styles.dest))
+        .pipe(bsync.stream())
+});
+
+
+/*gulp.src(config.less.src)
     .pipe(plugins.plumber({
         errorHandler: onPlumberError
     }))
     .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.concat(config.less.outputFileName))
     .pipe(plugins.less())
     .pipe(plugins.autoprefixer(config.autoprefixer))
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(config.less.dest))
     .pipe(bsync.stream())
-);
+);*/
 
 gulp.task('less:prod', ["clean:prod"], () =>
 gulp.src(config.less.src)

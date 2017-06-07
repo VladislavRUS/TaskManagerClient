@@ -1,5 +1,6 @@
 function researchDetailsFactory($http, $q, restServiceFactory) {
 	var factory = {};
+	factory.researchDetails = [];
 
 	factory.createResearchDetail = function (researchDetail) {
 		var deferred = $q.defer();

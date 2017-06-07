@@ -40,12 +40,14 @@
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "^1.7.0",
     "less-loader": "^2.2.3",
+    "merge-stream": "^1.0.1",
     "phantomjs-prebuilt": "^2.1.4",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.14"
   },
   "dependencies": {
     "angular-ui-router": "^0.3.2",
+    "angular-ui-router-anim-in-out": "^1.0.2",
     "fullcalendar": "^3.2.0",
     "tether": "^1.4.0"
   }

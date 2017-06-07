@@ -36,7 +36,7 @@ function eventsFactory($http, $q, restServiceFactory) {
         var deferred = $q.defer();
 
         $http.put(restServiceFactory.eventsUpdate.replace('{UUID}', event.uuid), event).then(function() {
-           factory.getEvents().then(deferred.resolve);
+            factory.getEvents().then(deferred.resolve);
         });
 
         return deferred.promise;

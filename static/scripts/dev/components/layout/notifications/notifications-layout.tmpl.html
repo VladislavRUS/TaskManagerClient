@@ -1,7 +1,6 @@
 <ul class="list-group col-md-6">
     <li class="list-group-item list-group-item-action justify-content-between"
-        ng-class="{'active': type.designation == ctrl.currentType.designation}"
-        ng-click="ctrl.setType(type)"
+
         ng-repeat="type in ctrl.storage.types">
         {{type.name}}
         <span class="badge badge-default badge-pill">{{ctrl.getNumberOfNotificationsByType(type.designation)}}</span>
@@ -11,7 +10,7 @@
 <hr>
 
 <div class="alert alert-{{ctrl.getNotificationAlertType(n)}} col-md-12" role="alert"
-     ng-repeat="n in ctrl.notifications | filter: ctrl.typeFilter">
+     ng-repeat="n in ctrl.storage.notifications | filter: ctrl.typeFilter">
 
     <h4 class="alert-heading">{{n.title}}</h4>
 

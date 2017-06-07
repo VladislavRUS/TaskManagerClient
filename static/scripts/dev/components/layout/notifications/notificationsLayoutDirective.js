@@ -2,7 +2,6 @@ function notificationsLayoutDirective(notificationsFactory) {
     return {
         scope: {},
         bindToController: {
-            notifications: '<'
         },
         templateUrl: 'scripts/dev/components/layout/notifications/notifications-layout.tmpl.html',
         controller: function() {
@@ -16,7 +15,7 @@ function notificationsLayoutDirective(notificationsFactory) {
 
             self.getNotificationAlertType = function(n) {
 				return n.type.split(':')[1];
-			}
+			};
 
             self.typeFilter = function(notification) {
 
@@ -38,7 +37,7 @@ function notificationsLayoutDirective(notificationsFactory) {
                     var n = self.storage.notifications[i];
                     var nDesignation = n.type.split(':')[0];
 
-                    if (nDesignation == typeDesignation) {
+                    if (nDesignation === typeDesignation) {
                         cnt++;
                     }
                 }

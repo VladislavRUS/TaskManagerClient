@@ -1,3 +1,4 @@
+<!--
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
@@ -42,3 +43,45 @@
         </ul>
     </div>
 </nav>
+-->
+
+<div class="ui four item menu">
+
+    <a class="item"
+       ui-sref="notifications"
+       ng-class="{'_active': mainHeaderCtrl.inState(['notifications'])}">
+        Уведомления
+        <div class="ui teal left pointing label">{{mainHeaderCtrl.storage.notifications.length}}</div>
+    </a>
+
+    <a class="item"
+       ui-sref="calendar"
+       ng-class="{'_active': mainHeaderCtrl.inState(['calendar'])}">
+        <i class="calendar icon"></i>
+        Календарь
+    </a>
+
+    <div class="ui dropdown item"
+         ng-class="{'_active': mainHeaderCtrl.inState(['dampers', 'research-details', 'test-equipments', 'university'])}">
+        <i class="university icon"></i>
+        Самарский университет
+        <i class="dropdown icon"></i>
+
+        <div class="menu">
+            <a class="item" ui-sref="dampers">Виброизоляторы</a>
+            <a class="item" ui-sref="test-equipments({vendor: 'university'})">Испытательное оборудование</a>
+            <a class="item" ui-sref="research-details">НИОКР</a>
+        </div>
+    </div>
+
+    <div class="ui dropdown item"
+         ng-class="{'_active': mainHeaderCtrl.inState(['test-equipments', 'progress'])}">
+        <i class="space shuttle icon"></i>
+        АО РКЦ Прогресс
+        <i class="dropdown icon"></i>
+
+        <div class="menu">
+            <a class="item" ui-sref="test-equipments({vendor: 'progress'})">Испытательное оборудование</a>
+        </div>
+    </div>
+</div>

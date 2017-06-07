@@ -17,9 +17,27 @@ module.exports = {
         ],
         cascade: true
     },
+    fonts: {
+        src: 'bower_components/semantic/dist/themes/**/**/**/**',
+        dest: 'styles/themes/'
+    },
+    css: {
+        src: [
+            'bower_components/semantic/dist/semantic.css',
+            'node_modules/fullcalendar/dist/fullcalendar.css',
+            'node_modules/angular-ui-router-anim-in-out/css/anim-in-out.css'
+        ],
+        outputFileName: 'css-files.css'
+    },
     less: {
         srcProd: "styles/main.css",
-        src: 'styles/*.less',
+        outputFileName: "less-files.css",
+        src: [
+            'styles/*.less'
+        ]
+    },
+    styles: {
+        outputFileName: 'styles.css',
         dest: 'styles/'
     },
     js: {
@@ -28,6 +46,8 @@ module.exports = {
         src: [
             "bower_components/underscore/underscore-min.js",
             "bower_components/jquery/dist/jquery.min.js",
+            "bower_components/semantic/dist/semantic.js",
+            "bower_components/semantic/dist/components/*.js",
             "bower_components/moment/min/moment-with-locales.min.js",
             "bower_components/velocity/velocity.min.js",
             "bower_components/angular/angular.min.js",
@@ -41,9 +61,9 @@ module.exports = {
             "bower_components/fullcalendar/dist/fullcalendar.js",
             "bower_components/fullcalendar/dist/gcal.js",
             "bower_components/fullcalendar/dist/lang-all.js",
-
-            "node_modules/tether/dist/js/tether.min.js",
-            "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "node_modules/angular-ui-router-anim-in-out/anim-in-out.js",
+            /*"node_modules/tether/dist/js/tether.min.js",*/
+            //"node_modules/bootstrap/dist/js/bootstrap.min.js",
 
             "scripts/ngTemplates.js",
             "scripts/modules/**/*.js",

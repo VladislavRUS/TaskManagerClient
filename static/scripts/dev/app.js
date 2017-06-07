@@ -1,8 +1,10 @@
-angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.calendar'])
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.calendar', 'anim-in-out'])
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+        $httpProvider.interceptors.push('responseInterceptor');
 
         $urlRouterProvider.otherwise('/notifications');
 
@@ -67,6 +69,14 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
                 controllerAs: 'researchDetailsDetailedCtrl',
                 templateUrl: 'scripts/dev/activity/research-details/detailed/research-details-detailed-activity.tmpl.html'
             })
+    })
+    .run(function ($rootScope, notificationsFactory, dampersFactory, researchDetailsFactory, testEquipmentsFactory, eventsFactory) {
+
+        dampersFactory.getDampers();
+        researchDetailsFactory.getResearchDetails();
+        testEquipmentsFactory.getTestEquipments();
+        eventsFactory.getEvents();
+
     });
 
 /*Controllers*/
@@ -77,15 +87,10 @@ angular.module('app')
     .controller('AddDetailDialogController', AddDetailDialogController)
     .controller('AddStepDialogController', AddStepDialogController)
     .controller('AddProgressDetailDialogController', AddProgressDetailDialogController)
-    .controller('AddEquipmentDialogController', AddEquipmentDialogController)
-    .controller('DetailsController', DetailsController)
+    .controller('AddEquipmentDialogController', AddProgressDetailDialogController)
     .controller('DampersController', DampersController)
     .controller('DampersDetailedController', DampersDetailedController)
     .controller('CalendarController', CalendarController)
-    .controller('DetailsProgressController', DetailsProgressController)
-    .controller('EventsController', EventsController)
-    .controller('EquipmentsController', EquipmentsController)
-    .controller('EquipmentsProgressController', EquipmentsProgressController)
     .controller('EditContractDialogController', EditContractDialogController)
     .controller('EditAccessoryDialogController', EditAccessoryDialogController)
     .controller('NotificationsController', NotificationsController)
@@ -124,13 +129,12 @@ angular.module('app')
 
 /*Factories*/
 angular.module('app')
+    .factory('constantsFactory', constantsFactory)
+    .factory('responseInterceptor', responseInterceptor)
     .factory('dateFactory', dateFactory)
     .factory('dampersFactory', dampersFactory)
     .factory('dialogWrapFactory', dialogWrapFactory)
-    .factory('detailsFactory', detailsFactory)
-    .factory('detailsProgressFactory', detailsProgressFactory)
     .factory('eventsFactory', eventsFactory)
-    .factory('equipmentsFactory', equipmentsFactory)
     .factory('fileFactory', fileFactory)
     .factory('loginFactory', loginFactory)
     .factory('modalFactory', modalFactory)
