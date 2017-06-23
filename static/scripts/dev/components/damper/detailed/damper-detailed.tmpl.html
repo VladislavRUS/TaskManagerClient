@@ -4,6 +4,7 @@
     <div class="active section">{{ctrl.damper.name}}</div>
 </div>
 
+<!--Форма обновления виброизолятора-->
 <div class="ui segment">
 
     <div class="ui positive message slideAnimation" ng-if="ctrl.showAlert">
@@ -91,7 +92,7 @@
 
             <button class="ui labeled icon positive mini button" ng-click="ctrl.addContract('createContractModal');">
                 <i class="plus icon"></i>
-                Добавить договор
+                Добавить
             </button>
 
         </div>
@@ -216,6 +217,7 @@
     </div>
 </div>
 
+
 <!--<table class="table table-hover">
     <thead class="thead-inverse">
     <tr>
@@ -250,9 +252,26 @@
     </tbody>
 </table>-->
 
-<hr>
+<div class="ui divider"></div>
 
-<div class="d-flex justify-content-start">
+<div class="ui form">
+    <div class="fields">
+        <div class="fourteen wide field">
+            <div class="ui huge header">Комплектующие</div>
+        </div>
+
+        <div class="two wide field">
+
+            <button class="ui labeled icon positive mini button" ng-click="ctrl.addAccessory('createAccessoryModal', 'component');">
+                <i class="plus icon"></i>
+                Добавить
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!--<div class="d-flex justify-content-start">
     <div class="p-2">
         <h4>Комплектующие</h4>
     </div>
@@ -261,7 +280,7 @@
                 ng-click="ctrl.addAccessory('createAccessoryModal', 'component');">Добавить
         </button>
     </div>
-</div>
+</div>-->
 
 <table class="table table-hover">
     <thead class="thead-inverse">

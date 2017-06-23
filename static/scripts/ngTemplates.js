@@ -5,9 +5,11 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/activity/calendar/calendar-activity.tmpl.html',
-    '<calendar-layout></calendar-layout>\n' +
-    '<dialog-wrap></dialog-wrap>\n' +
+  $templateCache.put('scripts/dev/activity/dampers/dampers-activity.tmpl.html',
+    '<div class="anim-slide-left">\n' +
+    '    <dampers-layout></dampers-layout>\n' +
+    '    <dialog-wrap></dialog-wrap>\n' +
+    '</div>\n' +
     '');
 }]);
 })();
@@ -19,11 +21,9 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/activity/dampers/dampers-activity.tmpl.html',
-    '<div class="anim-slide-left">\n' +
-    '    <dampers-layout></dampers-layout>\n' +
-    '    <dialog-wrap></dialog-wrap>\n' +
-    '</div>\n' +
+  $templateCache.put('scripts/dev/activity/calendar/calendar-activity.tmpl.html',
+    '<calendar-layout></calendar-layout>\n' +
+    '<dialog-wrap></dialog-wrap>\n' +
     '');
 }]);
 })();
@@ -493,6 +493,7 @@ module.run(['$templateCache', function($templateCache) {
     '    <div class="active section">{{ctrl.damper.name}}</div>\n' +
     '</div>\n' +
     '\n' +
+    '<!--Форма обновления виброизолятора-->\n' +
     '<div class="ui segment">\n' +
     '\n' +
     '    <div class="ui positive message slideAnimation" ng-if="ctrl.showAlert">\n' +
@@ -580,7 +581,7 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '            <button class="ui labeled icon positive mini button" ng-click="ctrl.addContract(\'createContractModal\');">\n' +
     '                <i class="plus icon"></i>\n' +
-    '                Добавить договор\n' +
+    '                Добавить\n' +
     '            </button>\n' +
     '\n' +
     '        </div>\n' +
@@ -705,6 +706,7 @@ module.run(['$templateCache', function($templateCache) {
     '    </div>\n' +
     '</div>\n' +
     '\n' +
+    '\n' +
     '<!--<table class="table table-hover">\n' +
     '    <thead class="thead-inverse">\n' +
     '    <tr>\n' +
@@ -739,9 +741,26 @@ module.run(['$templateCache', function($templateCache) {
     '    </tbody>\n' +
     '</table>-->\n' +
     '\n' +
-    '<hr>\n' +
+    '<div class="ui divider"></div>\n' +
     '\n' +
-    '<div class="d-flex justify-content-start">\n' +
+    '<div class="ui form">\n' +
+    '    <div class="fields">\n' +
+    '        <div class="fourteen wide field">\n' +
+    '            <div class="ui huge header">Комплектующие</div>\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="two wide field">\n' +
+    '\n' +
+    '            <button class="ui labeled icon positive mini button" ng-click="ctrl.addAccessory(\'createAccessoryModal\', \'component\');">\n' +
+    '                <i class="plus icon"></i>\n' +
+    '                Добавить\n' +
+    '            </button>\n' +
+    '\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
+    '<!--<div class="d-flex justify-content-start">\n' +
     '    <div class="p-2">\n' +
     '        <h4>Комплектующие</h4>\n' +
     '    </div>\n' +
@@ -750,7 +769,7 @@ module.run(['$templateCache', function($templateCache) {
     '                ng-click="ctrl.addAccessory(\'createAccessoryModal\', \'component\');">Добавить\n' +
     '        </button>\n' +
     '    </div>\n' +
-    '</div>\n' +
+    '</div>-->\n' +
     '\n' +
     '<table class="table table-hover">\n' +
     '    <thead class="thead-inverse">\n' +
@@ -1268,7 +1287,7 @@ module.run(['$templateCache', function($templateCache) {
     '</nav>\n' +
     '-->\n' +
     '\n' +
-    '<div class="ui four item menu">\n' +
+    '<div class="ui four item menu inverted">\n' +
     '\n' +
     '    <a class="item"\n' +
     '       ui-sref="notifications"\n' +
