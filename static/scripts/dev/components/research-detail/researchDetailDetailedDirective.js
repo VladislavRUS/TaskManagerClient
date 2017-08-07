@@ -1,4 +1,5 @@
-function researchDetailDetailedDirective($timeout, $state, $q, researchDetailsFactory, modalFactory, notificationsFactory, fileFactory) {
+function researchDetailDetailedDirective($timeout, $state, researchDetailsFactory,
+										 modalFactory, notificationsFactory, fileFactory) {
 	return {
 		scope: {},
 		bindToController: {
@@ -25,29 +26,17 @@ function researchDetailDetailedDirective($timeout, $state, $q, researchDetailsFa
 
 			self.addStep = function () {
 				self.update = false;
+				self.currentStep = {};
 				modalFactory.openModal(stepModal);
 			};
 
 			self.saveStep = function () {
-				if (self.update) {
-					researchDetailsFactory.updateStep(self.currentStep).then(function () {
-						self.currentStep = {};
-						modalFactory.closeModal(stepModal);
 
-						$timeout(function () {
-							$state.reload();
-						}, 500);
-					});
-				} else {
-					researchDetailsFactory.createStep(self.researchDetail, self.currentStep).then(function () {
-						self.currentStep = {};
-						modalFactory.closeModal(stepModal);
+				var promise = self.update
+					? researchDetailsFactory.updateStep(self.currentStep)
+					: researchDetailsFactory.createStep(self.researchDetail, self.currentStep);
 
-						$timeout(function () {
-							$state.reload();
-						}, 500);
-					});
-				}
+				promise.then(modalFactory.closeModal);
 			};
 
 			self.updateStep = function (step) {
@@ -66,10 +55,6 @@ function researchDetailDetailedDirective($timeout, $state, $q, researchDetailsFa
 			self.deleteStep = function () {
 				researchDetailsFactory.deleteStep(self.currentStep).then(function () {
 					modalFactory.closeModal(stepModal);
-
-					$timeout(function () {
-						$state.reload();
-					}, 500);
 				});
 			};
 		},

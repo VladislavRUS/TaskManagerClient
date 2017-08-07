@@ -1,33 +1,17 @@
 function modalFactory($q, $timeout) {
-    var factory = {};
-    factory.deferred = null;
-    factory.currentModal = null;
+	var factory = {};
+	factory.currentModal = null;
 
-    factory.openModal = function (modalId, approveCallback, successCallback, errorCallback) {
-        factory.deferred = $q.defer();
-        factory.currentModal = modalId;
+	factory.openModal = function (modalId, approveCallback, successCallback, errorCallback) {
+		factory.currentModal = modalId;
 
-        var el = angular.element(document).find('#' + modalId);
-        el.modal({
+		var el = angular.element(document).find('#' + modalId);
+		el.modal('show');
+	};
 
-            onHide: function () {
-                $timeout(function() {
-                    factory.deferred.resolve();
-                }, 1000);
-            },
-            onApprove: function () {
-                return false;
-            }
+	factory.closeModal = function () {
+		$('#' + factory.currentModal).modal('hide');
+	};
 
-        }).modal('show');
-    };
-
-    factory.closeModal = function () {
-
-        $('#' + factory.currentModal).modal('hide');
-
-        return factory.deferred.promise;
-    };
-
-    return factory;
+	return factory;
 }

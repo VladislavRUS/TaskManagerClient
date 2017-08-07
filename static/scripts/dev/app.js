@@ -70,13 +70,17 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
                 templateUrl: 'scripts/dev/activity/research-details/detailed/research-details-detailed-activity.tmpl.html'
             })
     })
-    .run(function ($rootScope, notificationsFactory, dampersFactory, researchDetailsFactory, testEquipmentsFactory, eventsFactory) {
+    .run(function ($rootScope, notificationsFactory, dampersFactory,
+                   researchDetailsFactory, testEquipmentsFactory, eventsFactory, $interval) {
 
         dampersFactory.getDampers();
         researchDetailsFactory.getResearchDetails();
         testEquipmentsFactory.getTestEquipments();
         eventsFactory.getEvents();
 
+        /*$interval(function() {
+            notificationsFactory.getNotifications();
+        }, 2000);*/
     });
 
 /*Controllers*/

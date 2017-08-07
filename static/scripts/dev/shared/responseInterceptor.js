@@ -1,9 +1,12 @@
-function responseInterceptor($q, $injector) {
+function responseInterceptor($q, $timeout, $injector) {
     return {
         response: function(response) {
 
-            var nf = $injector.get('notificationsFactory');
-            nf.getNotifications();
+
+            $timeout(function() {
+				var nf = $injector.get('notificationsFactory');
+				nf.getNotifications();
+            }, 2000);
 
             return response;
         }

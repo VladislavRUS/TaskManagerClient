@@ -1,4 +1,4 @@
-function notificationsFactory(dampersFactory, researchDetailsFactory, testEquipmentsFactory, eventsFactory) {
+function notificationsFactory($interval, dampersFactory, researchDetailsFactory, testEquipmentsFactory, eventsFactory) {
     var factory = {};
 
     factory.notifications = [];
@@ -36,7 +36,7 @@ function notificationsFactory(dampersFactory, researchDetailsFactory, testEquipm
 
     function containsType(type, types) {
         for (var i = 0; i < types.length; i++) {
-            if (types[i].designation == type.designation) {
+            if (types[i].designation === type.designation) {
                 return true;
             }
         }

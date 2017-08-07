@@ -27,6 +27,7 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 			self.filterContract = function (contract) {
 				if (self.hideDone) {
 					return !contract.done;
+
 				} else {
 					return true;
 				}
@@ -58,6 +59,11 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 				if (self.update) {
 					dampersFactory.updateContract(self.currentContract).then(function () {
 						modalFactory.closeModal();
+
+						iziToast.success({
+							title: 'OK',
+							message: 'Successfully inserted record!'
+						});
 					});
 
 				} else {
@@ -71,43 +77,37 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 				self.update = false;
 				self.currentAccessory = {};
 				self.currentAccessory.type = type;
-				self.openModal(modal);
+				modalFactory.openModal(modal);
 			};
 
 			self.updateAccessory = function (accessory, modal) {
 				self.update = true;
 				self.currentAccessory = angular.copy(accessory);
-				self.openModal(modal);
+				modalFactory.openModal(modal);
 			};
 
 			self.saveAccessory = function () {
 				if (self.update) {
 					dampersFactory.updateAccessory(self.currentAccessory).then(function () {
-						self.closeModal();
+						modalFactory.closeModal();
 						self.currentAccessory = {};
-
-						$timeout(function () {
-							$state.reload();
-						}, 500);
 					});
+
 				} else {
 					dampersFactory.addAccessoryToDamper(self.damper, self.currentAccessory).then(function () {
-						self.closeModal();
-
-						$timeout(function () {
-							$state.reload();
-						}, 500);
-					})
+						modalFactory.closeModal();
+					});
 				}
+
+				iziToast.success({
+					title: 'OK',
+					message: 'Успешно добавлено!'
+				});
 			};
 
 			self.deleteAccessory = function () {
 				dampersFactory.deleteAccessory(self.currentAccessory).then(function () {
-					self.closeModal();
-
-					$timeout(function () {
-						$state.reload();
-					}, 500);
+					modalFactory.closeModal();
 				})
 			};
 
@@ -120,11 +120,7 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 			self.deleteContract = function () {
 
 				dampersFactory.deleteContract(self.currentContract).then(function () {
-					self.closeModal();
-
-					$timeout(function () {
-						$state.reload();
-					}, 500);
+					modalFactory.closeModal();
 				});
 			}
 		},

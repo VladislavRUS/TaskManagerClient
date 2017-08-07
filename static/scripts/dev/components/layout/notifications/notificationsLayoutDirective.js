@@ -17,6 +17,20 @@ function notificationsLayoutDirective(notificationsFactory) {
 				return n.type.split(':')[1];
 			};
 
+            self.getRowClass = function (n) {
+                var color = n.type.split(':')[1];
+
+                if (color === 'red') {
+                    return 'negative';
+
+                } else if (color === 'green') {
+                    return 'positive';
+
+                } else if (color === 'yellow') {
+                    return 'warning';
+                }
+			};
+
             self.typeFilter = function(notification) {
 
                 if (self.currentType) {

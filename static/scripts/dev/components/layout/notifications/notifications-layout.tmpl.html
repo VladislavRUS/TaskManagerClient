@@ -1,13 +1,64 @@
-<ul class="list-group col-md-6">
-    <li class="list-group-item list-group-item-action justify-content-between"
+<table class="ui selectable table">
+    <thead>
+    <tr>
+        <th>Тип уведомления</th>
+        <th>Количество</th>
+    </tr>
+    </thead>
 
-        ng-repeat="type in ctrl.storage.types">
-        {{type.name}}
-        <span class="badge badge-default badge-pill">{{ctrl.getNumberOfNotificationsByType(type.designation)}}</span>
-    </li>
-</ul>
+    <tbody>
+    <tr ng-click="ctrl.setType('')">
+        <td>Все</td>
+        <td>{{ctrl.storage.notifications.length}}</td>
+    </tr>
 
-<hr>
+    <tr ng-repeat="type in ctrl.storage.types"
+        ng-click="ctrl.setType(type)"
+        ng-class="{'active': type === ctrl.currentType}">
+
+        <td>{{type.name}}</td>
+        <td>{{ctrl.getNumberOfNotificationsByType(type.designation)}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="ui divider"></div>
+
+<table class="ui selectable compact table">
+    <tbody>
+        <tr ng-repeat="n in ctrl.storage.notifications | filter: ctrl.typeFilter" ng-class="ctrl.getRowClass(n);">
+            <td>{{n.title}}</td>
+
+            <td>{{n.text}}</td>
+
+            <td>
+                <a href="#/{{n.link}}">
+                    {{n.linkText}}
+                </a>
+            </td>
+
+        </tr>
+    </tbody>
+</table>
+
+<!--<div class="ui cards">
+    <div class="card"
+         ng-repeat="n in ctrl.storage.notifications | filter: ctrl.typeFilter">
+        <div class="header">
+            {{n.title}}
+        </div>
+        <div class="meta">
+            <a href="#/{{n.link}}">
+                {{n.linkText}}
+            </a>
+        </div>
+        <div class="description">
+            {{n.text}}
+        </div>
+    </div>
+</div>-->
+
+<!--
 
 <div class="alert alert-{{ctrl.getNotificationAlertType(n)}} col-md-12" role="alert"
      ng-repeat="n in ctrl.storage.notifications | filter: ctrl.typeFilter">
@@ -20,3 +71,4 @@
 
     <p>{{n.text}}</p>
 </div>
+-->

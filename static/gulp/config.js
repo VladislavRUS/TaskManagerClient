@@ -25,6 +25,7 @@ module.exports = {
         src: [
             'bower_components/semantic/dist/semantic.css',
             'node_modules/fullcalendar/dist/fullcalendar.css',
+            'node_modules/izitoast/dist/css/iziToast.min.css',
             'node_modules/angular-ui-router-anim-in-out/css/anim-in-out.css'
         ],
         outputFileName: 'css-files.css'
@@ -62,6 +63,7 @@ module.exports = {
             "bower_components/fullcalendar/dist/gcal.js",
             "bower_components/fullcalendar/dist/lang-all.js",
             "node_modules/angular-ui-router-anim-in-out/anim-in-out.js",
+            "node_modules/izitoast/dist/js/iziToast.min.js",
             /*"node_modules/tether/dist/js/tether.min.js",*/
             //"node_modules/bootstrap/dist/js/bootstrap.min.js",
 

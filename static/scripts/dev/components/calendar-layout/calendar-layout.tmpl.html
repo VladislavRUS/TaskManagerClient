@@ -1,6 +1,48 @@
-<div ui-calendar="ctrl.uiConfig.calendar" ng-model="ctrl.eventSources"></div>
+<div ui-calendar="ctrl.uiConfig.calendar"
+     ng-model="ctrl.eventSources"
+     calendar="ctrl.myCalendar"
+     id="calendar"></div>
 
-<!--Create event modal-->
+<div class="ui modal" id="createEventModal">
+    <i class="close icon"></i>
+    <div class="header">
+        Событие ({{ctrl.currentEvent.date | date: "dd-MM-yyyy"}})
+    </div>
+
+    <div class="content">
+        <form class="ui form">
+            <div class="required field">
+                <label>Название</label>
+                <input type="text" ng-model="ctrl.currentEvent.title">
+            </div>
+
+            <div class="required field">
+                <label>Комментарий</label>
+                <textarea row="2" ng-model="ctrl.currentEvent.comment"></textarea>
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="actions" ng-if="!ctrl.currentEvent.custom">
+        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.delete()">
+            Удалить
+        </div>
+
+        <div class="ui deny black button">
+            Отмена
+        </div>
+
+        <div class="ui positive right labeled icon button" ng-click="ctrl.save()">
+            Сохранить
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+<!--
+
+&lt;!&ndash;Create event modal&ndash;&gt;
 <div class="modal fade" id="createEventModal" tabindex="-1" role="dialog" aria-labelledby="createEventModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -43,4 +85,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->

@@ -43,7 +43,6 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
                 });
             });
 
-            $rootScope.$emit(constantsFactory.updateNotifications);
             deferred.resolve();
         });
 
@@ -175,7 +174,7 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
                 return factory.dampers[i];
             }
         }
-    }
+    };
 
     return factory;
 }

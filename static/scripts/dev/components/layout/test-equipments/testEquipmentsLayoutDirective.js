@@ -1,4 +1,5 @@
-function testEquipmentsLayoutDirective($stateParams, $timeout, $state, testEquipmentsFactory, notificationsFactory) {
+function testEquipmentsLayoutDirective($stateParams, $timeout, $state,
+									   testEquipmentsFactory, notificationsFactory, modalFactory) {
 	return {
 		scope: {},
 		bindToController: {},
@@ -11,7 +12,7 @@ function testEquipmentsLayoutDirective($stateParams, $timeout, $state, testEquip
 			self.nf = notificationsFactory;
 
 			self.onAdd = function() {
-				openModal('createTestEquipmentModal');
+				modalFactory.openModal('createTestEquipmentModal');
 			};
 
 			self.save = function() {
@@ -24,36 +25,17 @@ function testEquipmentsLayoutDirective($stateParams, $timeout, $state, testEquip
 				};
 
 				testEquipmentsFactory.createTestEquipment(testEquipment).then(function() {
-					self.nf.getNotifications().then(function () {
-						closeModal('createTestEquipmentModal');
-						reloadState();
-					});
+					modalFactory.closeModal();
 				});
 			};
 
 			self.vendorFilter = function(testEquipment) {
-				return testEquipment.vendor == self.vendor;
+				return testEquipment.vendor === self.vendor;
 			};
 
 			self.onClick = function(testEquipment) {
                 $state.go('test-equipments-detailed', { uuid: testEquipment.uuid });
 			};
-
-			function closeModal(id) {
-				var el = angular.element(document).find('#' + id);
-				el.modal('hide');
-			}
-
-			function openModal(id) {
-				var el = angular.element(document).find('#' + id);
-				el.modal('show');
-			}
-
-			function reloadState() {
-				$timeout(function () {
-					$state.reload();
-				}, 500);
-			}
 		},
 		controllerAs: 'ctrl'
 	}

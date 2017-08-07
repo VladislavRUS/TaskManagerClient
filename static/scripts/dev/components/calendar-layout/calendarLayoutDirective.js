@@ -1,14 +1,16 @@
-function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsFactory) {
+function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
+								 eventsFactory, notificationsFactory, modalFactory) {
 	return {
 		scope: {},
 		bindToController: {},
 		templateUrl: 'scripts/dev/components/calendar-layout/calendar-layout.tmpl.html',
-		controller: function () {
+		controller: function ($scope) {
 			var self = this;
 
 			self.currentDate = new Date();
-			self.currentEvent = null;
+			self.currentEvent = {};
 			self.update = false;
+			self.eventSources = [];
 
 			self.uiConfig = {
 				calendar: {
@@ -24,30 +26,32 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 						self.currentEvent = {};
 						self.currentEvent.date = new Date(date);
 						self.update = false;
-						openModal('createEventModal');
+
+						console.log(self.currentEvent);
+						modalFactory.openModal('createEventModal');
 					},
 
 					eventClick: function (calEvent, jsEvent, view) {
-						/*self.currentEvent = {};
-						self.currentEvent.title = calEvent.title;
-						self.currentEvent.comment = calEvent.comment;
-						self.currentEvent.uuid = calEvent.uuid;
-						self.currentEvent.date = calEvent.start._i;
-						self.currentEvent.custom = calEvent.custom || false;*/
+						self.currentEvent = {};
 
-						self.currentEvent = angular.copy(calEvent);
+						self.currentEvent.title = calEvent.title;
 						self.currentEvent.date = calEvent.start._i;
+						self.currentEvent.comment = calEvent.comment;
 						self.currentEvent.custom = calEvent.custom || false;
+						self.currentEvent.uuid = calEvent.uuid;
 
 						self.update = true;
-						openModal('createEventModal');
+
+						console.log(self.currentEvent);
+
+						modalFactory.openModal('createEventModal');
 					},
 
 					dayRender: function (date, cell) {
 						var day = new Date(date);
 						var isWeekend = false;
 
-						if (day.getDay() == 6 || day.getDay() == 0) {
+						if (day.getDay() === 6 || day.getDay() === 0) {
 							isWeekend = true;
 						}
 
@@ -62,58 +66,62 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 				}
 			};
 
-			self.eventSources = [];
+			function updateEventSources() {
+				self.eventSources = [];
 
-			eventsFactory.getEvents().then(function () {
-				self.eventSources.push(
-					{
-						events: eventsFactory.events
-							.map(function (event) {
-								console.log(event);
+				notificationsFactory.getNotifications();
 
+				eventsFactory.getEvents().then(function () {
+					self.eventSources.push(
+						{
+							events: eventsFactory.events
+								.map(function (event) {
+									console.log(event);
+
+									return {
+										uuid: event.uuid,
+										title: event.title,
+										start: new Date(event.date),
+										comment: event.comment,
+										color: '#2196F3'
+									}
+								})
+						});
+
+					self.eventSources.push({
+						events: notificationsFactory.notifications.filter(function (n) {
+							return n.type.split(':')[0] !== 'event'
+						})
+							.map(function (n) {
 								return {
-									uuid: event.uuid,
-									title: event.title,
-									start: new Date(event.date),
-									comment: event.comment,
-									color: '#2196F3'
+									uuid: n.uuid,
+									title: n.title,
+									start: n.date,
+									comment: n.text,
+									link: n.link,
+									linkText: n.linkText,
+									custom: true,
+									color: getNotificationColor(n)
 								}
 							})
-					});
-
-				self.eventSources.push({
-					events: notificationsFactory.notifications.filter(function (n) {
-						return n.type.split(':')[0] !== 'event'
 					})
-						.map(function (n) {
-							return {
-								uuid: n.uuid,
-								title: n.title,
-								start: n.date,
-								comment: n.text,
-								link: n.link,
-								linkText: n.linkText,
-								custom: true,
-								color: getNotificationColor(n)
-							}
-						})
-				})
-			});
+				});
+			};
 
 			function getNotificationColor(n) {
 				var type = n.type.split(':')[1];
 
-				if (type == 'warning') {
+				if (type === 'yellow') {
 					return '#FFC107';
 
-				} else  if(type == 'danger') {
+				} else if (type === 'red') {
 					return '#F44336';
 
 				} else return 'blue';
 			}
 
 			self.go = function (link) {
-				closeModal('createEventModal');
+				modalFactory.closeModal();
 
 				$timeout(function () {
 					window.location.href = '#/' + link;
@@ -121,46 +129,40 @@ function calendarLayoutDirective($state, $timeout, eventsFactory, notificationsF
 			};
 
 			self.save = function () {
-				console.log(self.currentEvent);
+				var promise = self.update
+					? eventsFactory.updateEvent(self.currentEvent)
+					: eventsFactory.addEvent(self.currentEvent);
 
-				if (self.update) {
-					eventsFactory.updateEvent(self.currentEvent).then(function () {
-						closeModal('createEventModal');
-						reloadState();
-					});
-
-				} else {
-					eventsFactory.addEvent(self.currentEvent).then(function () {
-						closeModal('createEventModal');
-						reloadState();
-					});
-				}
+				promise.then(function () {
+					modalFactory.closeModal();
+					reloadState();
+				});
 			};
 
 			self.delete = function () {
 				var event = {uuid: self.currentEvent.uuid};
 
 				eventsFactory.removeEvent(event).then(function () {
-					closeModal('createEventModal');
+					modalFactory.closeModal();
 					reloadState();
 				});
 			};
 
-			function closeModal(id) {
-				var el = angular.element(document).find('#' + id);
-				el.modal('hide');
-			}
-
-			function openModal(id) {
-				var el = angular.element(document).find('#' + id);
-				el.modal('show');
-			}
-
 			function reloadState() {
-				$timeout(function () {
-					$state.reload();
+				/*updateEventSources();
+
+				$('#calendar').fullCalendar("refetchEvents");*/
+
+				$timeout(function() {
+					$window.location.reload();
 				}, 500);
+
 			}
+
+			console.log(self.myCalendar);
+			console.log(uiCalendarConfig.calendars['myCalendar']);
+
+			updateEventSources();
 		},
 
 		link: function () {
