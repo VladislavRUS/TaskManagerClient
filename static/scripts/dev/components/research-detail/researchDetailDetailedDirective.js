@@ -1,5 +1,5 @@
 function researchDetailDetailedDirective($timeout, $state, researchDetailsFactory,
-										 modalFactory, notificationsFactory, fileFactory) {
+										 modalFactory, notificationsFactory, toastFactory) {
 	return {
 		scope: {},
 		bindToController: {
@@ -16,11 +16,7 @@ function researchDetailDetailedDirective($timeout, $state, researchDetailsFactor
 
 			self.onUpdate = function () {
 				researchDetailsFactory.updateResearchDetail(self.researchDetail).then(function () {
-					self.showAlert = true;
-
-					$timeout(function () {
-						self.showAlert = false;
-					}, 3000);
+					toastFactory.successToast('НИОКР успешно обновлен!')
 				});
 			};
 
@@ -36,7 +32,16 @@ function researchDetailDetailedDirective($timeout, $state, researchDetailsFactor
 					? researchDetailsFactory.updateStep(self.currentStep)
 					: researchDetailsFactory.createStep(self.researchDetail, self.currentStep);
 
-				promise.then(modalFactory.closeModal);
+				promise.then(function() {
+					modalFactory.closeModal();
+
+					if (self.update) {
+						toastFactory.successToast('Этап обновлен!');
+
+					} else {
+						toastFactory.successToast('Этап создан!');
+					}
+				});
 			};
 
 			self.updateStep = function (step) {

@@ -1,5 +1,5 @@
 function testEquipmentsLayoutDirective($stateParams, $timeout, $state,
-									   testEquipmentsFactory, notificationsFactory, modalFactory) {
+									   testEquipmentsFactory, notificationsFactory, modalFactory, toastFactory) {
 	return {
 		scope: {},
 		bindToController: {},
@@ -26,6 +26,7 @@ function testEquipmentsLayoutDirective($stateParams, $timeout, $state,
 
 				testEquipmentsFactory.createTestEquipment(testEquipment).then(function() {
 					modalFactory.closeModal();
+					toastFactory.successToast('Испытательное оборудование добавлено!');
 				});
 			};
 

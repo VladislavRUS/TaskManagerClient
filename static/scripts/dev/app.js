@@ -146,6 +146,7 @@ angular.module('app')
     .factory('restServiceFactory', restServiceFactory)
     .factory('notificationsFactory', notificationsFactory)
     .factory('researchDetailsFactory', researchDetailsFactory)
+    .factory('toastFactory', toastFactory)
     .factory('testEquipmentsFactory', testEquipmentsFactory);
 
 /*Animations*/

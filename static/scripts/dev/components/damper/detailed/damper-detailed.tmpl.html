@@ -55,6 +55,7 @@
             <textarea rows="2" ng-model="ctrl.damper.note"></textarea>
         </div>
 
+
         <div class="fields">
             <div class="field">
                 <div class="ui positive right labeled icon button" ng-click="ctrl.onUpdate()">
@@ -71,6 +72,8 @@
         </div>
     </form>
 </div>
+
+<files object="ctrl.damper"></files>
 
 <div class="ui divider"></div>
 
@@ -166,12 +169,12 @@
 
             <div class="required field">
                 <label>Количество</label>
-                <input type="number" min="1" step="1" ng-model="ctrl.currentContract.amount">
+                <input type="number" min="1" step="1" ng-model="ctrl.currentContract.amount" value="1">
             </div>
 
             <div class="required field">
                 <label>Квартал</label>
-                <input type="number" min="1" max="4" step="1" ng-model="ctrl.currentContract.quoter">
+                <input type="number" min="1" max="4" step="1" ng-model="ctrl.currentContract.quoter" value="1">
             </div>
 
             <div class="required field">

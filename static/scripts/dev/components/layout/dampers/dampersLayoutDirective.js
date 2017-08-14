@@ -1,4 +1,5 @@
-function dampersLayoutDirective($timeout, $state, $q, modalFactory, notificationsFactory, dampersFactory, printFactory) {
+function dampersLayoutDirective($timeout, $state, $q, modalFactory,
+                                notificationsFactory, dampersFactory, printFactory, toastFactory) {
     return {
         scope: {},
         bindToController: {},
@@ -82,6 +83,8 @@ function dampersLayoutDirective($timeout, $state, $q, modalFactory, notification
             }
 
             function reloadState() {
+				toastFactory.successToast('Виброизолятор добавлен!');
+
                 $timeout(function () {
                     $state.reload();
                 }, 500);

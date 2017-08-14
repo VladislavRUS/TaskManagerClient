@@ -99,7 +99,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                         uuid: contract.uuid,
                         type: 'contract:red:Договор',
                         title: contractExpiredText,
-                        text: 'Данные договора: ' + contract.agreement + ', ' + contract.customer + ', квартал: ' + contract.quoter + ', год: ' + contract.year,
+                        text: 'Данные договора: квартал: ' + contract.quoter + ', год: ' + contract.year,
                         link: 'dampers-detailed/' + damper.uuid,
                         linkText: 'Перейти к договору',
                         badge: 'Истек',
@@ -107,7 +107,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                     });
 
                     //Или если года совпадают
-                } else if (contract.year == currentYear) {
+                } else if (contract.year === currentYear) {
                     var lastMonthInQuoter = getLastMonthInQuoter(contract.quoter);
 
                     //Если текующий месяц больше последнего месяца квартала контракт
@@ -116,7 +116,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                             uuid: contract.uuid,
                             type: 'contract:red:Договор',
                             title: contractExpiredText,
-                            text: 'Данные договора: ' + contract.agreement + ', ' + contract.customer + ', квартал: ' + contract.quoter + ', год: ' + contract.year,
+                            text: 'Данные договора: квартал: ' + contract.quoter + ', год: ' + contract.year,
                             link: 'dampers-detailed/' + damper.uuid,
                             linkText: 'Перейти к договору',
                             badge: 'Истек',
@@ -260,7 +260,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
         var eventExpiredText = 'Событие  "{eventTitle}" прошло';
         var eventSoonText = 'Скоро произойдет событие "{eventTitle}". Дата: {date}';
-        var eventExpiresIn = 'До события "{eventTitle}" осталось дней: {daysBetween}.';
+        var eventExpiresIn = 'Осталось дней: {daysBetween}.';
 
         events.forEach(function (event) {
             var daysBetween = getDaysBetween(event.date, now);
@@ -285,7 +285,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                     uuid: event.uuid,
                     type: 'event:yellow:Событие',
                     title: eventSoonText.replace('{eventTitle}', event.title).replace('{date}', eventStr),
-                    text: eventExpiresIn.replace('{eventTitle}', event.title).replace('{daysBetween}', daysBetween),
+                    text: eventExpiresIn.replace('{daysBetween}', daysBetween),
                     link: 'calendar',
                     linkText: 'Перейти к календарю',
                     badge: 'Дней осталось: ' + daysBetween,
@@ -297,12 +297,15 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         return notifications;
     }
 
-    function getDaysBetween(first, second) {
-        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-        var firstDate = new Date(first);
-        var secondDate = new Date(second);
+    function getDaysBetween(second, first) {
+        first = new Date(first);
+        second = new Date(second);
 
-        return Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay)) + 1;
+        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+        var firstDate = Date.UTC(first.getFullYear(), first.getMonth(), first.getDate());
+        var secondDate = Date.UTC(second.getFullYear(), second.getMonth(), second.getDate());
+
+        return Math.floor((secondDate - firstDate) / oneDay);
     }
 
     factory.getBadgeType = function (obj) {

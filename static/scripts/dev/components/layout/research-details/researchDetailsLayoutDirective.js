@@ -1,4 +1,4 @@
-function researchDetailsLayoutDirective($state, researchDetailsFactory, modalFactory) {
+function researchDetailsLayoutDirective($state, researchDetailsFactory, modalFactory, toastFactory) {
     return {
         scope: {},
         bindToController: {},
@@ -21,6 +21,7 @@ function researchDetailsLayoutDirective($state, researchDetailsFactory, modalFac
 
                 researchDetailsFactory.createResearchDetail(researchDetail).then(function () {
                     modalFactory.closeModal(modalId);
+					toastFactory.successToast('НИОКР добавлен!');
                 });
             };
 

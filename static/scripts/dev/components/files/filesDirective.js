@@ -1,4 +1,4 @@
-function filesDirective($state, $timeout, fileFactory, modalFactory) {
+function filesDirective($state, $stateParams, $rootScope, $timeout, fileFactory, modalFactory, toastFactory) {
 	return {
 		scope: {},
 		bindToController: {
@@ -38,9 +38,13 @@ function filesDirective($state, $timeout, fileFactory, modalFactory) {
 					modalFactory.closeModal(modalId);
 					self.animated = false;
 
-					$timeout(function() {
-						$state.reload();
-					}, 500);
+					toastFactory.successToast('Файл добавлен!');
+
+					$timeout(function () {
+
+						window.location.reload();
+
+					}, 1000);
 
 				}, function() {
 					self.animated = false;
@@ -52,6 +56,11 @@ function filesDirective($state, $timeout, fileFactory, modalFactory) {
 
 					}, 10000);
 				})
+			};
+
+			self.resetFile = function () {
+				self.name = '';
+				self.file = null;
 			};
 
 			self.onOpen = function (file) {

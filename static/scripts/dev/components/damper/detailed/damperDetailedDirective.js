@@ -1,4 +1,4 @@
-function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory, modalFactory) {
+function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory, modalFactory, toastFactory) {
 	return {
 		scope: {},
 		bindToController: {
@@ -35,17 +35,18 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 
 			self.onUpdate = function () {
 				dampersFactory.updateDamper(self.damper).then(function () {
-					self.showAlert = true;
-
-					$timeout(function () {
-						self.showAlert = false;
-					}, 3000);
+					toastFactory.successToast('Виброизолятор успешно обновлен!')
 				});
 			};
 
 			self.addContract = function (modal) {
 				self.update = false;
 				self.currentContract = {};
+
+				self.currentContract.amount = 1;
+				self.currentContract.quoter = 1;
+				self.currentContract.year = new Date().getFullYear();
+
 				modalFactory.openModal(modal);
 			};
 
@@ -60,15 +61,15 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 					dampersFactory.updateContract(self.currentContract).then(function () {
 						modalFactory.closeModal();
 
-						iziToast.success({
-							title: 'OK',
-							message: 'Successfully inserted record!'
-						});
+						toastFactory.successToast('Договор обновлен!')
+
 					});
 
 				} else {
 					dampersFactory.addContractToDamper(self.damper, self.currentContract).then(function () {
 						modalFactory.closeModal();
+
+						toastFactory.successToast('Договор создан!')
 					});
 				}
 			};
@@ -91,18 +92,15 @@ function damperDetailedDirective($state, $timeout, dampersFactory, notifications
 					dampersFactory.updateAccessory(self.currentAccessory).then(function () {
 						modalFactory.closeModal();
 						self.currentAccessory = {};
+						toastFactory.successToast('Обновлено!')
 					});
 
 				} else {
 					dampersFactory.addAccessoryToDamper(self.damper, self.currentAccessory).then(function () {
 						modalFactory.closeModal();
+						toastFactory.successToast('Обновлено!')
 					});
 				}
-
-				iziToast.success({
-					title: 'OK',
-					message: 'Успешно добавлено!'
-				});
 			};
 
 			self.deleteAccessory = function () {

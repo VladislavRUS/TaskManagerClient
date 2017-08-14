@@ -20,9 +20,15 @@
                 <label>Комментарий</label>
                 <textarea row="2" ng-model="ctrl.currentEvent.comment"></textarea>
             </div>
-
-
         </form>
+    </div>
+
+    <div class="actions" ng-if="ctrl.currentEvent.custom">
+        <button class="ui right labeled icon button" ng-if="ctrl.currentEvent.custom"
+                ng-click="ctrl.go(ctrl.currentEvent.link)">
+            <i class="right arrow icon"></i>
+            {{ctrl.currentEvent.linkText}}
+        </button>
     </div>
 
     <div class="actions" ng-if="!ctrl.currentEvent.custom">

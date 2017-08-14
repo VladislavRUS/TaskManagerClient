@@ -1,5 +1,5 @@
 function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
-								 eventsFactory, notificationsFactory, modalFactory) {
+								 eventsFactory, notificationsFactory, modalFactory, toastFactory) {
 	return {
 		scope: {},
 		bindToController: {},
@@ -16,7 +16,7 @@ function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
 				calendar: {
 					editable: false,
 					header: {
-						left: 'month agendaWeek agendaDay',
+						left: 'month',
 						center: 'title',
 						right: 'today prev,next'
 					},
@@ -33,16 +33,15 @@ function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
 
 					eventClick: function (calEvent, jsEvent, view) {
 						self.currentEvent = {};
-
 						self.currentEvent.title = calEvent.title;
 						self.currentEvent.date = calEvent.start._i;
 						self.currentEvent.comment = calEvent.comment;
 						self.currentEvent.custom = calEvent.custom || false;
 						self.currentEvent.uuid = calEvent.uuid;
+						self.currentEvent.link = calEvent.link;
+						self.currentEvent.linkText = calEvent.linkText;
 
 						self.update = true;
-
-						console.log(self.currentEvent);
 
 						modalFactory.openModal('createEventModal');
 					},
@@ -135,6 +134,14 @@ function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
 
 				promise.then(function () {
 					modalFactory.closeModal();
+
+					if (self.update) {
+						toastFactory.successToast('Событие обновлено!');
+
+					} else {
+						toastFactory.successToast('Событие создано!');
+					}
+
 					reloadState();
 				});
 			};
@@ -155,7 +162,7 @@ function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
 
 				$timeout(function() {
 					$window.location.reload();
-				}, 500);
+				}, 1000);
 
 			}
 
