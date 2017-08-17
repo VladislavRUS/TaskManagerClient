@@ -16,7 +16,11 @@ function researchDetailsLayoutDirective($state, researchDetailsFactory, modalFac
             self.save = function () {
                 var researchDetail = {
                     requirements: self.requirements,
-                    contract: self.contract
+                    contract: self.contract,
+                    name: self.name,
+                    vendor: self.vendor,
+                    head: self.head,
+                    customer: self.customer
                 };
 
                 researchDetailsFactory.createResearchDetail(researchDetail).then(function () {

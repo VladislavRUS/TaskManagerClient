@@ -28,7 +28,10 @@ function dampersLayoutDirective($timeout, $state, $q, modalFactory,
                     measurementMeans: self.measurementMeans,
                     guarantee: self.guarantee,
                     fiatLabeling: self.fiatLabeling,
-                    note: self.note
+                    note: self.note,
+                    vendor: self.vendor,
+                    head: self.head,
+                    contract: self.contract
                 };
 
                 dampersFactory.createDamper(damper).then(function () {
