@@ -1,38 +1,25 @@
 function printFactory($http, restServiceFactory, fileFactory) {
     var factory = {};
 
-    factory.printArray = [];
+    factory.printList = function (printArray) {
+		factory.print(restServiceFactory.printList, printArray);
+	};
 
-    factory.addToPrintArray = function (item) {
-        factory.printArray.push(item);
-    };
+	factory.printNomenclature = function (printArray) {
+	    factory.print(restServiceFactory.printNomenclature, printArray);
+	};
 
-    factory.clear = function() {
-        factory.printArray = [];
-    };
+    factory.print = function(url, printArray) {
+		$http({
+			method: 'POST',
+			url: url,
+			responseType: 'arraybuffer',
+			data: { uuidList: printArray }
+		}).then(function (resp) {
 
-    factory.removeFromPrintArray = function (item) {
-        factory.printArray = factory.printArray.filter(function (obj) {
-            return obj.uuid != item.uuid;
-        });
-    };
+			fileFactory.makeFile(resp.data, getName());
 
-    factory.sendToPrint = function (page, printArray) {
-        switch (page) {
-            case 'dampers': {
-                $http({
-                    method: 'POST',
-                    url: restServiceFactory.detailsPrint,
-                    responseType: 'arraybuffer',
-                    data: { uuidList: printArray }
-                }).then(function (resp) {
-
-                    fileFactory.makeFile(resp.data, getName());
-
-                });
-                break;
-            }
-        }
+		});
     };
 
     function getName() {

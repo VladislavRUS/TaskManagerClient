@@ -49,6 +49,13 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
                 templateUrl: 'scripts/dev/activity/test-equipments/test-equipments-activity.tmpl.html'
             })
 
+			.state('print', {
+				url: '/print/:type',
+				controller: 'PrintController',
+				controllerAs: 'ctrl',
+				templateUrl: 'scripts/dev/activity/print/print-activity.tmpl.html'
+			})
+
             .state('test-equipments-detailed', {
                 url: '/test-equipments-detailed/:uuid',
                 controller: 'TestEquipmentsDetailedController',
@@ -77,10 +84,6 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
         researchDetailsFactory.getResearchDetails();
         testEquipmentsFactory.getTestEquipments();
         eventsFactory.getEvents();
-
-        /*$interval(function() {
-            notificationsFactory.getNotifications();
-        }, 2000);*/
     });
 
 /*Controllers*/
@@ -97,6 +100,7 @@ angular.module('app')
     .controller('CalendarController', CalendarController)
     .controller('EditContractDialogController', EditContractDialogController)
     .controller('EditAccessoryDialogController', EditAccessoryDialogController)
+    .controller('PrintController', PrintController)
     .controller('NotificationsController', NotificationsController)
     .controller('ResearchDetailsController', ResearchDetailsController)
     .controller('ResearchDetailsDetailedController', ResearchDetailsDetailedController)
