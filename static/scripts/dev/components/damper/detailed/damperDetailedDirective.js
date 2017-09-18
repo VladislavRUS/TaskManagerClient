@@ -1,127 +1,112 @@
-function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory, modalFactory, toastFactory) {
-	return {
-		scope: {},
-		bindToController: {
-			damper: '<'
-		},
-		templateUrl: 'scripts/dev/components/damper/detailed/damper-detailed.tmpl.html',
-		controller: function () {
-			var self = this;
-			self.showAlert = false;
-			self.currentContract = {};
-			self.nf = notificationsFactory;
-			self.update = false;
-			self.currentAccessory = {};
-			self.hideDone = false;
-			self.accessoryTypes = {
-				'component': 'Комплектующее',
-				'material': 'Расходный материал'
-			};
+function damperDetailedDirective($state, $timeout, dampersFactory, notificationsFactory, dialogWrapFactory, toastFactory) {
+    return {
+        scope: {},
+        bindToController: {
+            damper: '<'
+        },
+        templateUrl: 'scripts/dev/components/damper/detailed/damper-detailed.tmpl.html',
+        controller: function() {
+            var self = this;
+            self.showAlert = false;
+            self.currentContract = {};
+            self.nf = notificationsFactory;
+            self.update = false;
+            self.currentAccessory = {};
+            self.hideDone = false;
+            self.accessoryTypes = {
+                'component': 'Комплектующее',
+                'material': 'Расходный материал'
+            };
 
-			var currentModal = null;
+            var currentModal = null;
 
-			self.toggleDone = function () {
-				self.hideDone = !self.hideDone;
-			};
+            self.toggleDone = function() {
+                self.hideDone = !self.hideDone;
+            };
 
-			self.filterContract = function (contract) {
-				if (self.hideDone) {
-					return !contract.done;
+            self.filterContract = function(contract) {
+                if (self.hideDone) {
+                    return !contract.done;
 
-				} else {
-					return true;
-				}
-			};
+                } else {
+                    return true;
+                }
+            };
 
-			self.onUpdate = function () {
-				dampersFactory.updateDamper(self.damper).then(function () {
-					toastFactory.successToast('Виброизолятор успешно обновлен!')
-				});
-			};
+            self.onUpdate = function() {
+                dampersFactory.updateDamper(self.damper).then(function() {
+                    toastFactory.successToast('Виброизолятор успешно обновлен!')
+                });
+            };
 
-			self.addContract = function (modal) {
-				self.update = false;
-				self.currentContract = {};
+            self.addContract = function(modal) {
+                dialogWrapFactory.openDialog('scripts/dev/components/dialog/contract/add/add-contract-dialog.tmpl.html', {
+                    damper: self.damper,
+                });
+            };
 
-				self.currentContract.amount = 1;
-				self.currentContract.quoter = 1;
-				self.currentContract.year = new Date().getFullYear();
+            self.updateContract = function(contract, modal) {
+                dialogWrapFactory.openDialog('scripts/dev/components/dialog/contract/add/add-contract-dialog.tmpl.html', {
+                    contract: angular.copy(contract),
+                    update: true
+                });
+            };
 
-				modalFactory.openModal(modal);
-			};
+            self.saveContract = function() {
+                if (self.update) {
+                    dampersFactory.updateContract(self.currentContract).then(function() {
+                        modalFactory.closeModal();
 
-			self.updateContract = function (contract, modal) {
-				self.update = true;
-				self.currentContract = angular.copy(contract);
-                modalFactory.openModal(modal);
-			};
+                        toastFactory.successToast('Договор обновлен!')
 
-			self.saveContract = function () {
-				if (self.update) {
-					dampersFactory.updateContract(self.currentContract).then(function () {
-						modalFactory.closeModal();
+                    });
 
-						toastFactory.successToast('Договор обновлен!')
+                } else {
+                    dampersFactory.addContractToDamper(self.damper, self.currentContract).then(function() {
+                        modalFactory.closeModal();
 
-					});
+                        toastFactory.successToast('Договор создан!')
+                    });
+                }
+            };
 
-				} else {
-					dampersFactory.addContractToDamper(self.damper, self.currentContract).then(function () {
-						modalFactory.closeModal();
+            self.addAccessory = function(type) {
+                dialogWrapFactory.openDialog('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html', {
+                    damper: self.damper,
+                    accessory: {
+                        type: type
+                    },
+                    update: false
+                })
+            };
 
-						toastFactory.successToast('Договор создан!')
-					});
-				}
-			};
+            self.updateAccessory = function(accessory, modal) {
+                dialogWrapFactory.openDialog('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html', {
+                    damper: self.damper,
+                    accessory: angular.copy(accessory),
+                    update: true
+                })
+            };
 
-			self.addAccessory = function (modal, type) {
-				self.update = false;
-				self.currentAccessory = {};
-				self.currentAccessory.type = type;
-				modalFactory.openModal(modal);
-			};
+            self.deleteAccessory = function() {
+                dampersFactory.deleteAccessory(self.currentAccessory).then(function() {
+                    modalFactory.closeModal();
+                })
+            };
 
-			self.updateAccessory = function (accessory, modal) {
-				self.update = true;
-				self.currentAccessory = angular.copy(accessory);
-				modalFactory.openModal(modal);
-			};
+            self.onDelete = function() {
+                dampersFactory.deleteDamper(self.damper).then(function() {
+                    $state.go('dampers');
+                })
+            };
 
-			self.saveAccessory = function () {
-				if (self.update) {
-					dampersFactory.updateAccessory(self.currentAccessory).then(function () {
-						modalFactory.closeModal();
-						self.currentAccessory = {};
-						toastFactory.successToast('Обновлено!')
-					});
+            self.deleteContract = function() {
 
-				} else {
-					dampersFactory.addAccessoryToDamper(self.damper, self.currentAccessory).then(function () {
-						modalFactory.closeModal();
-						toastFactory.successToast('Обновлено!')
-					});
-				}
-			};
-
-			self.deleteAccessory = function () {
-				dampersFactory.deleteAccessory(self.currentAccessory).then(function () {
-					modalFactory.closeModal();
-				})
-			};
-
-			self.onDelete = function () {
-				dampersFactory.deleteDamper(self.damper).then(function () {
-					$state.go('dampers');
-				})
-			};
-
-			self.deleteContract = function () {
-
-				dampersFactory.deleteContract(self.currentContract).then(function () {
-					modalFactory.closeModal();
-				});
-			}
-		},
-		controllerAs: 'ctrl'
-	}
+                dampersFactory.deleteContract(self.currentContract).then(function() {
+                    modalFactory.closeModal();
+                });
+            }
+        },
+        controllerAs: 'ctrl'
+    }
 }

@@ -10,10 +10,10 @@ function toastFactory() {
 	};
 
 	factory.successToast = function (text) {
-		iziToast.show({
+		iziToast.info({
 			title: text,
-			titleColor: '#fff',
-			color: '#16AB39'
+			// titleColor: '#3c763d',
+			// color: '#dff0d8'
 		});
 	};
 

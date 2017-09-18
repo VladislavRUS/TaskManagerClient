@@ -1,198 +1,171 @@
-function calendarLayoutDirective($timeout, $window, uiCalendarConfig,
-								 eventsFactory, notificationsFactory, modalFactory, toastFactory) {
-	return {
-		scope: {},
-		bindToController: {},
-		templateUrl: 'scripts/dev/components/calendar-layout/calendar-layout.tmpl.html',
-		controller: function ($scope) {
-			var self = this;
+function calendarLayoutDirective($timeout, $q, $window, $state, uiCalendarConfig,
+    eventsFactory, notificationsFactory, modalFactory, toastFactory) {
+    return {
+        scope: {},
+        bindToController: {},
+        templateUrl: 'scripts/dev/components/calendar-layout/calendar-layout.tmpl.html',
+        controller: function($scope) {
+            var self = this;
 
-			self.currentDate = new Date();
-			self.currentEvent = {};
-			self.update = false;
-			self.eventSources = [];
+            self.currentDate = new Date();
+            self.currentEvent = {};
+            self.update = false;
 
-			self.uiConfig = {
-				calendar: {
-					editable: false,
-					header: {
-						left: 'month',
-						center: 'title',
-						right: 'today prev,next'
-					},
-					displayEventTime: false,
-					height: 800,
-					dayClick: function (date) {
-						self.currentEvent = {};
-						self.currentEvent.date = new Date(date);
-						self.update = false;
+            $scope.eventSources = [];
 
-						console.log(self.currentEvent);
-						modalFactory.openModal('createEventModal');
-					},
+            $scope.uiConfig = {
+                calendar: {
+                    editable: false,
+                    header: {
+                        left: 'month',
+                        center: 'title',
+                        right: 'today prev,next'
+                    },
+                    displayEventTime: false,
+                    height: '450',
+                    dayClick: function(date) {
+                        modalFactory.openModal('createEventModal');
 
-					eventClick: function (calEvent, jsEvent, view) {
-						self.currentEvent = {};
-						self.currentEvent.title = calEvent.title;
-						self.currentEvent.date = calEvent.start._i;
-						self.currentEvent.comment = calEvent.comment;
-						self.currentEvent.custom = calEvent.custom || false;
-						self.currentEvent.uuid = calEvent.uuid;
-						self.currentEvent.link = calEvent.link;
-						self.currentEvent.linkText = calEvent.linkText;
+                        self.currentEvent = {};
+                        self.currentEvent.date = new Date(date);
+                        self.update = false;
+                    },
 
-						self.update = true;
+                    eventClick: function(calEvent, jsEvent, view) {
 
-						modalFactory.openModal('createEventModal');
-					},
+                        modalFactory.openModal('createEventModal');
 
-					dayRender: function (date, cell) {
-						var day = new Date(date);
-						var isWeekend = false;
+                        self.currentEvent = {};
+                        self.currentEvent.title = calEvent.title;
+                        self.currentEvent.date = calEvent.start._i;
+                        self.currentEvent.comment = calEvent.comment;
+                        self.currentEvent.custom = calEvent.custom || false;
+                        self.currentEvent.uuid = calEvent.uuid;
+                        self.currentEvent.link = calEvent.link;
+                        self.currentEvent.linkText = calEvent.linkText;
 
-						if (day.getDay() === 6 || day.getDay() === 0) {
-							isWeekend = true;
-						}
+                        self.update = true;
+                    },
 
-						if (isWeekend) {
-							$(cell).css({
-								'background-color': '#ffc4b7'
-							});
-						}
-					},
+                    dayRender: function(date, cell) {
+                        var day = new Date(date);
+                        var isWeekend = false;
 
-					lang: 'ru'
-				}
-			};
+                        if (day.getDay() === 6 || day.getDay() === 0) {
+                            isWeekend = true;
+                        }
 
-			function updateEventSources() {
-				self.eventSources = [];
+                        if (isWeekend) {
+                            $(cell).css({
+                                'background-color': '#ffc4b7'
+                            });
+                        }
+                    },
 
-				notificationsFactory.getNotifications();
+                    lang: 'ru'
+                }
+            };
 
-				eventsFactory.getEvents().then(function () {
-					self.eventSources.push(
-						{
-							events: eventsFactory.events
-								.map(function (event) {
-									console.log(event);
+            self.updateEventSources = function() {
+                $scope.eventSources.length = 0;
 
-									return {
-										uuid: event.uuid,
-										title: event.title,
-										start: new Date(event.date),
-										comment: event.comment,
-										color: '#2196F3'
-									}
-								})
-						});
+                var p1 = notificationsFactory.getNotifications();
+                var p2 = eventsFactory.getEvents();
 
-					self.eventSources.push({
-						events: notificationsFactory.notifications.filter(function (n) {
-							return n.type.split(':')[0] !== 'event'
-						})
-							.map(function (n) {
-								return {
-									uuid: n.uuid,
-									title: n.title,
-									start: n.date,
-									comment: n.text,
-									link: n.link,
-									linkText: n.linkText,
-									custom: true,
-									color: getNotificationColor(n)
-								}
-							})
-					})
-				});
-			};
+                $q.all(p1, p2).then(function() {
+                    var userEvents = eventsFactory.events.map(function(event) {
+                        return {
+                            uuid: event.uuid,
+                            title: event.title,
+                            start: new Date(event.date),
+                            comment: event.comment,
+                            color: '#2196F3'
+                        }
+                    });
 
-			function getNotificationColor(n) {
-				var type = n.type.split(':')[1];
+                    $scope.eventSources.push({
+                        events: userEvents
+                    });
 
-				if (type === 'yellow') {
-					return '#FFC107';
+                    var notificationEvents = notificationsFactory.notifications.
 
-				} else if (type === 'red') {
-					return '#F44336';
+                    filter(function(n) {
+                        return n.type.split(':')[0] !== 'event';
 
-				} else return 'blue';
-			}
+                    }).map(function(n) {
+                        return {
+                            uuid: n.uuid,
+                            title: n.title,
+                            start: n.date,
+                            comment: n.text,
+                            link: n.link,
+                            linkText: n.linkText,
+                            custom: true,
+                            color: getNotificationColor(n)
+                        }
+                    });
 
-			self.go = function (link) {
-				modalFactory.closeModal();
+                    $scope.eventSources.push({
+                        events: notificationEvents
+                    });
+                });
 
-				$timeout(function () {
-					window.location.href = '#/' + link;
-				}, 500);
-			};
+            };
 
-			self.save = function () {
-				var promise = self.update
-					? eventsFactory.updateEvent(self.currentEvent)
-					: eventsFactory.addEvent(self.currentEvent);
+            function getNotificationColor(n) {
+                var type = n.type.split(':')[1];
 
-				promise.then(function () {
-					modalFactory.closeModal();
+                if (type === 'yellow') {
+                    return '#FFC107';
 
-					if (self.update) {
-						toastFactory.successToast('Событие обновлено!');
+                } else if (type === 'red') {
+                    return '#F44336';
 
-					} else {
-						toastFactory.successToast('Событие создано!');
-					}
+                } else return 'blue';
+            }
 
-					reloadState();
-				});
-			};
+            self.go = function(link) {
+                modalFactory.closeModal();
 
-			self.delete = function () {
-				var event = {uuid: self.currentEvent.uuid};
+                $timeout(function() {
+                    window.location.href = '#/' + link;
+                }, 500);
+            };
 
-				eventsFactory.removeEvent(event).then(function () {
-					modalFactory.closeModal();
-					reloadState();
-				});
-			};
+            self.save = function() {
+                var promise = self.update ?
+                    eventsFactory.updateEvent(self.currentEvent) :
+                    eventsFactory.addEvent(self.currentEvent);
 
-			function reloadState() {
-				/*updateEventSources();
+                promise.then(function() {
+                    modalFactory.closeModal();
 
-				$('#calendar').fullCalendar("refetchEvents");*/
+                    if (self.update) {
+                        toastFactory.successToast('Событие обновлено!');
 
-				$timeout(function() {
-					$window.location.reload();
-				}, 1000);
+                    } else {
+                        toastFactory.successToast('Событие создано!');
+                    }
 
-			}
+                    self.updateEventSources();
+                    $state.reload();
+                });
+            };
 
-			console.log(self.myCalendar);
-			console.log(uiCalendarConfig.calendars['myCalendar']);
+            self.delete = function() {
+                var event = { uuid: self.currentEvent.uuid };
 
-			updateEventSources();
-		},
+                modalFactory.closeModal();
 
-		link: function () {
-			$timeout(function () {
-				$('.fc-day-number').each(function (i, obj) {
-					var bgColor = $(obj).css('background-color');
+                eventsFactory.removeEvent(event).then(function() {
+                    toastFactory.successToast('Событие удалено!');
+                    self.updateEventSources();
+                });
+            };
 
-					$(obj).bind('mouseover', function () {
-						$(this).css({
-							'background-color': '#e5e3e3'
-						})
-					});
+            self.updateEventSources();
+        },
 
-					$(obj).bind('mouseout', function () {
-						$(this).css({
-							'background-color': bgColor
-						})
-					});
-				});
-
-			}, 1000);
-		},
-
-		controllerAs: 'ctrl'
-	}
+        controllerAs: 'ctrl'
+    }
 }

@@ -12,33 +12,30 @@
 <table class="ui selectable striped celled table">
 
     <thead>
-    <tr>
-        <th>#</th>
-        <th>Название</th>
-        <th>Обозначение</th>
-        <th>Срок действия ПИ</th>
-        <th>Договоров</th>
-        <th>Отметка</th>
-    </tr>
+        <tr>
+            <th>#</th>
+            <th>Наименование</th>
+            <th>Обозначение КД</th>
+            <th>Срок действия ПИ</th>
+            <th>Договоров</th>
+            <th>Отметка</th>
+        </tr>
     </thead>
 
     <tbody>
-    <tr ng-repeat="damper in ctrl.storage.dampers track by $index"
-        ng-class="{'active': ctrl.inPrint(damper.uuid)}"
-        ng-click="ctrl.onClick(damper, $event)">
+        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ng-class="{'active': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">
 
-        <td>{{$index + 1}}</td>
-        <td>{{damper.name}}</td>
-        <td>{{damper.designation}}</td>
-        <td>{{damper.expirationDate | date: 'dd-MM-yyyy'}}</td>
-        <td>{{damper.contracts.length}}</td>
-        <td>
-            <a class="ui label"
-               ng-class="ctrl.nf.getBadgeType(damper)">
+            <td>{{$index + 1}}</td>
+            <td>{{damper.name}}</td>
+            <td>{{damper.designation}}</td>
+            <td>{{damper.expirationDate | date: 'dd-MM-yyyy'}}</td>
+            <td>{{damper.contracts.length}}</td>
+            <td>
+                <a class="ui label" ng-class="ctrl.nf.getBadgeType(damper)">
                 {{ctrl.nf.getBadgeText(damper)}}
             </a>
-        </td>
-    </tr>
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -56,7 +53,7 @@
                 Пожалуйста, заполните обязательные поля:
             </div>
             <ul class="list">
-                <li>Наименование, обозначение</li>
+                <li>Наименование</li>
                 <li>Обозначение КД</li>
                 <li>Дата истечения срока действия ПИ</li>
             </ul>
@@ -64,7 +61,7 @@
 
         <form class="ui form">
             <div class="required field">
-                <label>Наименование, обозначение</label>
+                <label>Наименование</label>
                 <input type="text" ng-model="ctrl.name">
             </div>
 
@@ -77,58 +74,11 @@
                 <label>Дата истечения срока действия ПИ</label>
                 <input type="date" ng-model="ctrl.expirationDate">
             </div>
-
-            <div class="field">
-                <label>Договор</label>
-                <textarea rows="2" ng-model="ctrl.contract"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Состав контролируемых параметров изделий</label>
-                <textarea rows="2" ng-model="ctrl.inspectionMethods"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Вид контроля, объем выборки, контрольные нормативы и правила выборочного контроля</label>
-                <textarea rows="2" ng-model="ctrl.controlType"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Средства измерений необходимые для контроля параметров изделий</label>
-                <textarea rows="2" ng-model="ctrl.measurementMeans"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Гарантийный срок хранения</label>
-                <input type="text" ng-model="ctrl.guarantee">
-            </div>
-
-            <div class="field">
-                <label>Указания о маркировке изделий по результатам входного контроля</label>
-                <textarea rows="2" ng-model="ctrl.fiatLabeling"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Примечание</label>
-                <textarea rows="2" ng-model="ctrl.note"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Предприятие-изготовитель</label>
-                <textarea rows="2" ng-model="ctrl.vendor"></textarea>
-            </div>
-
-            <div class="field">
-                <label>Предприятие, являющееся головным</label>
-                <textarea rows="2" ng-model="ctrl.head"></textarea>
-            </div>
-
-
         </form>
     </div>
 
     <div class="actions">
-        <div class="ui black deny button">
+        <div class="ui black deny button" ng-click="ctrl.onCancel()">
             Отмена
         </div>
         <div class="ui positive right labeled icon button" ng-click="ctrl.save()">

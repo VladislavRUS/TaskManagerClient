@@ -19,13 +19,13 @@
         </div>
 
         <div class="field">
-            <label>Договор</label>
-            <textarea rows="2" ng-model="ctrl.damper.contract"></textarea>
+            <label>Дата истечения срока действия ПИ</label>
+            <input type="date" ng-model="ctrl.damper.expirationDate">
         </div>
 
         <div class="field">
-            <label>Дата истечения срока действия ПИ</label>
-            <input type="date" ng-model="ctrl.damper.expirationDate">
+            <label>Договор</label>
+            <textarea rows="2" ng-model="ctrl.damper.contract"></textarea>
         </div>
 
         <div class="field">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="field">
-            <label>Средства измерений необходимые для контроля параметров изделий</label>
+            <label>Средства измерений, необходимые для контроля параметров изделий</label>
             <textarea rows="2" ng-model="ctrl.damper.measurementMeans"></textarea>
         </div>
 
@@ -54,18 +54,23 @@
         </div>
 
         <div class="field">
-            <label>Примечание</label>
-            <textarea rows="2" ng-model="ctrl.damper.note"></textarea>
-        </div>
-
-        <div class="field">
             <label>Предприятие-изготовитель</label>
             <textarea rows="2" ng-model="ctrl.damper.vendor"></textarea>
         </div>
 
         <div class="field">
+            <label>Генеральный заказчик</label>
+            <textarea rows="2" ng-model="ctrl.damper.customer"></textarea>
+        </div>
+
+        <div class="field">
             <label>Предприятие, являющееся головным</label>
             <textarea rows="2" ng-model="ctrl.damper.head"></textarea>
+        </div>
+
+        <div class="field">
+            <label>Примечание</label>
+            <textarea rows="2" ng-model="ctrl.damper.note"></textarea>
         </div>
 
         <div class="fields">
@@ -97,8 +102,7 @@
 
         <div class="two wide field">
 
-            <button class="ui labeled icon positive mini button"
-                    ng-click="ctrl.addContract('createContractModal');">
+            <button class="ui labeled icon positive mini button" ng-click="ctrl.addContract('createContractModal');">
                 <i class="plus icon"></i>
                 Добавить
             </button>
@@ -121,109 +125,39 @@
 <table class="ui selectable striped celled table">
 
     <thead>
-    <tr>
-        <th>#</th>
-        <th>Номер</th>
-        <th>От</th>
-        <th>Заказчик</th>
-        <th>Кол-во</th>
-        <th>Квартал</th>
-        <th>Год</th>
-        <th>Авансирование</th>
-        <th>Выполнен</th>
-        <th>Отметка</th>
-    </tr>
+        <tr>
+            <th>#</th>
+            <th>Номер</th>
+            <th>От</th>
+            <th>Заказчик</th>
+            <th>Кол-во</th>
+            <th>Квартал</th>
+            <th>Год</th>
+            <th>Авансирование</th>
+            <th>Выполнен</th>
+            <th>Отметка</th>
+        </tr>
     </thead>
 
     <tbody>
-    <tr ng-repeat="contract in ctrl.damper.contracts | filter: ctrl.filterContract track by $index"
-        ng-click="ctrl.updateContract(contract, 'createContractModal');">
-        <td>{{$index + 1}}</td>
-        <td>{{contract.number}}</td>
-        <td>{{contract.fromDate | date : 'dd-MM-yyyy'}}</td>
-        <td>{{contract.customer}}</td>
-        <td>{{contract.amount}}</td>
-        <td>{{contract.quoter}}</td>
-        <td>{{contract.year}}</td>
-        <td>{{contract.prepaidNote}}</td>
-        <td>{{contract.done ? 'Да' : 'Нет'}}</td>
-        <td>
-            <a class="ui {{ctrl.nf.getBadgeType(contract)}} label">
+        <tr ng-repeat="contract in ctrl.damper.contracts | filter: ctrl.filterContract track by $index" ng-click="ctrl.updateContract(contract, 'createContractModal');">
+            <td>{{$index + 1}}</td>
+            <td>{{contract.number}}</td>
+            <td>{{contract.fromDate | date : 'dd-MM-yyyy'}}</td>
+            <td>{{contract.customer}}</td>
+            <td>{{contract.amount}}</td>
+            <td>{{contract.quoter}}</td>
+            <td>{{contract.year}}</td>
+            <td>{{contract.prepaidNote}}</td>
+            <td>{{contract.done ? 'Да' : 'Нет'}}</td>
+            <td>
+                <a class="ui {{ctrl.nf.getBadgeType(contract)}} label">
                 {{ctrl.nf.getBadgeText(contract)}}
             </a>
-        </td>
-    </tr>
+            </td>
+        </tr>
     </tbody>
 </table>
-
-<div class="ui modal" id="createContractModal">
-    <i class="close icon"></i>
-    <div class="header">
-        Договор
-    </div>
-
-    <div class="content">
-        <form class="ui form">
-            <div class="required field">
-                <label>Номер договора</label>
-                <input type="text" ng-model="ctrl.currentContract.number">
-            </div>
-
-            <div class="required field">
-                <label>От даты</label>
-                <input type="date" ng-model="ctrl.currentContract.fromDate">
-            </div>
-
-            <div class="required field">
-                <label>Заказчик</label>
-                <input type="text" ng-model="ctrl.currentContract.customer">
-            </div>
-
-            <div class="required field">
-                <label>Количество</label>
-                <input type="number" min="1" step="1" ng-model="ctrl.currentContract.amount" value="1">
-            </div>
-
-            <div class="required field">
-                <label>Квартал</label>
-                <input type="number" min="1" max="4" step="1" ng-model="ctrl.currentContract.quoter" value="1">
-            </div>
-
-            <div class="required field">
-                <label>Год</label>
-                <input type="number" min="2000" step="1" ng-model="ctrl.currentContract.year">
-            </div>
-
-            <div class="field">
-                <label>Авансирование</label>
-                <input type="text" ng-model="ctrl.currentContract.prepaidNote">
-            </div>
-
-            <div class="field" ng-if="ctrl.update">
-                <div class="ui checkbox">
-                    <input type="checkbox" ng-model="ctrl.currentContract.done">
-                    <label>Выполнен</label>
-                </div>
-            </div>
-
-        </form>
-    </div>
-
-    <div class="actions">
-        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.deleteContract()">
-            Удалить
-        </div>
-
-        <div class="ui deny black button" ng-if="!ctrl.update">
-            Отмена
-        </div>
-
-        <div class="ui positive right labeled icon button" ng-click="ctrl.saveContract()">
-            Сохранить
-            <i class="checkmark icon"></i>
-        </div>
-    </div>
-</div>
 
 <!--Комплектующие-->
 <div class="ui divider"></div>
@@ -236,8 +170,7 @@
 
         <div class="two wide field">
 
-            <button class="ui labeled icon positive mini button"
-                    ng-click="ctrl.addAccessory('createAccessoryModal', 'component');">
+            <button class="ui labeled icon positive mini button" ng-click="ctrl.addAccessory('component');">
                 <i class="plus icon"></i>
                 Добавить
             </button>
@@ -256,12 +189,11 @@
     </thead>
 
     <tbody>
-    <tr ng-repeat="accessory in ctrl.damper.accessories | filter: { type: 'component' }"
-        ng-click="ctrl.updateAccessory(accessory, 'createAccessoryModal');">
-        <td>{{$index + 1}}</td>
-        <td>{{accessory.name}}</td>
-        <td>{{accessory.designation}}</td>
-    </tr>
+        <tr ng-repeat="accessory in ctrl.damper.accessories | filter: { type: 'component' }" ng-click="ctrl.updateAccessory(accessory, 'createAccessoryModal');">
+            <td>{{$index + 1}}</td>
+            <td>{{accessory.name}}</td>
+            <td>{{accessory.designation}}</td>
+        </tr>
     </tbody>
 </table>
 
@@ -277,8 +209,7 @@
 
         <div class="two wide field">
 
-            <button class="ui labeled icon positive mini button"
-                    ng-click="ctrl.addAccessory('createAccessoryModal', 'material');">
+            <button class="ui labeled icon positive mini button" ng-click="ctrl.addAccessory('material');">
                 <i class="plus icon"></i>
                 Добавить
             </button>
@@ -289,20 +220,19 @@
 
 <table class="ui selectable striped celled table">
     <thead>
-    <tr>
-        <th>#</th>
-        <th>Наименование, обозначение</th>
-        <th>Обозначение КД, ТД и ТУ</th>
-    </tr>
+        <tr>
+            <th>#</th>
+            <th>Наименование, обозначение</th>
+            <th>Обозначение КД, ТД и ТУ</th>
+        </tr>
     </thead>
 
     <tbody>
-    <tr ng-repeat="accessory in ctrl.damper.accessories | filter: { type: 'material' }"
-        ng-click="ctrl.updateAccessory(accessory, 'createAccessoryModal');">
-        <td>{{$index + 1}}</td>
-        <td>{{accessory.name}}</td>
-        <td>{{accessory.designation}}</td>
-    </tr>
+        <tr ng-repeat="accessory in ctrl.damper.accessories | filter: { type: 'material' }" ng-click="ctrl.updateAccessory(accessory, 'createAccessoryModal');">
+            <td>{{$index + 1}}</td>
+            <td>{{accessory.name}}</td>
+            <td>{{accessory.designation}}</td>
+        </tr>
     </tbody>
 </table>
 

@@ -28,11 +28,11 @@ module.exports = {
             'node_modules/izitoast/dist/css/iziToast.min.css',
             'node_modules/angular-ui-router-anim-in-out/css/anim-in-out.css'
         ],
-        outputFileName: 'css-files.css'
+        outputFileName: 'vendor-styles.css'
     },
     less: {
         srcProd: "styles/main.css",
-        outputFileName: "less-files.css",
+        outputFileName: "my-styles.css",
         src: [
             'styles/*.less'
         ]

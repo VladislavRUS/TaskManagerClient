@@ -1,53 +1,58 @@
 function PrintController($stateParams, dampersFactory, researchDetailsFactory, printFactory, notificationsFactory) {
-	var self = this;
+    var self = this;
 
-	self.type = $stateParams.type;
+    self.type = $stateParams.type;
 
-	dampersFactory.getDampers();
-	researchDetailsFactory.getResearchDetails();
+    dampersFactory.getDampers();
+    researchDetailsFactory.getResearchDetails();
 
-	self.dampersFactory = dampersFactory;
-	self.researchDetailsFactory = researchDetailsFactory;
-	self.nf = notificationsFactory;
+    self.dampersFactory = dampersFactory;
+    self.researchDetailsFactory = researchDetailsFactory;
+    self.nf = notificationsFactory;
 
-	self.printArray = [];
+    self.printFactory = printFactory;
+    self.printArray = [];
+    self.printActive = false;
 
-	self.onClick = function (item) {
+    self.onClick = function(item) {
 
-		var idx = self.printArray.indexOf(item.uuid);
+        var idx = self.printArray.indexOf(item.uuid);
 
-		if (idx === -1) {
-			self.printArray.push(item.uuid);
+        if (idx === -1) {
+            self.printArray.push(item.uuid);
 
-		} else {
-			self.printArray.splice(idx, 1);
-		}
-	};
+        } else {
+            self.printArray.splice(idx, 1);
+        }
+    };
 
-	self.onPrint = function () {
-		switch (self.type) {
-			case 'list': {
-				printFactory.printList(self.printArray);
-				break;
-			}
+    self.onPrint = function() {
+        self.printActive = true;
 
-			case 'nomenclature': {
-				printFactory.printNomenclature(self.printArray);
-				break;
-			}
-		}
+        switch (self.type) {
+            case 'list':
+                {
+                    printFactory.printList(self.printArray);
+                    break;
+                }
 
+            case 'nomenclature':
+                {
+                    printFactory.printNomenclature(self.printArray);
+                    break;
+                }
+        }
 
-		self.printArray = [];
-	};
+        self.printArray = [];
+    };
 
-	self.inPrint = function (uuid) {
-		for (var i = 0; i < self.printArray.length; i++) {
-			if (self.printArray[i] === uuid) {
-				return true;
-			}
-		}
+    self.inPrint = function(uuid) {
+        for (var i = 0; i < self.printArray.length; i++) {
+            if (self.printArray[i] === uuid) {
+                return true;
+            }
+        }
 
-		return false;
-	};
+        return false;
+    };
 }

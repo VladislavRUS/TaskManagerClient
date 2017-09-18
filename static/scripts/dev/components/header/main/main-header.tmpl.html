@@ -1,23 +1,16 @@
-<div class="ui five item menu">
+<div class="ui top fixed fluid five item menu">
 
-    <a class="item"
-       ui-sref="notifications"
-       ng-class="{'_active': mainHeaderCtrl.inState(['notifications'])}">
+    <a class="item" ui-sref="notifications" ng-class="{'_active': mainHeaderCtrl.inState(['notifications'])}">
         Уведомления
         <div class="ui teal left pointing label">{{mainHeaderCtrl.storage.notifications.length}}</div>
     </a>
 
-    <a class="item"
-       ui-sref="calendar"
-       ng-class="{'_active': mainHeaderCtrl.inState(['calendar'])}">
-        <i class="calendar icon"></i>
-        Календарь
+    <a class="item" ui-sref="calendar" ui-sref-opts="{reload: true, notify: true}" ng-class="{'_active': mainHeaderCtrl.inState(['calendar'])}">
+        <i class="calendar icon"></i> Календарь
     </a>
 
-    <div class="ui dropdown item"
-         ng-class="{'_active': mainHeaderCtrl.inState(['dampers', 'research-details', 'test-equipments', 'university'])}">
-        <i class="university icon"></i>
-        Самарский университет
+    <div class="ui dropdown item" ng-class="{'_active': mainHeaderCtrl.inState(['dampers', 'research-details', 'test-equipments', 'university'])}">
+        <i class="university icon"></i> Самарский университет
         <i class="dropdown icon"></i>
 
         <div class="menu">
@@ -27,10 +20,8 @@
         </div>
     </div>
 
-    <div class="ui dropdown item"
-         ng-class="{'_active': mainHeaderCtrl.inState(['test-equipments', 'progress'])}">
-        <i class="space shuttle icon"></i>
-        АО РКЦ Прогресс
+    <div class="ui dropdown item" ng-class="{'_active': mainHeaderCtrl.inState(['test-equipments', 'progress'])}">
+        <i class="space shuttle icon"></i> АО РКЦ Прогресс
         <i class="dropdown icon"></i>
 
         <div class="menu">
@@ -38,10 +29,8 @@
         </div>
     </div>
 
-    <div class="ui dropdown item"
-         ng-class="{'_active': mainHeaderCtrl.inState(['print'])}">
-        <i class="print icon"></i>
-        Печать
+    <div class="ui dropdown item" ng-class="{'_active': mainHeaderCtrl.inState(['print'])}">
+        <i class="print icon"></i> Печать
         <i class="dropdown icon"></i>
 
         <div class="menu">

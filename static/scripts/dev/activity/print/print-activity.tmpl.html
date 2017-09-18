@@ -1,3 +1,7 @@
+<div class="ui dimmer" ng-class="{ 'active': ctrl.printFactory.printing }">
+    <div class="ui loader"></div>
+</div>
+
 <div class="ui form">
     <div class="fields">
 
@@ -20,52 +24,47 @@
 <table class="ui selectable striped celled table">
 
     <thead>
-    <tr>
-        <th>#</th>
-        <th>Название</th>
-        <th>Обозначение</th>
-        <th>Срок действия ПИ</th>
-        <th>Договоров</th>
-        <th>Отметка</th>
-    </tr>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Обозначение</th>
+            <th>Срок действия ПИ</th>
+            <th>Договоров</th>
+            <th>Отметка</th>
+        </tr>
     </thead>
 
     <tbody>
-    <tr ng-repeat="damper in ctrl.dampersFactory.dampers track by $index"
-        ng-class="{'active': ctrl.inPrint(damper.uuid)}"
-        ng-click="ctrl.onClick(damper, $event)">
+        <tr ng-repeat="damper in ctrl.dampersFactory.dampers track by $index" ng-class="{'active': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">
 
-        <td>{{$index + 1}}</td>
-        <td>{{damper.name}}</td>
-        <td>{{damper.designation}}</td>
-        <td>{{damper.expirationDate | date: 'dd-MM-yyyy'}}</td>
-        <td>{{damper.contracts.length}}</td>
-        <td>
-            <a class="ui label"
-               ng-class="ctrl.nf.getBadgeType(damper)">
+            <td>{{$index + 1}}</td>
+            <td>{{damper.name}}</td>
+            <td>{{damper.designation}}</td>
+            <td>{{damper.expirationDate | date: 'dd-MM-yyyy'}}</td>
+            <td>{{damper.contracts.length}}</td>
+            <td>
+                <a class="ui label" ng-class="ctrl.nf.getBadgeType(damper)">
                 {{ctrl.nf.getBadgeText(damper)}}
             </a>
-        </td>
-    </tr>
+            </td>
+        </tr>
     </tbody>
 </table>
 
 <h3 ng-if="ctrl.type === 'nomenclature'">НИОКР</h3>
 <table class="ui selectable striped celled table" ng-if="ctrl.type === 'nomenclature'">
     <thead>
-    <tr>
-        <th>#</th>
-        <th>Название</th>
-        <th>Этапов</th>
-    </tr>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Этапов</th>
+        </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="researchDetail in ctrl.researchDetailsFactory.researchDetails"
-        ng-class="{'active': ctrl.inPrint(researchDetail.uuid)}"
-        ng-click="ctrl.onClick(researchDetail, $event)">
-        <td>{{$index + 1}}</td>
-        <td>{{researchDetail.name}}</td>
-        <td>{{researchDetail.steps.length}}</td>
-    </tr>
+        <tr ng-repeat="researchDetail in ctrl.researchDetailsFactory.researchDetails" ng-class="{'active': ctrl.inPrint(researchDetail.uuid)}" ng-click="ctrl.onClick(researchDetail, $event)">
+            <td>{{$index + 1}}</td>
+            <td>{{researchDetail.name}}</td>
+            <td>{{researchDetail.steps.length}}</td>
+        </tr>
     </tbody>
 </table>

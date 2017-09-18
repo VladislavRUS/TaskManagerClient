@@ -1,43 +1,31 @@
 function testEquipmentsLayoutDirective($stateParams, $timeout, $state,
-									   testEquipmentsFactory, notificationsFactory, modalFactory, toastFactory) {
-	return {
-		scope: {},
-		bindToController: {},
-		templateUrl: 'scripts/dev/components/layout/test-equipments/test-equipments-layout.tmpl.html',
-		controller: function() {
-			var self = this;
+    testEquipmentsFactory, notificationsFactory, dialogWrapFactory, toastFactory) {
+    return {
+        scope: {},
+        bindToController: {},
+        templateUrl: 'scripts/dev/components/layout/test-equipments/test-equipments-layout.tmpl.html',
+        controller: function() {
+            var self = this;
 
-			self.storage = testEquipmentsFactory;
-			self.vendor = $stateParams.vendor;
-			self.nf = notificationsFactory;
+            self.storage = testEquipmentsFactory;
+            self.vendor = $stateParams.vendor;
+            self.nf = notificationsFactory;
 
-			self.onAdd = function() {
-				modalFactory.openModal('createTestEquipmentModal');
-			};
+            self.onAdd = function() {
+                dialogWrapFactory.openDialog('scripts/dev/components/dialog/test-equipment/add/add-test-equipment-dialog.tmpl.html', {
+                    vendor: self.vendor
+                });
 
-			self.save = function() {
-				var testEquipment = {
-					name: self.name,
-                    number: self.number,
-                    type: self.type,
-					expirationDate: self.expirationDate,
-					vendor: self.vendor
-				};
+            };
 
-				testEquipmentsFactory.createTestEquipment(testEquipment).then(function() {
-					modalFactory.closeModal();
-					toastFactory.successToast('Испытательное оборудование добавлено!');
-				});
-			};
+            self.vendorFilter = function(testEquipment) {
+                return testEquipment.vendor === self.vendor;
+            };
 
-			self.vendorFilter = function(testEquipment) {
-				return testEquipment.vendor === self.vendor;
-			};
-
-			self.onClick = function(testEquipment) {
+            self.onClick = function(testEquipment) {
                 $state.go('test-equipments-detailed', { uuid: testEquipment.uuid });
-			};
-		},
-		controllerAs: 'ctrl'
-	}
+            };
+        },
+        controllerAs: 'ctrl'
+    }
 }

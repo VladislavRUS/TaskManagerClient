@@ -1,5 +1,5 @@
 angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.calendar', 'anim-in-out'])
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -9,76 +9,77 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
         $urlRouterProvider.otherwise('/notifications');
 
         $stateProvider
+
             .state('/', {
-                url: '/',
-                abstract: 'true'
-            })
+            url: '/',
+            abstract: 'true'
+        })
 
-            .state('dampers', {
-                url: '/dampers',
-                controller: 'DampersController',
-                controllerAs: 'dampersCtrl',
-                templateUrl: 'scripts/dev/activity/dampers/dampers-activity.tmpl.html'
-            })
+        .state('dampers', {
+            url: '/dampers',
+            controller: 'DampersController',
+            controllerAs: 'dampersCtrl',
+            templateUrl: 'scripts/dev/activity/dampers/dampers-activity.tmpl.html'
+        })
 
-            .state('dampers-detailed', {
-                url: '/dampers-detailed/{uuid}',
-                controller: 'DampersDetailedController',
-                controllerAs: 'dampersDetailedCtrl',
-                templateUrl: 'scripts/dev/activity/dampers/detailed/dampers-detailed-activity.tmpl.html'
-            })
+        .state('dampers-detailed', {
+            url: '/dampers-detailed/{uuid}',
+            controller: 'DampersDetailedController',
+            controllerAs: 'dampersDetailedCtrl',
+            templateUrl: 'scripts/dev/activity/dampers/detailed/dampers-detailed-activity.tmpl.html'
+        })
 
-            .state('calendar', {
-                url: '/calendar',
-                controller: 'CalendarController',
-                controllerAs: 'calendarCtrl',
-                templateUrl: 'scripts/dev/activity/calendar/calendar-activity.tmpl.html'
-            })
+        .state('calendar', {
+            url: '/calendar',
+            controller: 'CalendarController',
+            controllerAs: 'calendarCtrl',
+            templateUrl: 'scripts/dev/activity/calendar/calendar-activity.tmpl.html'
+        })
 
-            .state('notifications', {
-                url: '/notifications',
-                controller: 'NotificationsController',
-                controllerAs: 'notificationsCtrl',
-                templateUrl: 'scripts/dev/activity/notifications/notifictions-activity.tmpl.html'
-            })
+        .state('notifications', {
+            url: '/notifications',
+            controller: 'NotificationsController',
+            controllerAs: 'notificationsCtrl',
+            templateUrl: 'scripts/dev/activity/notifications/notifictions-activity.tmpl.html'
+        })
 
-            .state('test-equipments', {
-                url: '/test-equipments/:vendor',
-                controller: 'TestEquipmentsController',
-                controllerAs: 'testEquipmentsCtrl',
-                templateUrl: 'scripts/dev/activity/test-equipments/test-equipments-activity.tmpl.html'
-            })
+        .state('test-equipments', {
+            url: '/test-equipments/:vendor',
+            controller: 'TestEquipmentsController',
+            controllerAs: 'testEquipmentsCtrl',
+            templateUrl: 'scripts/dev/activity/test-equipments/test-equipments-activity.tmpl.html'
+        })
 
-			.state('print', {
-				url: '/print/:type',
-				controller: 'PrintController',
-				controllerAs: 'ctrl',
-				templateUrl: 'scripts/dev/activity/print/print-activity.tmpl.html'
-			})
+        .state('print', {
+            url: '/print/:type',
+            controller: 'PrintController',
+            controllerAs: 'ctrl',
+            templateUrl: 'scripts/dev/activity/print/print-activity.tmpl.html'
+        })
 
-            .state('test-equipments-detailed', {
-                url: '/test-equipments-detailed/:uuid',
-                controller: 'TestEquipmentsDetailedController',
-                controllerAs: 'testEquipmentsDetailedCtrl',
-                templateUrl: 'scripts/dev/activity/test-equipments/detailed/test-equipments-detailed-activity.tmpl.html'
-            })
+        .state('test-equipments-detailed', {
+            url: '/test-equipments-detailed/:uuid',
+            controller: 'TestEquipmentsDetailedController',
+            controllerAs: 'testEquipmentsDetailedCtrl',
+            templateUrl: 'scripts/dev/activity/test-equipments/detailed/test-equipments-detailed-activity.tmpl.html'
+        })
 
-            .state('research-details', {
-                url: '/research-details',
-                controller: 'ResearchDetailsController',
-                controllerAs: 'researchDetailsCtrl',
-                templateUrl: 'scripts/dev/activity/research-details/research-details-activity.tmpl.html'
-            })
+        .state('research-details', {
+            url: '/research-details',
+            controller: 'ResearchDetailsController',
+            controllerAs: 'researchDetailsCtrl',
+            templateUrl: 'scripts/dev/activity/research-details/research-details-activity.tmpl.html'
+        })
 
-            .state('research-details-detailed', {
-                url: '/research-details-detailed/:uuid',
-                controller: 'ResearchDetailsDetailedController',
-                controllerAs: 'researchDetailsDetailedCtrl',
-                templateUrl: 'scripts/dev/activity/research-details/detailed/research-details-detailed-activity.tmpl.html'
-            })
+        .state('research-details-detailed', {
+            url: '/research-details-detailed/:uuid',
+            controller: 'ResearchDetailsDetailedController',
+            controllerAs: 'researchDetailsDetailedCtrl',
+            templateUrl: 'scripts/dev/activity/research-details/detailed/research-details-detailed-activity.tmpl.html'
+        })
     })
-    .run(function ($rootScope, notificationsFactory, dampersFactory,
-                   researchDetailsFactory, testEquipmentsFactory, eventsFactory, $interval) {
+    .run(function($rootScope, notificationsFactory, dampersFactory,
+        researchDetailsFactory, testEquipmentsFactory, eventsFactory, $interval) {
 
         dampersFactory.getDampers();
         researchDetailsFactory.getResearchDetails();
@@ -93,13 +94,13 @@ angular.module('app')
     .controller('AddContractDialogController', AddContractDialogController)
     .controller('AddDetailDialogController', AddDetailDialogController)
     .controller('AddStepDialogController', AddStepDialogController)
+    .controller('AddTestEquipmentDialogController', AddTestEquipmentDialogController)
     .controller('AddProgressDetailDialogController', AddProgressDetailDialogController)
     .controller('AddEquipmentDialogController', AddProgressDetailDialogController)
+    .controller('AddDamperDialogController', AddDamperDialogController)
     .controller('DampersController', DampersController)
     .controller('DampersDetailedController', DampersDetailedController)
     .controller('CalendarController', CalendarController)
-    .controller('EditContractDialogController', EditContractDialogController)
-    .controller('EditAccessoryDialogController', EditAccessoryDialogController)
     .controller('PrintController', PrintController)
     .controller('NotificationsController', NotificationsController)
     .controller('ResearchDetailsController', ResearchDetailsController)
@@ -111,7 +112,6 @@ angular.module('app')
 /*Directives*/
 angular.module('app')
     .directive('calendarLayout', calendarLayoutDirective)
-    .directive('dialogWrap', dialogWrapDirective)
     .directive('detailsLayout', detailsLayoutDirective)
     .directive('dampersLayout', dampersLayoutDirective)
     .directive('damperDetailed', damperDetailedDirective)
@@ -122,6 +122,7 @@ angular.module('app')
     .directive('detailContracts', detailContractsDirective)
     .directive('detailAccessory', detailAccessoryDirective)
     .directive('detailAccessories', detailAccessoriesDirective)
+    .directive('dialogWrap', dialogWrapDirective)
     .directive('eventsLayout', eventsLayoutDirective)
     .directive('eventItem', eventItemDirective)
     .directive('equipmentsLayout', equipmentsLayoutDirective)

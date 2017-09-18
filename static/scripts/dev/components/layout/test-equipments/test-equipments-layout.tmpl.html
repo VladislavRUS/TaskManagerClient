@@ -22,21 +22,20 @@
     </thead>
 
     <tbody>
-    <tr ng-repeat="testEquipment in ctrl.storage.testEquipments | filter: { vendor: ctrl.vendor }"
-        ng-click="ctrl.onClick(testEquipment, $event)">
-        <td>{{$index + 1}}</td>
-        <td>{{testEquipment.name}}</td>
-        <td>{{testEquipment.number}}</td>
-        <td>{{testEquipment.type}}</td>
-        <td>{{testEquipment.expirationDate | date: 'dd-MM-yyyy'}}</td>
-        <td>
-            <a class="ui label" ng-class="ctrl.nf.getBadgeType(testEquipment)">{{ctrl.nf.getBadgeText(testEquipment)}}</a>
-        </td>
-    </tr>
+        <tr ng-repeat="testEquipment in ctrl.storage.testEquipments | filter: { vendor: ctrl.vendor }" ng-click="ctrl.onClick(testEquipment, $event)">
+            <td>{{$index + 1}}</td>
+            <td>{{testEquipment.name}}</td>
+            <td>{{testEquipment.number}}</td>
+            <td>{{testEquipment.type}}</td>
+            <td>{{testEquipment.expirationDate | date: 'dd-MM-yyyy'}}</td>
+            <td>
+                <a class="ui label" ng-class="ctrl.nf.getBadgeType(testEquipment)">{{ctrl.nf.getBadgeText(testEquipment)}}</a>
+            </td>
+        </tr>
     </tbody>
 </table>
 
-<div class="ui modal" id="createTestEquipmentModal">
+<!-- <div class="ui modal" id="createTestEquipmentModal">
     <i class="close icon"></i>
     <div class="header">
         Добавление испытательного оборудования
@@ -59,22 +58,22 @@
         <form class="ui form">
             <div class="required field">
                 <label>Наименование</label>
-                <input type="text" ng-model="ctrl.name">
+                <input type="text" ng-model="ctrl.testEquipment.name">
             </div>
 
             <div class="required field">
                 <label>Заводской номер</label>
-                <input type="text" ng-model="ctrl.number">
+                <input type="text" ng-model="ctrl.testEquipment.number">
             </div>
 
             <div class="required field">
                 <label>Дата истечения срока</label>
-                <input type="date" ng-model="ctrl.expirationDate">
+                <input type="date" ng-model="ctrl.testEquipment.expirationDate">
             </div>
 
             <div class="required field">
                 <label>Тип</label>
-                <input type="text" ng-model="ctrl.type">
+                <input type="text" ng-model="ctrl.testEquipment.type">
             </div>
         </form>
     </div>
@@ -88,7 +87,7 @@
             <i class="checkmark icon"></i>
         </div>
     </div>
-</div>
+</div> -->
 <!--
 
 <div class="modal fade" id="createTestEquipmentModal" tabindex="-1" role="dialog"

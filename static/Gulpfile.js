@@ -48,22 +48,20 @@ gulp.task('copy-fonts', () => {
     .pipe(gulp.dest(config.fonts.dest))
 });
 
+gulp.task('vendor-styles', () => {
+		return gulp.src(config.css.src)
+			.pipe(plugins.concat(config.css.outputFileName))
+            .pipe(gulp.dest(config.styles.dest));
+});
+
 /*Less tasks*/
 gulp.task('less', ["copy-fonts"], () => {
-    let lessStream =
-        gulp.src(config.less.src)
-            .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.less())
-            .pipe(plugins.autoprefixer(config.autoprefixer))
-            .pipe(plugins.sourcemaps.write())
-            .pipe(plugins.concat(config.less.outputFileName));
-
-    let cssStream =
-        gulp.src(config.css.src)
-            .pipe(plugins.concat(config.css.outputFileName));
-
-    merge(lessStream, cssStream)
-        .pipe(plugins.concat(config.styles.outputFileName))
+	return gulp.src(config.less.src)
+		.pipe(plugins.sourcemaps.init())
+		.pipe(plugins.less())
+		.pipe(plugins.autoprefixer(config.autoprefixer))
+		.pipe(plugins.sourcemaps.write())
+		.pipe(plugins.concat(config.less.outputFileName))
         .pipe(gulp.dest(config.styles.dest))
         .pipe(bsync.stream())
 });
@@ -249,7 +247,7 @@ gulp.task('watch', function() {
     gulp.watch(config.watch.html, ['js']);
 });
 
-gulp.task('bswatch', ['watch', 'bsync'], function() {
+gulp.task('bswatch', ['vendor-styles', 'watch', 'bsync'], function() {
     gulp.watch([
         './scripts/**/*.js',
         './scripts/**/*.html'
