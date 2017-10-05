@@ -9,6 +9,10 @@
     </div>
 </div>
 
+<div class="ui input">
+    <input type="text" placeholder="Поиск" ng-model="ctrl.searchStr">
+  </div>
+
 <table class="ui selectable striped celled table">
     <thead>
         <tr>
@@ -22,7 +26,7 @@
     </thead>
 
     <tbody>
-        <tr ng-repeat="testEquipment in ctrl.storage.testEquipments | filter: { vendor: ctrl.vendor }" ng-click="ctrl.onClick(testEquipment, $event)">
+        <tr ng-repeat="testEquipment in ctrl.storage.testEquipments | filter: { vendor: ctrl.vendor, name: ctrl.searchStr } | orderBy: 'name' track by $index" ng-click="ctrl.onClick(testEquipment, $event)">
             <td>{{$index + 1}}</td>
             <td>{{testEquipment.name}}</td>
             <td>{{testEquipment.number}}</td>

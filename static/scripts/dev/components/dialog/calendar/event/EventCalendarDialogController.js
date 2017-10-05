@@ -14,17 +14,17 @@ function EventCalendarDialogController($rootScope, $timeout,
         promise.then(function() {
             toastFactory.successToast('Событие сохранено!');
             $rootScope.$emit('updateEvents');
-        });
+            dialogWrapFactory.closeDialog();
 
-        dialogWrapFactory.closeDialog();
+        }, function() {
+            alert('Ошибка!');
+        });
     };
 
     self.onGo = function(link) {
         dialogWrapFactory.closeDialog();
 
-        //$timeout(function() {
         window.location.href = '#/' + link;
-        //}, 500);
     };
 
     self.onDelete = function() {
