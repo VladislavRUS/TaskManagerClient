@@ -66,8 +66,7 @@
 
         <div class="two wide field">
 
-            <button class="ui labeled icon positive mini button"
-                    ng-click="ctrl.addStep('createStepModal');">
+            <button class="ui labeled icon positive mini button" ng-click="ctrl.addStep('createStepModal');">
                 <i class="plus icon"></i>
                 Добавить
             </button>
@@ -87,8 +86,7 @@
     </thead>
 
     <tbody>
-        <tr ng-repeat="step in ctrl.researchDetail.steps track by $index"
-            ng-click="ctrl.updateStep(step, 'createStepModal');">
+        <tr ng-repeat="step in ctrl.researchDetail.steps track by $index" ng-click="ctrl.updateStep(step);">
             <td>{{step.number}}</td>
             <td>{{step.name}}</td>
             <td>{{step.expirationDate | date: 'dd-MM-yyyy'}}</td>
@@ -98,44 +96,3 @@
         </tr>
     </tbody>
 </table>
-
-<div class="ui modal" id="createStepModal">
-    <i class="close icon"></i>
-    <div class="header">
-        Этап
-    </div>
-
-    <div class="content">
-        <form class="ui form">
-            <div class="required field">
-                <label>Номер этапа (число)</label>
-                <input type="number" min="1" step="1" ng-model="ctrl.currentStep.number">
-            </div>
-
-            <div class="required field">
-                <label>Название</label>
-                <input type="text" ng-model="ctrl.currentStep.name">
-            </div>
-
-            <div class="required field">
-                <label>Срок выполнения</label>
-                <input type="date" min="1" step="1" ng-model="ctrl.currentStep.expirationDate">
-            </div>
-        </form>
-    </div>
-
-    <div class="actions">
-        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.deleteStep()">
-            Удалить
-        </div>
-
-        <div class="ui deny black button" ng-if="!ctrl.update">
-            Отмена
-        </div>
-
-        <div class="ui positive right labeled icon button" ng-click="ctrl.saveStep()">
-            Сохранить
-            <i class="checkmark icon"></i>
-        </div>
-    </div>
-</div>

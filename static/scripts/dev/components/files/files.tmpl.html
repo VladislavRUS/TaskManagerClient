@@ -3,22 +3,22 @@
 
     <table class="ui celled selectable stripped table" ng-if="ctrl.files.length">
         <tbody>
-        <tr ng-repeat="file in ctrl.files">
-            <td>{{file.name}}</td>
-            <td class="collapsing">
-                <a class="ui teal  circular label">
+            <tr ng-repeat="file in ctrl.files">
+                <td>{{file.name}}</td>
+                <td class="collapsing">
+                    <a class="ui teal  circular label">
                     {{file.extension}}
                 </a>
-            </td>
-            <td class="collapsing">
-                <button class="positive ui button" ng-click="ctrl.onOpen(file); $event.preventDefault();">Просмотреть
+                </td>
+                <td class="collapsing">
+                    <button class="positive ui button" ng-click="ctrl.onOpen(file); $event.preventDefault();">Просмотреть
                 </button>
-            </td>
-            <td class="collapsing">
-                <button class="negative ui button" ng-click="ctrl.onDelete(file); $event.preventDefault();">Удалить
+                </td>
+                <td class="collapsing">
+                    <button class="negative ui button" ng-click="ctrl.onDelete(file); $event.preventDefault();">Удалить
                 </button>
-            </td>
-        </tr>
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -26,38 +26,4 @@
 
     <button type="button" class="ui primary button" ng-click="ctrl.onAdd()">Добавить файл</button>
 
-    <div class="ui modal" id="createFileModal">
-        <i class="close icon"></i>
-        <div class="header">
-            Добавление файла
-        </div>
-
-        <div class="content">
-            <form class="ui form">
-                <div class="required field">
-                    <label>Название</label>
-                    <input type="text" ng-model="ctrl.name">
-                </div>
-
-                <div class="required field">
-                    <label>Выберите файл</label>
-                    <input type="file" id="file" ng-model="ctrl.file">
-                </div>
-            </form>
-        </div>
-
-        <div class="ui active centered inline loader" ng-if="ctrl.animated"></div>
-
-        <div class="actions">
-
-            <div class="ui deny black button">
-                Отмена
-            </div>
-
-            <div class="ui positive right labeled icon button" ng-click="ctrl.addFile()">
-                Добавить
-                <i class="checkmark icon"></i>
-            </div>
-        </div>
-    </div>
 </div>

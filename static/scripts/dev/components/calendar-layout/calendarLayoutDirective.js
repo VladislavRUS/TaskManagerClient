@@ -1,5 +1,5 @@
-function calendarLayoutDirective($timeout, $q, $window, $state, uiCalendarConfig,
-    eventsFactory, notificationsFactory, modalFactory, toastFactory) {
+function calendarLayoutDirective($timeout, $q, $window, $state, $rootScope, uiCalendarConfig,
+    eventsFactory, notificationsFactory, dialogWrapFactory, toastFactory) {
     return {
         scope: {},
         bindToController: {},
@@ -22,40 +22,36 @@ function calendarLayoutDirective($timeout, $q, $window, $state, uiCalendarConfig
                         right: 'today prev,next'
                     },
                     displayEventTime: false,
-                    height: '450',
+                    height: 600,
                     dayClick: function(date) {
-                        modalFactory.openModal('createEventModal');
 
-                        self.currentEvent = {};
-                        self.currentEvent.date = new Date(date);
-                        self.update = false;
+                        dialogWrapFactory.openDialog('scripts/dev/components/dialog/calendar/event/event-calendar-dialog.tmpl.html', {
+                            update: false,
+                            event: {
+                                date: new Date(date)
+                            }
+                        });
                     },
 
                     eventClick: function(calEvent, jsEvent, view) {
-
-                        modalFactory.openModal('createEventModal');
-
-                        self.currentEvent = {};
-                        self.currentEvent.title = calEvent.title;
-                        self.currentEvent.date = calEvent.start._i;
-                        self.currentEvent.comment = calEvent.comment;
-                        self.currentEvent.custom = calEvent.custom || false;
-                        self.currentEvent.uuid = calEvent.uuid;
-                        self.currentEvent.link = calEvent.link;
-                        self.currentEvent.linkText = calEvent.linkText;
-
-                        self.update = true;
+                        dialogWrapFactory.openDialog('scripts/dev/components/dialog/calendar/event/event-calendar-dialog.tmpl.html', {
+                            update: true,
+                            event: {
+                                title: calEvent.title,
+                                date: calEvent.start._i,
+                                comment: calEvent.comment,
+                                custom: calEvent.custom || false,
+                                uuid: calEvent.uuid,
+                                link: calEvent.link,
+                                linkText: calEvent.linkText
+                            }
+                        });
                     },
 
                     dayRender: function(date, cell) {
                         var day = new Date(date);
-                        var isWeekend = false;
 
                         if (day.getDay() === 6 || day.getDay() === 0) {
-                            isWeekend = true;
-                        }
-
-                        if (isWeekend) {
                             $(cell).css({
                                 'background-color': '#ffc4b7'
                             });
@@ -124,44 +120,9 @@ function calendarLayoutDirective($timeout, $q, $window, $state, uiCalendarConfig
                 } else return 'blue';
             }
 
-            self.go = function(link) {
-                modalFactory.closeModal();
-
-                $timeout(function() {
-                    window.location.href = '#/' + link;
-                }, 500);
-            };
-
-            self.save = function() {
-                var promise = self.update ?
-                    eventsFactory.updateEvent(self.currentEvent) :
-                    eventsFactory.addEvent(self.currentEvent);
-
-                promise.then(function() {
-                    modalFactory.closeModal();
-
-                    if (self.update) {
-                        toastFactory.successToast('Событие обновлено!');
-
-                    } else {
-                        toastFactory.successToast('Событие создано!');
-                    }
-
-                    self.updateEventSources();
-                    $state.reload();
-                });
-            };
-
-            self.delete = function() {
-                var event = { uuid: self.currentEvent.uuid };
-
-                modalFactory.closeModal();
-
-                eventsFactory.removeEvent(event).then(function() {
-                    toastFactory.successToast('Событие удалено!');
-                    self.updateEventSources();
-                });
-            };
+            $rootScope.$on('updateEvents', function() {
+                self.updateEventSources();
+            });
 
             self.updateEventSources();
         },

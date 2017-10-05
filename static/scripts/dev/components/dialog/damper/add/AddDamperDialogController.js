@@ -11,6 +11,7 @@ function AddDamperDialogController(dialogWrapFactory, dampersFactory, toastFacto
         var damper = angular.copy(self.damper);
 
         dampersFactory.createDamper(damper).then(function() {
+
             toastFactory.successToast('Виброизолятор создан!')
             dialogWrapFactory.closeDialog();
 
