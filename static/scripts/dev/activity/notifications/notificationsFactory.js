@@ -4,7 +4,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
     factory.notifications = [];
     factory.types = [];
 
-    factory.getNotifications = function () {
+    factory.getNotifications = function() {
 
         var n1 = processDampers(dampersFactory.dampers);
         var n2 = processResearchDetails(researchDetailsFactory.researchDetails);
@@ -16,7 +16,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
         factory.notifications = factory.notifications.concat(n1).concat(n2).concat(n3).concat(n4);
 
-        var allTypes = factory.notifications.map(function (n) {
+        var allTypes = factory.notifications.map(function(n) {
             return {
                 designation: n.type.split(':')[0],
                 name: n.type.split(':')[2]
@@ -25,7 +25,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
         var uniqueTypes = [];
 
-        allTypes.forEach(function (type) {
+        allTypes.forEach(function(type) {
             if (!containsType(type, uniqueTypes)) {
                 uniqueTypes.push(type);
             }
@@ -58,7 +58,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         var contractSoonText = 'Выполнение обязательств по договору скоро прекратится';
         var contractExpiresIn = 'До выполнения обязательств по договору осталось дней: {daysBetween}';
 
-        dampers.forEach(function (damper) {
+        dampers.forEach(function(damper) {
             var damperExpirationDate = damper.expirationDate;
 
             var daysBetween = getDaysBetween(damperExpirationDate, now);
@@ -83,35 +83,20 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                     text: damperExpiresIn.replace('{damper}', damper.name).replace('{daysBetween}', daysBetween),
                     link: 'dampers-detailed/' + damper.uuid,
                     linkText: 'Перейти к виброизолятору',
-                    badge: 'Дней осталось: ' + daysBetween,
+                    badge: 'Осталось дней: ' + daysBetween,
                     date: damper.expirationDate
                 })
             }
 
-            damper.contracts.forEach(function (contract) {
+            damper.contracts.forEach(function(contract) {
 
-                var currentYear = now.getFullYear();
-                var currentMonth = now.getMonth();
+                if (!contract.done) {
 
-                //Если год контракта меньше текущего
-                if (contract.year < currentYear) {
-                    notifications.push({
-                        uuid: contract.uuid,
-                        type: 'contract:red:Договор',
-                        title: contractExpiredText,
-                        text: 'Данные договора: квартал: ' + contract.quoter + ', год: ' + contract.year,
-                        link: 'dampers-detailed/' + damper.uuid,
-                        linkText: 'Перейти к договору',
-                        badge: 'Истек',
-                        date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
-                    });
+                    var currentYear = now.getFullYear();
+                    var currentMonth = now.getMonth();
 
-                    //Или если года совпадают
-                } else if (contract.year === currentYear) {
-                    var lastMonthInQuoter = getLastMonthInQuoter(contract.quoter);
-
-                    //Если текующий месяц больше последнего месяца квартала контракт
-                    if (currentMonth > lastMonthInQuoter) {
+                    //Если год контракта меньше текущего
+                    if (contract.year < currentYear) {
                         notifications.push({
                             uuid: contract.uuid,
                             type: 'contract:red:Договор',
@@ -123,23 +108,41 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                             date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
                         });
 
-                        //Если же совпадают, то смотрим сколько дней осталось
-                    } else if (currentMonth == lastMonthInQuoter) {
-                        var lastDate = new Date(currentYear, lastMonthInQuoter);
-                        var lastDayOfMonth = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, 0);
+                        //Или если года совпадают
+                    } else if (contract.year === currentYear) {
+                        var lastMonthInQuoter = getLastMonthInQuoter(contract.quoter);
 
-                        var daysBetween = getDaysBetween(lastDayOfMonth, now);
+                        //Если текующий месяц больше последнего месяца квартала контракт
+                        if (currentMonth > lastMonthInQuoter) {
+                            notifications.push({
+                                uuid: contract.uuid,
+                                type: 'contract:red:Договор',
+                                title: contractExpiredText,
+                                text: 'Данные договора: квартал: ' + contract.quoter + ', год: ' + contract.year,
+                                link: 'dampers-detailed/' + damper.uuid,
+                                linkText: 'Перейти к договору',
+                                badge: 'Истек',
+                                date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
+                            });
 
-                        notifications.push({
-                            uuid: contract.uuid,
-                            type: 'contract:yellow:Договор',
-                            title: contractSoonText,
-                            text: contractExpiresIn.replace('{daysBetween}', daysBetween),
-                            link: 'dampers-detailed/' + damper.uuid,
-                            linkText: 'Перейти к договору',
-                            badge: 'Дней осталось: ' + daysBetween,
-                            date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
-                        });
+                            //Если же совпадают, то смотрим сколько осталось дней
+                        } else if (currentMonth == lastMonthInQuoter) {
+                            var lastDate = new Date(currentYear, lastMonthInQuoter);
+                            var lastDayOfMonth = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, 0);
+
+                            var daysBetween = getDaysBetween(lastDayOfMonth, now);
+
+                            notifications.push({
+                                uuid: contract.uuid,
+                                type: 'contract:yellow:Договор',
+                                title: contractSoonText,
+                                text: contractExpiresIn.replace('{daysBetween}', daysBetween),
+                                link: 'dampers-detailed/' + damper.uuid,
+                                linkText: 'Перейти к договору',
+                                badge: 'Осталось дней: ' + daysBetween,
+                                date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
+                            });
+                        }
                     }
                 }
             });
@@ -150,18 +153,22 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
     function getLastMonthInQuoter(quoter) {
         switch (quoter) {
-            case 1: {
-                return 2;
-            }
-            case 2: {
-                return 5;
-            }
-            case 3: {
-                return 8;
-            }
-            case 4: {
-                return 11;
-            }
+            case 1:
+                {
+                    return 2;
+                }
+            case 2:
+                {
+                    return 5;
+                }
+            case 3:
+                {
+                    return 8;
+                }
+            case 4:
+                {
+                    return 11;
+                }
         }
     }
 
@@ -174,8 +181,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         var stepSoonText = 'Скоро прекратится этап';
         var stepExpiresIn = 'До окончания этапа {step} осталось дней: {daysBetween}.';
 
-        researchDetails.forEach(function (researchDetail) {
-            researchDetail.steps.forEach(function (step) {
+        researchDetails.forEach(function(researchDetail) {
+            researchDetail.steps.forEach(function(step) {
                 var stepExpirationDate = step.expirationDate;
 
                 var daysBetween = getDaysBetween(stepExpirationDate, now);
@@ -200,7 +207,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                         text: stepExpiresIn.replace('{step}', step.name).replace('{daysBetween}', daysBetween),
                         link: 'research-details-detailed/' + researchDetail.uuid,
                         linkText: 'Перейти к этапу',
-                        badge: 'Дней осталось: ' + daysBetween,
+                        badge: 'Осталось дней: ' + daysBetween,
                         date: step.expirationDate
                     })
                 }
@@ -219,7 +226,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         var teSoonText = 'Скоро истечет срок действия испытательного оборудования';
         var teExpiresIn = 'До окончания срока действия испытательного оборудования {testEquipment} осталось дней: {daysBetween}.';
 
-        testEquipments.forEach(function (testEquipment) {
+        testEquipments.forEach(function(testEquipment) {
             var teExpirationDate = testEquipment.expirationDate;
 
             var daysBetween = getDaysBetween(teExpirationDate, now);
@@ -244,7 +251,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                     text: teExpiresIn.replace('{testEquipment}', testEquipment.name).replace('{daysBetween}', daysBetween),
                     link: 'test-equipments-detailed/' + testEquipment.uuid,
                     linkText: 'Перейти к испытательному оборудованию',
-                    badge: 'Дней осталось: ' + daysBetween,
+                    badge: 'Осталось дней: ' + daysBetween,
                     date: testEquipment.expirationDate
                 })
             }
@@ -262,7 +269,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         var eventSoonText = 'Скоро произойдет событие "{eventTitle}". Дата: {date}';
         var eventExpiresIn = 'Осталось дней: {daysBetween}.';
 
-        events.forEach(function (event) {
+        events.forEach(function(event) {
             var daysBetween = getDaysBetween(event.date, now);
 
             var eventDate = new Date(event.date);
@@ -288,7 +295,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                     text: eventExpiresIn.replace('{daysBetween}', daysBetween),
                     link: 'calendar',
                     linkText: 'Перейти к календарю',
-                    badge: 'Дней осталось: ' + daysBetween,
+                    badge: 'Осталось дней: ' + daysBetween,
                     date: event.date
                 })
             }
@@ -308,7 +315,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         return Math.floor((secondDate - firstDate) / oneDay);
     }
 
-    factory.getBadgeType = function (obj) {
+    factory.getBadgeType = function(obj) {
         for (var i = 0; i < factory.notifications.length; i++) {
             var n = factory.notifications[i];
 
@@ -320,7 +327,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         return 'green';
     };
 
-    factory.getBadgeText = function (obj) {
+    factory.getBadgeText = function(obj) {
         for (var i = 0; i < factory.notifications.length; i++) {
             var n = factory.notifications[i];
 
@@ -329,7 +336,7 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
             }
         }
 
-        return 'В норме';
+        return 'OK';
     };
 
 
