@@ -15,8 +15,15 @@ body {
 
 .fc-title {
     font-size: 12px;
-    font-weight: 500;
     color: white;
+}
+
+.fc-day-grid-event .fc-content {
+    white-space: normal;
+}
+
+.fc-content:hover {
+    text-decoration: underline !important;
 }
 
 .fc-event {
@@ -29,16 +36,11 @@ body {
 
 .fc-today {
     font-weight: bold;
-    background-color: #00B5AD !important;
+    background-color: rgba(0, 181, 172, 0.314) !important;
 }
 
 .fc-event {
     line-height: 1.5 !important;
-}
-
-.fc-day-grid-event .fc-content {
-    white-space: normal;
-    max-height: 50px;
 }
 
 .dialog-wrap {

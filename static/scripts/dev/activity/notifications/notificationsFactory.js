@@ -1,4 +1,4 @@
-function notificationsFactory($interval, dampersFactory, researchDetailsFactory, testEquipmentsFactory, eventsFactory) {
+function notificationsFactory($interval, $filter, dampersFactory, researchDetailsFactory, testEquipmentsFactory, eventsFactory) {
     var factory = {};
 
     factory.notifications = [];
@@ -49,14 +49,12 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         var now = new Date();
 
         /*Damper*/
-        var dampersExpiredText = 'Истек срок действия ПИ виброизолятора';
-        var dampersSoonText = 'Скоро истечет срок действия ПИ виброизолятора';
-        var damperExpiresIn = 'До окончания срока действия ПИ выброизолятора {damper} осталось дней: {daysBetween}.';
+        var dampersExpiredText = 'Истек срок действия ПИ виброизолятора "{name}"';
+        var dampersSoonText = 'Скоро истечет срок действия ПИ виброизолятора "{name}"';
 
         /*Contract*/
-        var contractExpiredText = 'Выполнение обязательств по договору перекращно';
-        var contractSoonText = 'Выполнение обязательств по договору скоро прекратится';
-        var contractExpiresIn = 'До выполнения обязательств по договору осталось дней: {daysBetween}';
+        var contractExpiredText = 'Истек срок выполнения договора № {number}, {fromDate}';
+        var contractSoonText = 'Срок выполнения договора № {number}, {fromDate} скоро прекратится';
 
         dampers.forEach(function(damper) {
             var damperExpirationDate = damper.expirationDate;
@@ -67,8 +65,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                 notifications.push({
                     uuid: damper.uuid,
                     type: 'damper:red:Виброизолятор',
-                    title: dampersExpiredText,
-                    text: 'Виброизолятор: ' + damper.name,
+                    title: dampersExpiredText.replace('{name}', damper.name),
+                    text: 'Дата истечения: ' + $filter('date')(damper.expirationDate, 'dd-MM-yyyy'),
                     link: 'dampers-detailed/' + damper.uuid,
                     linkText: 'Перейти к виброизолятору',
                     badge: 'Истек',
@@ -79,8 +77,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                 notifications.push({
                     uuid: damper.uuid,
                     type: 'damper:yellow:Виброизолятор',
-                    title: dampersSoonText,
-                    text: damperExpiresIn.replace('{damper}', damper.name).replace('{daysBetween}', daysBetween),
+                    title: dampersSoonText.replace('{name}', damper.name),
+                    text: 'Дата истечения: ' + $filter('date')(damper.expirationDate, 'dd-MM-yyyy'),
                     link: 'dampers-detailed/' + damper.uuid,
                     linkText: 'Перейти к виброизолятору',
                     badge: 'Осталось дней: ' + daysBetween,
@@ -92,57 +90,32 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
                 if (!contract.done) {
 
-                    var currentYear = now.getFullYear();
-                    var currentMonth = now.getMonth();
+                    var contractExpirationDate = contract.expirationDate;
+                    var daysBetween = getDaysBetween(contractExpirationDate, now);
 
-                    //Если год контракта меньше текущего
-                    if (contract.year < currentYear) {
+                    if (daysBetween <= 0) {
                         notifications.push({
                             uuid: contract.uuid,
                             type: 'contract:red:Договор',
-                            title: contractExpiredText,
-                            text: 'Данные договора: квартал: ' + contract.quoter + ', год: ' + contract.year,
+                            title: contractExpiredText.replace('{number}', contract.number).replace('{fromDate}', $filter('date')(contract.fromDate, 'dd-MM-yyyy')),
+                            text: 'Дата истечения: ' + $filter('date')(contract.expirationDate, 'dd-MM-yyyy'),
                             link: 'dampers-detailed/' + damper.uuid,
-                            linkText: 'Перейти к договору',
+                            linkText: 'Перейти к контракту',
                             badge: 'Истек',
-                            date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
+                            date: contract.expirationDate
                         });
 
-                        //Или если года совпадают
-                    } else if (contract.year === currentYear) {
-                        var lastMonthInQuoter = getLastMonthInQuoter(contract.quoter);
-
-                        //Если текующий месяц больше последнего месяца квартала контракт
-                        if (currentMonth > lastMonthInQuoter) {
-                            notifications.push({
-                                uuid: contract.uuid,
-                                type: 'contract:red:Договор',
-                                title: contractExpiredText,
-                                text: 'Данные договора: квартал: ' + contract.quoter + ', год: ' + contract.year,
-                                link: 'dampers-detailed/' + damper.uuid,
-                                linkText: 'Перейти к договору',
-                                badge: 'Истек',
-                                date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
-                            });
-
-                            //Если же совпадают, то смотрим сколько осталось дней
-                        } else if (currentMonth == lastMonthInQuoter) {
-                            var lastDate = new Date(currentYear, lastMonthInQuoter);
-                            var lastDayOfMonth = new Date(lastDate.getFullYear(), lastDate.getMonth() + 1, 0);
-
-                            var daysBetween = getDaysBetween(lastDayOfMonth, now);
-
-                            notifications.push({
-                                uuid: contract.uuid,
-                                type: 'contract:yellow:Договор',
-                                title: contractSoonText,
-                                text: contractExpiresIn.replace('{daysBetween}', daysBetween),
-                                link: 'dampers-detailed/' + damper.uuid,
-                                linkText: 'Перейти к договору',
-                                badge: 'Осталось дней: ' + daysBetween,
-                                date: new Date(contract.year, getLastMonthInQuoter(contract.quoter) + 1, 0)
-                            });
-                        }
+                    } else if (daysBetween < 30) {
+                        notifications.push({
+                            uuid: contract.uuid,
+                            type: 'contract:yellow:Договор',
+                            title: contractSoonText.replace('{number}', contract.number).replace('{fromDate}', $filter('date')(contract.fromDate, 'dd-MM-yyyy')),
+                            text: 'Дата истечения: ' + $filter('date')(contract.expirationDate, 'dd-MM-yyyy'),
+                            link: 'dampers-detailed/' + damper.uuid,
+                            linkText: 'Перейти к контракту',
+                            badge: 'Осталось дней: ' + daysBetween,
+                            date: contract.expirationDate
+                        })
                     }
                 }
             });
@@ -177,39 +150,41 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
         var now = new Date();
 
-        var stepExpiredText = 'Этап №{number} завершен';
-        var stepSoonText = 'Скоро прекратится этап';
-        var stepExpiresIn = 'До окончания этапа {step} осталось дней: {daysBetween}.';
+        var stepExpiredText = 'Истек срок выполнения этапа "{name}" под номером №{number}';
+        var stepSoonText = 'Скоро истечет срок выполнения этапа "{name}" под номером №{number}';
 
         researchDetails.forEach(function(researchDetail) {
             researchDetail.steps.forEach(function(step) {
-                var stepExpirationDate = step.expirationDate;
 
-                var daysBetween = getDaysBetween(stepExpirationDate, now);
+                if (!step.done) {
+                    var stepExpirationDate = step.expirationDate;
 
-                if (daysBetween <= 0) {
-                    notifications.push({
-                        uuid: step.uuid,
-                        type: 'step:red:Этап',
-                        title: stepExpiredText.replace('{number}', step.number),
-                        text: 'Название: ' + step.name,
-                        link: 'research-details-detailed/' + researchDetail.uuid,
-                        linkText: 'Перейти к этапу',
-                        badge: 'Истек',
-                        date: step.expirationDate
-                    });
+                    var daysBetween = getDaysBetween(stepExpirationDate, now);
 
-                } else if (daysBetween < 30) {
-                    notifications.push({
-                        uuid: step.uuid,
-                        type: 'step:yellow:Этап',
-                        title: stepSoonText,
-                        text: stepExpiresIn.replace('{step}', step.name).replace('{daysBetween}', daysBetween),
-                        link: 'research-details-detailed/' + researchDetail.uuid,
-                        linkText: 'Перейти к этапу',
-                        badge: 'Осталось дней: ' + daysBetween,
-                        date: step.expirationDate
-                    })
+                    if (daysBetween <= 0) {
+                        notifications.push({
+                            uuid: step.uuid,
+                            type: 'step:red:Этап',
+                            title: stepExpiredText.replace('{number}', step.number).replace('{name}', step.name),
+                            text: 'Дата истечения: ' + $filter('date')(step.expirationDate, 'dd-MM-yyyy'),
+                            link: 'research-details-detailed/' + researchDetail.uuid,
+                            linkText: 'Перейти к этапу',
+                            badge: 'Истек',
+                            date: step.expirationDate
+                        });
+
+                    } else if (daysBetween < 30) {
+                        notifications.push({
+                            uuid: step.uuid,
+                            type: 'step:yellow:Этап',
+                            title: stepSoonText.replace('{number}', step.number).replace('{name}', step.name),
+                            text: 'Дата истечения: ' + $filter('date')(step.expirationDate, 'dd-MM-yyyy'),
+                            link: 'research-details-detailed/' + researchDetail.uuid,
+                            linkText: 'Перейти к этапу',
+                            badge: 'Осталось дней: ' + daysBetween,
+                            date: step.expirationDate
+                        })
+                    }
                 }
             });
         });
@@ -222,9 +197,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
 
         var now = new Date();
 
-        var teExpiredText = 'Прекращен срок действия испытательного оборудования';
-        var teSoonText = 'Скоро истечет срок действия испытательного оборудования';
-        var teExpiresIn = 'До окончания срока действия испытательного оборудования {testEquipment} осталось дней: {daysBetween}.';
+        var teExpiredText = 'Истек срок действия испытательного оборудования "{name}"';
+        var teSoonText = 'Скоро истечет срок действия испытательного оборудования "{name}"';
 
         testEquipments.forEach(function(testEquipment) {
             var teExpirationDate = testEquipment.expirationDate;
@@ -235,8 +209,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                 notifications.push({
                     uuid: testEquipment.uuid,
                     type: 'testEquipment:red:Испытательное оборудование',
-                    title: teExpiredText,
-                    text: 'Испытательное оборудование: ' + testEquipment.name,
+                    title: teExpiredText.replace('{name}', testEquipment.name),
+                    text: 'Дата истечения: ' + $filter('date')(testEquipment.expirationDate, 'dd-MM-yyyy'),
                     link: 'test-equipments-detailed/' + testEquipment.uuid,
                     linkText: 'Перейти к испытательному оборудованию',
                     badge: 'Истек',
@@ -247,8 +221,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                 notifications.push({
                     uuid: testEquipment.uuid,
                     type: 'testEquipment:yellow:Испытательное оборудование',
-                    title: teSoonText,
-                    text: teExpiresIn.replace('{testEquipment}', testEquipment.name).replace('{daysBetween}', daysBetween),
+                    title: teSoonText.replace('{name}', testEquipment.name),
+                    text: 'Дата истечения: ' + $filter('date')(testEquipment.expirationDate, 'dd-MM-yyyy'),
                     link: 'test-equipments-detailed/' + testEquipment.uuid,
                     linkText: 'Перейти к испытательному оборудованию',
                     badge: 'Осталось дней: ' + daysBetween,
@@ -266,21 +240,17 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
         var now = new Date();
 
         var eventExpiredText = 'Событие  "{eventTitle}" прошло';
-        var eventSoonText = 'Скоро произойдет событие "{eventTitle}". Дата: {date}';
-        var eventExpiresIn = 'Осталось дней: {daysBetween}.';
+        var eventSoonText = 'Скоро произойдет событие "{eventTitle}"';
 
         events.forEach(function(event) {
             var daysBetween = getDaysBetween(event.date, now);
-
-            var eventDate = new Date(event.date);
-            var eventStr = eventDate.getDate() + '-' + (eventDate.getMonth() + 1) + '-' + eventDate.getFullYear();
 
             if (daysBetween <= 0) {
                 notifications.push({
                     uuid: event.uuid,
                     type: 'event:red:Событие',
                     title: eventExpiredText.replace('{eventTitle}', event.title),
-                    text: 'Событие: ' + event.title + ', комментарий: ' + event.comment + '. Дата: ' + eventStr,
+                    text: 'Дата события: ' + $filter('date')(event.date, 'dd-MM-yyyy'),
                     link: 'calendar',
                     linkText: 'Перейти к календарю',
                     badge: 'Прошло',
@@ -291,8 +261,8 @@ function notificationsFactory($interval, dampersFactory, researchDetailsFactory,
                 notifications.push({
                     uuid: event.uuid,
                     type: 'event:yellow:Событие',
-                    title: eventSoonText.replace('{eventTitle}', event.title).replace('{date}', eventStr),
-                    text: eventExpiresIn.replace('{daysBetween}', daysBetween),
+                    title: eventSoonText.replace('{eventTitle}', event.title),
+                    text: 'Дата события: ' + $filter('date')(event.date, 'dd-MM-yyyy'),
                     link: 'calendar',
                     linkText: 'Перейти к календарю',
                     badge: 'Осталось дней: ' + daysBetween,

@@ -17,8 +17,8 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/activity/dampers/dampers-activity.tmpl.html',
-    '<dampers-layout></dampers-layout>');
+  $templateCache.put('scripts/dev/activity/notifications/notifictions-activity.tmpl.html',
+    '<notifications-layout></notifications-layout>');
 }]);
 })();
 
@@ -29,8 +29,8 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/activity/notifications/notifictions-activity.tmpl.html',
-    '<notifications-layout></notifications-layout>');
+  $templateCache.put('scripts/dev/activity/dampers/dampers-activity.tmpl.html',
+    '<dampers-layout></dampers-layout>');
 }]);
 })();
 
@@ -74,7 +74,6 @@ module.run(['$templateCache', function($templateCache) {
     '            <th>Обозначение</th>\n' +
     '            <th>Срок действия ПИ</th>\n' +
     '            <th>Договоров</th>\n' +
-    '            <th>Отметка</th>\n' +
     '        </tr>\n' +
     '    </thead>\n' +
     '\n' +
@@ -84,13 +83,15 @@ module.run(['$templateCache', function($templateCache) {
     '            <td>{{$index + 1}}</td>\n' +
     '            <td>{{damper.name}}</td>\n' +
     '            <td>{{damper.designation}}</td>\n' +
-    '            <td>{{damper.expirationDate | date: \'dd-MM-yyyy\'}}</td>\n' +
-    '            <td>{{damper.contracts.length}}</td>\n' +
-    '            <td>\n' +
-    '                <a class="ui label" ng-class="ctrl.nf.getBadgeType(damper)">\n' +
-    '                {{ctrl.nf.getBadgeText(damper)}}\n' +
-    '            </a>\n' +
+    '            <td>{{damper.expirationDate | date: \'dd-MM-yyyy\'}}\n' +
+    '\n' +
+    '                <a class="ui label" style="float:right" ng-class="ctrl.nf.getBadgeType(damper)">\n' +
+    '                    {{ctrl.nf.getBadgeText(damper)}}\n' +
+    '                </a>\n' +
+    '\n' +
     '            </td>\n' +
+    '            <td>{{damper.contracts.length}}</td>\n' +
+    '\n' +
     '        </tr>\n' +
     '    </tbody>\n' +
     '</table>\n' +
@@ -293,23 +294,40 @@ module.run(['$templateCache', function($templateCache) {
     '    </div>\n' +
     '</div>\n' +
     '\n' +
+    '<div class="ui form">\n' +
+    '    <div class="fields">\n' +
+    '        <div class="field">\n' +
+    '            <div class="ui checkbox">\n' +
+    '                <input type="checkbox" ng-click="ctrl.toggleDone()">\n' +
+    '                <label>Скрыть выполненные</label>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '\n' +
     '<table class="ui selectable striped celled table">\n' +
     '    <thead>\n' +
     '        <tr>\n' +
     '            <th>Номер этапа</th>\n' +
     '            <th>Название</th>\n' +
     '            <th>Срок выполнения</th>\n' +
-    '            <th>Отметка</th>\n' +
     '        </tr>\n' +
     '    </thead>\n' +
     '\n' +
     '    <tbody>\n' +
-    '        <tr ng-repeat="step in ctrl.researchDetail.steps track by $index" ng-click="ctrl.updateStep(step);">\n' +
+    '        <tr ng-repeat="step in ctrl.researchDetail.steps | filter: ctrl.stepFilter | orderBy: \'number\' track by $index" ng-click="ctrl.updateStep(step);">\n' +
     '            <td>{{step.number}}</td>\n' +
     '            <td>{{step.name}}</td>\n' +
-    '            <td>{{step.expirationDate | date: \'dd-MM-yyyy\'}}</td>\n' +
-    '            <td>\n' +
-    '                <a class="ui label" ng-class="ctrl.nf.getBadgeType(step)">{{ctrl.nf.getBadgeText(step)}}</a>\n' +
+    '            <td>{{step.expirationDate | date: \'dd-MM-yyyy\'}}\n' +
+    '\n' +
+    '                <a class="ui {{ctrl.nf.getBadgeType(step)}} label" style="float: right" ng-if="!step.done && ctrl.nf.getBadgeType(step) !== \'green\'">\n' +
+    '                    {{ctrl.nf.getBadgeText(step)}}\n' +
+    '                </a>\n' +
+    '\n' +
+    '                <a class="ui green label" style="float: right" ng-if="step.done">\n' +
+    '                    Выполнен\n' +
+    '                </a>\n' +
+    '\n' +
     '            </td>\n' +
     '        </tr>\n' +
     '    </tbody>\n' +
@@ -626,7 +644,7 @@ module.run(['$templateCache', function($templateCache) {
     '            <td>{{contract.customer}}</td>\n' +
     '            <td>{{contract.amount}}</td>\n' +
     '            <td>\n' +
-    '                {{contract.quoter + \'кв.\'}}, {{contract.year}}\n' +
+    '                {{contract.expirationDate | date: \'dd-MM-yyyy\'}}\n' +
     '                <a class="ui {{ctrl.nf.getBadgeType(contract)}} label" style="float: right" ng-if="!contract.done && ctrl.nf.getBadgeType(contract) !== \'green\'">\n' +
     '                    {{ctrl.nf.getBadgeText(contract)}}\n' +
     '                </a>\n' +
@@ -764,23 +782,6 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/detail/accessory/detail-accessory.tmpl.html',
-    '<div class="detail-accessory">\n' +
-    '    <div class="detail-accessory__row">\n' +
-    '        <div class="detail-accessory__col">{{detailAccessoryCtrl.accessory.name}}</div>\n' +
-    '        <div class="detail-accessory__col">{{detailAccessoryCtrl.accessory.designation}}</div>\n' +
-    '    </div>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/detail/accessories/detail-accessories.tmpl.html',
     '<div class="item__inner-header" ng-click="detailAccessoriesCtrl.toggle()">Комплектующие</div>\n' +
     '\n' +
@@ -813,19 +814,13 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/detail/contract/detail-contract.tmpl.html',
-    '<tr class="item__table-row"\n' +
-    '    ng-class="\'{{detailContractCtrl.contractStatus(contract)}}\'"\n' +
-    '    ng-click="detailContractCtrl.editContract(contract)">\n' +
-    '\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.agreement}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.customer}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.amount}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.quoter}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.year}}</td>\n' +
-    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.prepaidNote}}</td>\n' +
-    '</tr>\n' +
-    '');
+  $templateCache.put('scripts/dev/components/detail/accessory/detail-accessory.tmpl.html',
+    '<div class="detail-accessory">\n' +
+    '    <div class="detail-accessory__row">\n' +
+    '        <div class="detail-accessory__col">{{detailAccessoryCtrl.accessory.name}}</div>\n' +
+    '        <div class="detail-accessory__col">{{detailAccessoryCtrl.accessory.designation}}</div>\n' +
+    '    </div>\n' +
+    '</div>');
 }]);
 })();
 
@@ -876,6 +871,29 @@ module.run(['$templateCache', function($templateCache) {
     '\n' +
     '    <div class="detail-contract__add" ng-click="detailContractsCtrl.addContract()">Добавить контракт</div>\n' +
     '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/detail/contract/detail-contract.tmpl.html',
+    '<tr class="item__table-row"\n' +
+    '    ng-class="\'{{detailContractCtrl.contractStatus(contract)}}\'"\n' +
+    '    ng-click="detailContractCtrl.editContract(contract)">\n' +
+    '\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.agreement}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.customer}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.amount}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.quoter}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.year}}</td>\n' +
+    '    <td class="item__table-body-cell">{{detailContractCtrl.contract.prepaidNote}}</td>\n' +
+    '</tr>\n' +
+    '');
 }]);
 })();
 
@@ -1212,20 +1230,6 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/layout/events/events-layout.tmpl.html',
-    '<div class="alert alert-info" role="alert" ng-repeat="event in ctrl.events">\n' +
-    '    <strong>{{event.reason}}</strong> <a href="{{event.link}}" class="alert-link">{{event.linkText}}</a> {{event.text}}\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/layout/equipments/equipments-layout.tmpl.html',
     '<div class="page-layout">\n' +
     '\n' +
@@ -1238,6 +1242,20 @@ module.run(['$templateCache', function($templateCache) {
     '    <div class="floating-button-wrapper">\n' +
     '        <div class="floating-button" ng-click="equipmentsLayoutCtrl.addEquipment()"></div>\n' +
     '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/layout/events/events-layout.tmpl.html',
+    '<div class="alert alert-info" role="alert" ng-repeat="event in ctrl.events">\n' +
+    '    <strong>{{event.reason}}</strong> <a href="{{event.link}}" class="alert-link">{{event.linkText}}</a> {{event.text}}\n' +
     '</div>');
 }]);
 })();
@@ -1446,44 +1464,6 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html',
-    '<div class="ui container segment" ng-controller="AddAccessoryDialogController as ctrl">\n' +
-    '\n' +
-    '    <form class="ui form">\n' +
-    '        <div class="required field">\n' +
-    '            <label>Наименование</label>\n' +
-    '            <input type="text" ng-model="ctrl.accessory.name">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="required field">\n' +
-    '            <label>Обозначение основных КД, ТД, стандартов и ТУ</label>\n' +
-    '            <input type="text" ng-model="ctrl.accessory.designation">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="ui deny black button" ng-click="ctrl.onCancel()">\n' +
-    '            Отмена\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="ui positive right labeled icon button" ng-click="ctrl.onSave()">\n' +
-    '            Сохранить\n' +
-    '            <i class="checkmark icon"></i>\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.onDelete()">\n' +
-    '            Удалить\n' +
-    '        </div>\n' +
-    '    </form>\n' +
-    '</div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('HtmlTemplates');
-} catch (e) {
-  module = angular.module('HtmlTemplates', []);
-}
-module.run(['$templateCache', function($templateCache) {
   $templateCache.put('scripts/dev/components/dialog/calendar/event/event-calendar-dialog.tmpl.html',
     '<div class="ui container segment" ng-controller="EventCalendarDialogController as ctrl">\n' +
     '\n' +
@@ -1529,34 +1509,58 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('scripts/dev/components/dialog/damper/add/add-damper-dialog.tmpl.html',
-    '<div class="ui container segment" ng-controller="AddDamperDialogController as ctrl">\n' +
-    '\n' +
-    '    <h1>Добавление виброизолятора</h1>\n' +
+  $templateCache.put('scripts/dev/components/dialog/contract/add/add-contract-dialog.tmpl.html',
+    '<div class="ui container segment" ng-controller="AddContractDialogController as ctrl">\n' +
     '\n' +
     '    <form class="ui form">\n' +
     '        <div class="required field">\n' +
-    '            <label>Наименование</label>\n' +
-    '            <input type="text" ng-model="ctrl.damper.name">\n' +
+    '            <label>Номер договора</label>\n' +
+    '            <input type="text" ng-model="ctrl.contract.number">\n' +
     '        </div>\n' +
     '\n' +
     '        <div class="required field">\n' +
-    '            <label>Обозначение КД</label>\n' +
-    '            <input type="text" ng-model="ctrl.damper.designation">\n' +
+    '            <label>От даты</label>\n' +
+    '            <input type="date" ng-model="ctrl.contract.fromDate">\n' +
     '        </div>\n' +
     '\n' +
     '        <div class="required field">\n' +
-    '            <label>Дата истечения срока действия ПИ</label>\n' +
-    '            <input type="date" ng-model="ctrl.damper.expirationDate">\n' +
+    '            <label>Заказчик</label>\n' +
+    '            <input type="text" ng-model="ctrl.contract.customer">\n' +
     '        </div>\n' +
     '\n' +
-    '        <div class="ui black deny button" ng-click="ctrl.onCancel()">\n' +
+    '        <div class="required field">\n' +
+    '            <label>Количество</label>\n' +
+    '            <input type="number" min="1" step="1" ng-model="ctrl.contract.amount" value="1">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="required field">\n' +
+    '            <label>Срок исполнения</label>\n' +
+    '            <input type="date" ng-model="ctrl.contract.expirationDate">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="field">\n' +
+    '            <label>Авансирование</label>\n' +
+    '            <input type="text" ng-model="ctrl.contract.prepaidNote">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="field" ng-if="ctrl.update">\n' +
+    '            <div class="ui checkbox">\n' +
+    '                <input type="checkbox" ng-model="ctrl.contract.done">\n' +
+    '                <label>Выполнен</label>\n' +
+    '            </div>\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="ui deny black button" ng-click="ctrl.onCancel()">\n' +
     '            Отмена\n' +
     '        </div>\n' +
     '\n' +
     '        <div class="ui positive right labeled icon button" ng-click="ctrl.onSave()">\n' +
     '            Сохранить\n' +
     '            <i class="checkmark icon"></i>\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.onDelete()">\n' +
+    '            Удалить\n' +
     '        </div>\n' +
     '    </form>\n' +
     '</div>');
@@ -1634,54 +1638,28 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-<<<<<<< HEAD
-  $templateCache.put('scripts/dev/components/dialog/contract/add/add-contract-dialog.tmpl.html',
-    '<div class="ui container segment" ng-controller="AddContractDialogController as ctrl">\n' +
+  $templateCache.put('scripts/dev/components/dialog/damper/add/add-damper-dialog.tmpl.html',
+    '<div class="ui container segment" ng-controller="AddDamperDialogController as ctrl">\n' +
+    '\n' +
+    '    <h1>Добавление виброизолятора</h1>\n' +
     '\n' +
     '    <form class="ui form">\n' +
     '        <div class="required field">\n' +
-    '            <label>Номер договора</label>\n' +
-    '            <input type="text" ng-model="ctrl.contract.number">\n' +
+    '            <label>Наименование</label>\n' +
+    '            <input type="text" ng-model="ctrl.damper.name">\n' +
     '        </div>\n' +
     '\n' +
     '        <div class="required field">\n' +
-    '            <label>От даты</label>\n' +
-    '            <input type="date" ng-model="ctrl.contract.fromDate">\n' +
+    '            <label>Обозначение КД</label>\n' +
+    '            <input type="text" ng-model="ctrl.damper.designation">\n' +
     '        </div>\n' +
     '\n' +
     '        <div class="required field">\n' +
-    '            <label>Заказчик</label>\n' +
-    '            <input type="text" ng-model="ctrl.contract.customer">\n' +
+    '            <label>Дата истечения срока действия ПИ</label>\n' +
+    '            <input type="date" ng-model="ctrl.damper.expirationDate">\n' +
     '        </div>\n' +
     '\n' +
-    '        <div class="required field">\n' +
-    '            <label>Количество</label>\n' +
-    '            <input type="number" min="1" step="1" ng-model="ctrl.contract.amount" value="1">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="required field">\n' +
-    '            <label>Квартал</label>\n' +
-    '            <input type="number" min="1" max="4" step="1" ng-model="ctrl.contract.quoter" value="1">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="required field">\n' +
-    '            <label>Год</label>\n' +
-    '            <input type="number" min="2000" step="1" ng-model="ctrl.contract.year">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="field">\n' +
-    '            <label>Авансирование</label>\n' +
-    '            <input type="text" ng-model="ctrl.contract.prepaidNote">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="field" ng-if="ctrl.update">\n' +
-    '            <div class="ui checkbox">\n' +
-    '                <input type="checkbox" ng-model="ctrl.contract.done">\n' +
-    '                <label>Выполнен</label>\n' +
-    '            </div>\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="ui deny black button" ng-click="ctrl.onCancel()">\n' +
+    '        <div class="ui black deny button" ng-click="ctrl.onCancel()">\n' +
     '            Отмена\n' +
     '        </div>\n' +
     '\n' +
@@ -1689,46 +1667,7 @@ module.run(['$templateCache', function($templateCache) {
     '            Сохранить\n' +
     '            <i class="checkmark icon"></i>\n' +
     '        </div>\n' +
-    '\n' +
-    '        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.onDelete()">\n' +
-    '            Удалить\n' +
-    '        </div>\n' +
     '    </form>\n' +
-=======
-  $templateCache.put('scripts/dev/components/dialog/equipment/add/add-equipment-dialog.tmpl.html',
-    '<div class="dialog-add jsPopup" ng-controller="AddEquipmentDialogController as addEquipmentDialogCtrl">\n' +
-    '    <div class="dialog-add__header">\n' +
-    '        Добавление ИО\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__body">\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addEquipmentDialogCtrl.name" placeholder="Наименование">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addEquipmentDialogCtrl.type" placeholder="Тип">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <input class="input" type="text" ng-model="addEquipmentDialogCtrl.number" placeholder="Заводской №">\n' +
-    '        </div>\n' +
-    '\n' +
-    '        <div class="dialog-add__control">\n' +
-    '            <label>Дата окончания срока аттестации</label>\n' +
-    '            <input class="input" type="date" ng-model="addEquipmentDialogCtrl.expirationDate" placeholder="Дата окончания срока аттестации">\n' +
-    '        </div>\n' +
-    '\n' +
-    '    </div>\n' +
-    '\n' +
-    '    <div class="dialog-add__actions">\n' +
-    '        <div class="dialog-add__actions-button _save"\n' +
-    '             ng-click="addEquipmentDialogCtrl.onSave()">Сохранить</div>\n' +
-    '\n' +
-    '        <div class="dialog-add__actions-button _cancel"\n' +
-    '             ng-click="addEquipmentDialogCtrl.onCancel()">Отмена</div>\n' +
-    '    </div>\n' +
->>>>>>> 1b7f41e2264e78ceee3f2ac9cd1441bf5ca5dd9b
     '</div>');
 }]);
 })();
@@ -1807,6 +1746,44 @@ module.run(['$templateCache', function($templateCache) {
     '        <div class="dialog-add__actions-button _cancel"\n' +
     '             ng-click="addEquipmentDialogCtrl.onCancel()">Отмена</div>\n' +
     '    </div>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('HtmlTemplates');
+} catch (e) {
+  module = angular.module('HtmlTemplates', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('scripts/dev/components/dialog/accessory/add/add-accessory-dialog.tmpl.html',
+    '<div class="ui container segment" ng-controller="AddAccessoryDialogController as ctrl">\n' +
+    '\n' +
+    '    <form class="ui form">\n' +
+    '        <div class="required field">\n' +
+    '            <label>Наименование</label>\n' +
+    '            <input type="text" ng-model="ctrl.accessory.name">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="required field">\n' +
+    '            <label>Обозначение основных КД, ТД, стандартов и ТУ</label>\n' +
+    '            <input type="text" ng-model="ctrl.accessory.designation">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="ui deny black button" ng-click="ctrl.onCancel()">\n' +
+    '            Отмена\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="ui positive right labeled icon button" ng-click="ctrl.onSave()">\n' +
+    '            Сохранить\n' +
+    '            <i class="checkmark icon"></i>\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="ui red button" ng-if="ctrl.update" ng-click="ctrl.onDelete()">\n' +
+    '            Удалить\n' +
+    '        </div>\n' +
+    '    </form>\n' +
     '</div>');
 }]);
 })();
@@ -1952,6 +1929,13 @@ module.run(['$templateCache', function($templateCache) {
     '                <input type="date" min="1" step="1" ng-model="ctrl.step.expirationDate">\n' +
     '            </div>\n' +
     '\n' +
+    '            <div class="field" ng-if="ctrl.update">\n' +
+    '                <div class="ui checkbox">\n' +
+    '                    <input type="checkbox" ng-model="ctrl.step.done">\n' +
+    '                    <label>Выполнен</label>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
+    '\n' +
     '            <div class="ui black deny button" ng-click="ctrl.onCancel()">\n' +
     '                Отмена\n' +
     '            </div>\n' +
@@ -1995,7 +1979,7 @@ module.run(['$templateCache', function($templateCache) {
     '        </div>\n' +
     '\n' +
     '        <div class="required field">\n' +
-    '            <label>Дата истечения срока</label>\n' +
+    '            <label>Дата истечения срока аттестации</label>\n' +
     '            <input type="date" ng-model="ctrl.testEquipment.expirationDate">\n' +
     '        </div>\n' +
     '\n' +

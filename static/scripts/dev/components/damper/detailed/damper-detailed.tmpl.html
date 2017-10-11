@@ -142,7 +142,7 @@
             <td>{{contract.customer}}</td>
             <td>{{contract.amount}}</td>
             <td>
-                {{contract.quoter + 'кв.'}}, {{contract.year}}
+                {{contract.expirationDate | date: 'dd-MM-yyyy'}}
                 <a class="ui {{ctrl.nf.getBadgeType(contract)}} label" style="float: right" ng-if="!contract.done && ctrl.nf.getBadgeType(contract) !== 'green'">
                     {{ctrl.nf.getBadgeText(contract)}}
                 </a>
