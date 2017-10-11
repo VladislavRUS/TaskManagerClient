@@ -6,9 +6,11 @@ function AddResearchDetailDialogController(dialogWrapFactory, researchDetailsFac
     self.onSave = function() {
         researchDetailsFactory.createResearchDetail(self.researchDetail).then(function() {
             toastFactory.successToast('НИОКР добавлен!');
-        });
+            dialogWrapFactory.closeDialog();
 
-        dialogWrapFactory.closeDialog();
+        }, function() {
+            alert('Ошибка!')
+        });
     };
 
     self.onCancel = function() {

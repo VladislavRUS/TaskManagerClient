@@ -9,12 +9,16 @@
     </div>
 </div>
 
+<div class="ui input">
+    <input type="text" placeholder="Поиск" ng-model="ctrl.searchStr">
+  </div>
+
 <table class="ui selectable striped celled table">
 
     <thead>
         <tr>
             <th>#</th>
-            <th>Наименование</th>
+            <th ng-click="ctrl.order = name">Наименование</th>
             <th>Обозначение КД</th>
             <th>Срок действия ПИ</th>
             <th>Договоров</th>
@@ -22,7 +26,7 @@
     </thead>
 
     <tbody>
-        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ng-class="{'active': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">
+        <tr ng-repeat="damper in ctrl.storage.dampers | filter: { name : ctrl.searchStr } | orderBy: 'name' track by $index" ng-class="{'active': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">
 
             <td>{{$index + 1}}</td>
             <td>{{damper.name}}</td>

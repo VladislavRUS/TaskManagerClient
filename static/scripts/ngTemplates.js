@@ -1076,12 +1076,16 @@ module.run(['$templateCache', function($templateCache) {
     '    </div>\n' +
     '</div>\n' +
     '\n' +
+    '<div class="ui input">\n' +
+    '    <input type="text" placeholder="Поиск" ng-model="ctrl.searchStr">\n' +
+    '  </div>\n' +
+    '\n' +
     '<table class="ui selectable striped celled table">\n' +
     '\n' +
     '    <thead>\n' +
     '        <tr>\n' +
     '            <th>#</th>\n' +
-    '            <th>Наименование</th>\n' +
+    '            <th ng-click="ctrl.order = name">Наименование</th>\n' +
     '            <th>Обозначение КД</th>\n' +
     '            <th>Срок действия ПИ</th>\n' +
     '            <th>Договоров</th>\n' +
@@ -1089,7 +1093,7 @@ module.run(['$templateCache', function($templateCache) {
     '    </thead>\n' +
     '\n' +
     '    <tbody>\n' +
-    '        <tr ng-repeat="damper in ctrl.storage.dampers track by $index" ng-class="{\'active\': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">\n' +
+    '        <tr ng-repeat="damper in ctrl.storage.dampers | filter: { name : ctrl.searchStr } | orderBy: \'name\' track by $index" ng-class="{\'active\': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">\n' +
     '\n' +
     '            <td>{{$index + 1}}</td>\n' +
     '            <td>{{damper.name}}</td>\n' +
@@ -1309,6 +1313,10 @@ module.run(['$templateCache', function($templateCache) {
     '    </div>\n' +
     '</div>\n' +
     '\n' +
+    '<div class="ui input">\n' +
+    '    <input type="text" placeholder="Поиск" ng-model="ctrl.searchStr">\n' +
+    '  </div>\n' +
+    '\n' +
     '<table class="ui selectable striped celled table">\n' +
     '    <thead>\n' +
     '        <tr>\n' +
@@ -1318,7 +1326,7 @@ module.run(['$templateCache', function($templateCache) {
     '        </tr>\n' +
     '    </thead>\n' +
     '    <tbody>\n' +
-    '        <tr ng-repeat="researchDetail in ctrl.storage.researchDetails" ng-click="ctrl.onClick(researchDetail, $event)">\n' +
+    '        <tr ng-repeat="researchDetail in ctrl.storage.researchDetails | filter: { name: ctrl.searchStr } | orderBy: \'name\' track by $index" ng-click="ctrl.onClick(researchDetail, $event)">\n' +
     '            <td>{{$index + 1}}</td>\n' +
     '            <td>{{researchDetail.name}}</td>\n' +
     '            <td>{{researchDetail.steps.length}}</td>\n' +
@@ -1375,6 +1383,10 @@ module.run(['$templateCache', function($templateCache) {
     '    </div>\n' +
     '</div>\n' +
     '\n' +
+    '<div class="ui input">\n' +
+    '    <input type="text" placeholder="Поиск" ng-model="ctrl.searchStr">\n' +
+    '  </div>\n' +
+    '\n' +
     '<table class="ui selectable striped celled table">\n' +
     '    <thead>\n' +
     '        <tr>\n' +
@@ -1387,7 +1399,7 @@ module.run(['$templateCache', function($templateCache) {
     '    </thead>\n' +
     '\n' +
     '    <tbody>\n' +
-    '        <tr ng-repeat="testEquipment in ctrl.storage.testEquipments | filter: { vendor: ctrl.vendor }" ng-click="ctrl.onClick(testEquipment, $event)">\n' +
+    '        <tr ng-repeat="testEquipment in ctrl.storage.testEquipments | filter: { vendor: ctrl.vendor, name: ctrl.searchStr } | orderBy: \'name\' track by $index" ng-click="ctrl.onClick(testEquipment, $event)">\n' +
     '            <td>{{$index + 1}}</td>\n' +
     '            <td>{{testEquipment.name}}</td>\n' +
     '            <td>{{testEquipment.number}}</td>\n' +
@@ -1622,6 +1634,7 @@ try {
   module = angular.module('HtmlTemplates', []);
 }
 module.run(['$templateCache', function($templateCache) {
+<<<<<<< HEAD
   $templateCache.put('scripts/dev/components/dialog/contract/add/add-contract-dialog.tmpl.html',
     '<div class="ui container segment" ng-controller="AddContractDialogController as ctrl">\n' +
     '\n' +
@@ -1681,6 +1694,41 @@ module.run(['$templateCache', function($templateCache) {
     '            Удалить\n' +
     '        </div>\n' +
     '    </form>\n' +
+=======
+  $templateCache.put('scripts/dev/components/dialog/equipment/add/add-equipment-dialog.tmpl.html',
+    '<div class="dialog-add jsPopup" ng-controller="AddEquipmentDialogController as addEquipmentDialogCtrl">\n' +
+    '    <div class="dialog-add__header">\n' +
+    '        Добавление ИО\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__body">\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addEquipmentDialogCtrl.name" placeholder="Наименование">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addEquipmentDialogCtrl.type" placeholder="Тип">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <input class="input" type="text" ng-model="addEquipmentDialogCtrl.number" placeholder="Заводской №">\n' +
+    '        </div>\n' +
+    '\n' +
+    '        <div class="dialog-add__control">\n' +
+    '            <label>Дата окончания срока аттестации</label>\n' +
+    '            <input class="input" type="date" ng-model="addEquipmentDialogCtrl.expirationDate" placeholder="Дата окончания срока аттестации">\n' +
+    '        </div>\n' +
+    '\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="dialog-add__actions">\n' +
+    '        <div class="dialog-add__actions-button _save"\n' +
+    '             ng-click="addEquipmentDialogCtrl.onSave()">Сохранить</div>\n' +
+    '\n' +
+    '        <div class="dialog-add__actions-button _cancel"\n' +
+    '             ng-click="addEquipmentDialogCtrl.onCancel()">Отмена</div>\n' +
+    '    </div>\n' +
+>>>>>>> 1b7f41e2264e78ceee3f2ac9cd1441bf5ca5dd9b
     '</div>');
 }]);
 })();
