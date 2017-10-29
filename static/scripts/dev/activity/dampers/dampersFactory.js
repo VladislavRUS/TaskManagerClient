@@ -12,6 +12,7 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
             factory.getDampers().then(deferred.resolve);
 
         }, function() {
+            alert('Ошибка!');
             deferred.reject();
         });
 
@@ -23,7 +24,11 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
 
         $http.delete(restServiceFactory.dampersDelete.replace('{uuid}', damper.uuid)).then(function(data) {
             factory.getDampers().then(deferred.resolve);
-        });
+
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -45,7 +50,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
             });
 
             deferred.resolve();
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -57,7 +65,11 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
 
         $http.put(url, damper).then(function(resp) {
             factory.getDampers().then(deferred.resolve);
-        });
+
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -88,7 +100,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
                 deferred.resolve();
             });
 
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -102,7 +117,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
             factory.getDampers().then(function() {
                 deferred.resolve();
             });
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -117,7 +135,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
             factory.getDampers().then(function() {
                 deferred.resolve();
             });
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -132,7 +153,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
             factory.getDampers().then(function() {
                 deferred.resolve();
             });
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -148,7 +172,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
                 deferred.resolve();
             });
 
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
@@ -164,7 +191,10 @@ function dampersFactory($http, $q, $rootScope, constantsFactory, restServiceFact
                 deferred.resolve();
             });
 
-        });
+        }, function() {
+			alert('Ошибка!');
+			deferred.reject();
+		});
 
         return deferred.promise;
     };
