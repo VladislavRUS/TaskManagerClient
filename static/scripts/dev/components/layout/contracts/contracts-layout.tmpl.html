@@ -1,0 +1,75 @@
+<div class="ui form">
+    <div class="fields">
+        <div class="field">
+            <button class="ui labeled icon positive button" ng-click="ctrl.onAdd()">
+                <i class="add circle icon"></i>
+                Добавить договор
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="ui input">
+    <input type="text" placeholder="Поиск" ng-model="ctrl.searchStr">
+  </div>
+
+<table class="ui selectable striped celled table">
+
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Номер, дата</th>
+            <th>Наименовение</th>
+            <th>Количество</th>
+            <th>Срок исполнения</th>
+            <th>Принято штук</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="contract in ctrl.storage.dampers | filter: { name : ctrl.searchStr } | orderBy: 'name' track by $index" ng-class="{'active': ctrl.inPrint(damper.uuid)}" ng-click="ctrl.onClick(damper, $event)">
+
+            <td>{{$index + 1}}</td>
+            <td>{{contract.number + ',' + contract.fromDate}} </td>
+            <td>amount</td>
+            <td>due date</td>
+            <td>accepted</td>
+    </tbody>
+</table>
+
+<div class="ui modal" id="createContractModal">
+    <i class="close icon"></i>
+    <div class="header">
+        Добавление договора
+    </div>
+
+    <div class="content">
+
+        <form class="ui form">
+            <div class="required field">
+                <label>Наименование</label>
+                <input type="text" ng-model="ctrl.name">
+            </div>
+
+            <div class="required field">
+                <label>Обозначение КД</label>
+                <input type="text" ng-model="ctrl.designation">
+            </div>
+
+            <div class="required field">
+                <label>Дата истечения срока действия ПИ</label>
+                <input type="date" ng-model="ctrl.expirationDate">
+            </div>
+        </form>
+    </div>
+
+    <div class="actions">
+        <div class="ui black deny button" ng-click="ctrl.onCancel()">
+            Отмена
+        </div>
+        <div class="ui positive right labeled icon button" ng-click="ctrl.save()">
+            Сохранить
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>

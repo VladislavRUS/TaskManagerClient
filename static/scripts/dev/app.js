@@ -22,6 +22,13 @@ angular.module('app', ['ui.router', 'ngCookies', 'ngAnimate', 'duScroll', 'ui.ca
             templateUrl: 'scripts/dev/activity/dampers/dampers-activity.tmpl.html'
         })
 
+        .state('contracts', {
+            url: '/contracts',
+            controller: 'ContractsController',
+            controllerAs: 'contractsCtrl',
+            templateUrl: 'scripts/dev/activity/contracts/contracts-activity.tmpl.html'
+        })
+
         .state('dampers-detailed', {
             url: '/dampers-detailed/{uuid}',
             controller: 'DampersDetailedController',
@@ -101,6 +108,7 @@ angular.module('app')
     .controller('AddEquipmentDialogController', AddProgressDetailDialogController)
     .controller('AddDamperDialogController', AddDamperDialogController)
     .controller('CalendarController', CalendarController)
+    .controller('ContractsController', ContractsController)
     .controller('DampersController', DampersController)
     .controller('DampersDetailedController', DampersDetailedController)
     .controller('EventCalendarDialogController', EventCalendarDialogController)
@@ -115,6 +123,7 @@ angular.module('app')
 /*Directives*/
 angular.module('app')
     .directive('calendarLayout', calendarLayoutDirective)
+    .directive('contractsLayout', contractsLayoutDirective)
     .directive('detailsLayout', detailsLayoutDirective)
     .directive('dampersLayout', dampersLayoutDirective)
     .directive('damperDetailed', damperDetailedDirective)
@@ -142,6 +151,7 @@ angular.module('app')
 /*Factories*/
 angular.module('app')
     .factory('constantsFactory', constantsFactory)
+    .factory('contractsFactory', contractsFactory)
     .factory('responseInterceptor', responseInterceptor)
     .factory('dateFactory', dateFactory)
     .factory('dampersFactory', dampersFactory)

@@ -26,18 +26,35 @@
             <input type="date" ng-model="ctrl.contract.expirationDate">
         </div>
 
-        <div class="field">
-            <label>Авансирование</label>
-            <input type="text" ng-model="ctrl.contract.prepaidNote">
-        </div>
-
-        <div class="field" ng-if="ctrl.update">
-            <div class="ui checkbox">
-                <input type="checkbox" ng-model="ctrl.contract.done">
-                <label>Выполнен</label>
+        <div class="fields" ng-repeat="item in ctrl.items">
+            <div class="field">
+                <label>Выберите виброизолятор</label>
+                <select class="ui dropdown" ng-model="item.damperUuid">
+                    <option value="">виброизолятор</option>
+                    <option value="{{damper.uuid}}" ng-repeat="damper in ctrl.dampers">{{damper.name}}</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Количество</label>
+                <input type="number" ng-model="item.amount">
+            </div>
+            <div class="field">
+                <label>Срок исполнения</label>
+                <input type="date" ng-model="item.expirationDate">
+            </div>
+            <div class="field">
+                <label>Принято штук</label>
+                <input type="number" ng-model="item.accepted">
+            </div>
+            <div class="field">
+                <label>Удалить</label>
+                <div class="ui red button" ng-click="ctrl.removeItem($index)">Х</div>
             </div>
         </div>
 
+        <div class="field">
+            <div class="ui teal button" ng-click="ctrl.newItem()">Добавить виброизолятор</div>
+        </div>
         <div class="ui deny black button" ng-click="ctrl.onCancel()">
             Отмена
         </div>

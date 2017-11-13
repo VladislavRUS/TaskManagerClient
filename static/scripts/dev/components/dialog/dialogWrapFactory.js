@@ -9,7 +9,7 @@ function dialogWrapFactory($timeout) {
 
     factory.openDialog = function(templateUrl, params) {
         factory.templateUrl = templateUrl;
-        factory.params = params;
+        factory.params = params || {};
         factory.dialogOpened = true;
 
         $timeout(dialogIn, delay);
